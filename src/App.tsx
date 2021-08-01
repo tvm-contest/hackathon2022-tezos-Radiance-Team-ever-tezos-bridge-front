@@ -43,7 +43,7 @@ function App() {
   const donateCrunch = useCallback(async () => {
     try {
       const { tezos, accountPkh } = connection!;
-      const tokenContract = await tezos.contract.at(CRUNCH_ADDRESS);
+      const tokenContract = await tezos.wallet.at(CRUNCH_ADDRESS);
       await tokenContract.methods
         .transfer([
           {
@@ -60,6 +60,7 @@ function App() {
         .send();
       alert("Thank you, the donation is being processed!");
     } catch (e) {
+      console.error(e.message);
       alert(`Error while donating: ${e.message}`);
     }
   }, [connection]);
