@@ -1,24 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { TezosToolkit } from "@taquito/taquito";
+import { TempleWallet } from "@temple-wallet/dapp";
+import React, { useCallback, useState } from "react";
+import "./App.css";
+
+import { ReadOnlySigner } from "./ReadOnlySigner";
+
+interface ConnectionState {
+  accountPkh: string;
+  tezos: TezosToolkit;
+}
 
 function App() {
+  const [connection, setConnection] = useState<ConnectionState>();
+
+  const connectWallet = useCallback(async () => {
+    const isAvailable = TempleWallet.isAvailable();
+    if (!isAvailable) {
+      alert("Oy vey, you need to install Temple Wallet");
+      return;
+    }
+
+    try {
+      const wallet = new TempleWallet("Temple workshop");
+
+      if (!wallet.connected) {
+        await wallet.connect("mainnet", { forcePermission: true });
+      }
+
+      const tezos = wallet.toTezos();
+      const { pkh, publicKey } = wallet.permission!;
+      tezos.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
+      setConnection({ tezos, accountPkh: await tezos.signer.publicKeyHash() });
+    } catch (e) {
+      alert(`Error: ${e.message}`);
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={connectWallet}>
+        {connection ? connection.accountPkh : "Connect to wallet"}
+      </button>
     </div>
   );
 }
