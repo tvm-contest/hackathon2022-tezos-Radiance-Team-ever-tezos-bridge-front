@@ -9,7 +9,7 @@ export class ReadOnlySigner implements Signer {
   async publicKeyHash() {
     return this.pkh;
   }
-  sign(): Promise<{
+  async sign(): Promise<{
     bytes: string;
     sig: string;
     prefixSig: string;
@@ -17,7 +17,7 @@ export class ReadOnlySigner implements Signer {
   }> {
     throw new Error("Cannot sign");
   }
-  secretKey(): Promise<string> {
-    throw new Error("Cannot get private key");
+  async secretKey(): Promise<string> {
+    throw new Error("Secret key cannot be exposed");
   }
 }
