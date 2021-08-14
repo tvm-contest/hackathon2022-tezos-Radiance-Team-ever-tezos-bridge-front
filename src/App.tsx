@@ -18,7 +18,7 @@ function App() {
   const [connection, setConnection] = useState<ConnectionState>();
 
   const connectWallet = useCallback(async () => {
-    const isAvailable = TempleWallet.isAvailable();
+    const isAvailable = await TempleWallet.isAvailable();
     if (!isAvailable) {
       alert("Oy vey, you need to install Temple Wallet");
       return;
