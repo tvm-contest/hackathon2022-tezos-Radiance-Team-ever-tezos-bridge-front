@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
 import './App.css';
 
-import { beaconWallet, connectWalletBeacon, connectWalletTemple, DAppConnection } from './wallets';
+import { connectWalletBeacon, connectWalletTemple, DAppConnection } from './wallets';
 
 const networksTokensData = {
   mainnet: {
@@ -16,7 +16,7 @@ const networksTokensData = {
     address: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
     id: 0,
     decimals: 6,
-    name: 'Test Token'
+    name: 'Test QUIPU'
   }
 }
 
@@ -55,13 +55,6 @@ function App() {
   const handleConnectBeaconClick = () => connectWallet('beacon');
 
   const resetConnection = async () => {
-    if (connection?.type === 'beacon') {
-      try {
-        await beaconWallet.disconnect();
-      } catch (e) {
-        console.error(e);
-      }
-    }
     setConnection(undefined);
   };
 

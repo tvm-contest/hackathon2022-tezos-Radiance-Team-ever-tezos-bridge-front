@@ -31,7 +31,7 @@ const APP_NAME = 'Test app';
 export const beaconWallet = new BeaconWallet({
   name: APP_NAME,
   iconUrl: `${process.env.REACT_APP_BASE_URL}/favicon.ico`,
-  preferredNetwork: BeaconNetworkType.MAINNET
+  // preferredNetwork: BeaconNetworkType.MAINNET
 });
 
 export const defaultRpcUrls = {
@@ -40,6 +40,7 @@ export const defaultRpcUrls = {
 };
 
 export const connectWalletBeacon = async (forcePermission: boolean, network: ActiveBeaconNetwork): Promise<DAppConnection> => {
+  beaconWallet.client.preferredNetwork = network.type;
   const activeAccount = await beaconWallet.client.getActiveAccount();
   if (forcePermission || !activeAccount) {
     if (activeAccount) {
