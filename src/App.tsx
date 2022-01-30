@@ -1,76 +1,130 @@
-import { TezosToolkit } from "@taquito/taquito";
-import { TempleWallet } from "@temple-wallet/dapp";
-import React, { useCallback, useState } from "react";
-import "./App.css";
+import { NetworkType as BeaconNetworkType } from '@airgap/beacon-sdk';
+import BigNumber from 'bignumber.js';
+import React, { useState } from 'react';
+import './App.css';
 
-import { ReadOnlySigner } from "./ReadOnlySigner";
+import { beaconWallet, connectWalletBeacon, connectWalletTemple, DAppConnection } from './wallets';
 
-interface ConnectionState {
-  accountPkh: string;
-  tezos: TezosToolkit;
+const networksTokensData = {
+  mainnet: {
+    address: 'KT1BHCumksALJQJ8q8to2EPigPW6qpyTr7Ng',
+    id: 0,
+    decimals: 8,
+    name: 'CRUNCH'
+  },
+  hangzhounet: {
+    address: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
+    id: 0,
+    decimals: 6,
+    name: 'Test Token'
+  }
 }
 
-const CRUNCH_ADDRESS = "KT1BHCumksALJQJ8q8to2EPigPW6qpyTr7Ng";
-const CRUNCH_TOKEN_ID = 0;
-const AUTHOR_ADDRESS = "tz1LSMu9PugfVyfX2ynNU9y4eVvSACJKP7sg";
+const AUTHOR_ADDRESS = 'tz1LSMu9PugfVyfX2ynNU9y4eVvSACJKP7sg';
+
+function hasMessage(value: unknown): value is { message: string } {
+  return typeof value === 'object' && value !== null && 'message' in value;
+}
 
 function App() {
-  const [connection, setConnection] = useState<ConnectionState>();
+  const [connection, setConnection] = useState<DAppConnection>();
+  const [network, setNetwork] = useState<'mainnet' | 'hangzhounet'>('mainnet');
 
-  const connectWallet = useCallback(async () => {
-    const isAvailable = await TempleWallet.isAvailable();
-    if (!isAvailable) {
-      alert("Oy vey, you need to install Temple Wallet");
-      return;
-    }
-
+  const connectWallet = async (connectionType: DAppConnection['type']) => {
     try {
-      const wallet = new TempleWallet("Temple workshop");
+      const connection = connectionType === 'temple'
+        ? await connectWalletTemple(true, network)
+        : await connectWalletBeacon(
+          true,
+          { type: network === 'mainnet' ? BeaconNetworkType.MAINNET : BeaconNetworkType.HANGZHOUNET }
+        );
 
-      if (!wallet.connected) {
-        await wallet.connect("mainnet", { forcePermission: true });
+      setConnection(connection);
+    } catch (e) {
+      if ((e as any)?.name === 'NotGrantedTempleWalletError') {
+        return;
       }
 
-      const tezos = wallet.toTezos();
-      const { pkh, publicKey } = wallet.permission!;
-      tezos.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
-      setConnection({ tezos, accountPkh: await tezos.wallet.pkh() });
-    } catch (e) {
-      alert(`Error: ${e.message}`);
+      const outputArg = hasMessage(e) ? e.message : e;
+      console.error(e);
+      alert(`Error: ${outputArg}`);
     }
-  }, []);
+  };
 
-  const donateCrunch = useCallback(async () => {
+  const handleConnectTempleClick = () => connectWallet('temple');
+  const handleConnectBeaconClick = () => connectWallet('beacon');
+
+  const resetConnection = async () => {
+    if (connection?.type === 'beacon') {
+      try {
+        await beaconWallet.disconnect();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setConnection(undefined);
+  };
+
+  const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    resetConnection();
+    setNetwork(e.target.value as 'mainnet' | 'hangzhounet');
+  };
+
+  const donate = async () => {
     try {
-      const { tezos, accountPkh } = connection!;
-      const tokenContract = await tezos.wallet.at(CRUNCH_ADDRESS);
-      await tokenContract.methods
+      const { tezos, pkh } = connection!;
+      const { address, id, decimals } = networksTokensData[network];
+      const tokenContract = await tezos.wallet.at(address);
+      const op = await tokenContract.methods
         .transfer([
           {
-            from_: accountPkh,
+            from_: pkh,
             txs: [
               {
                 to_: AUTHOR_ADDRESS,
-                token_id: CRUNCH_TOKEN_ID,
-                amount: 2e8,
+                token_id: id,
+                amount: new BigNumber(10).pow(decimals).times(2),
               },
             ],
           },
         ])
         .send();
-      alert("Thank you, the donation is being processed!");
+      alert('Thank you, the donation is being processed!');
+      await op.confirmation(1);
+      alert('Donation has been processed successfully!');
     } catch (e) {
-      console.error(e.message);
-      alert(`Error while donating: ${e.message}`);
+      if ((e as any)?.name === 'NotGrantedTempleWalletError') {
+        return;
+      }
+
+      const outputArg = hasMessage(e) ? e.message : e;
+      console.error(e);
+      alert(`Error while donating: ${outputArg}`);
     }
-  }, [connection]);
+  };
 
   return (
     <div>
-      <button onClick={connectWallet}>
-        {connection ? connection.accountPkh : "Connect to wallet"}
-      </button>
-      {connection && <button onClick={donateCrunch}>Donate some CRUNCH</button>}
+      {connection ? (
+        <>
+          <span>Network: {network}</span>
+          <button onClick={resetConnection}>
+            {connection.pkh}
+          </button>
+          <button onClick={donate}>
+            Donate some {networksTokensData[network].name}
+          </button>
+        </>
+      ) : (
+        <>
+          <select name="network" value={network} onChange={handleNetworkChange}>
+            <option value="mainnet">Mainnet</option>
+            <option value="hangzhounet">Hangzhounet</option>
+          </select>
+          <button onClick={handleConnectTempleClick}>Connect Temple Wallet</button>
+          <button onClick={handleConnectBeaconClick}>Connect with Beacon</button>
+        </>
+      )}
     </div>
   );
 }
