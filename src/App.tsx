@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
 import './App.css';
 
-import { connectWalletBeacon, connectWalletTemple, DAppConnection } from './wallets';
+import { connectWalletBeacon, connectWalletEver, connectWalletTemple, DAppConnection, disconnectWalletEver } from './wallets';
 
 const networksTokensData = {
   mainnet: {
@@ -29,6 +29,7 @@ function hasMessage(value: unknown): value is { message: string } {
 function App() {
   const [connection, setConnection] = useState<DAppConnection>();
   const [network, setNetwork] = useState<'mainnet' | 'hangzhounet'>('mainnet');
+  const [everAddress, setEverAddress] = useState<string>("");
 
   const connectWallet = async (connectionType: DAppConnection['type']) => {
     try {
@@ -53,10 +54,19 @@ function App() {
 
   const handleConnectTempleClick = () => connectWallet('temple');
   const handleConnectBeaconClick = () => connectWallet('beacon');
+  const handleConnectEver = async () => {
+    const address = await connectWalletEver();
+    setEverAddress(address.toString());
+  }
 
   const resetConnection = async () => {
     setConnection(undefined);
   };
+
+  const resetEver = () => {
+    disconnectWalletEver();
+    setEverAddress("");
+  }
 
   const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     resetConnection();
@@ -99,24 +109,18 @@ function App() {
   return (
     <div>
       {connection ? (
-        <>
-          <span>Network: {network}</span>
-          <button onClick={resetConnection}>
-            {connection.pkh}
-          </button>
-          <button onClick={donate}>
-            Donate some {networksTokensData[network].name}
-          </button>
-        </>
+        <button onClick={resetConnection}>
+          {connection.pkh}
+        </button>
       ) : (
         <>
-          <select name="network" value={network} onChange={handleNetworkChange}>
-            <option value="mainnet">Mainnet</option>
-            <option value="hangzhounet">Hangzhounet</option>
-          </select>
           <button onClick={handleConnectTempleClick}>Connect Temple Wallet</button>
-          <button onClick={handleConnectBeaconClick}>Connect with Beacon</button>
         </>
+      )}
+      {everAddress ? (
+        <button onClick={resetEver}>{everAddress}</button>
+      ) : (
+        <button onClick={handleConnectEver}>Connect Ever Wallet</button>
       )}
     </div>
   );

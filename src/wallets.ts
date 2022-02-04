@@ -2,6 +2,11 @@ import { Network as BeaconNetwork, NetworkType as BeaconNetworkType } from '@air
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
+import { 
+  Address, 
+  ProviderRpcClient, 
+  TvmException 
+} from 'everscale-inpage-provider';
 import { ReadOnlySigner } from './ReadOnlySigner';
 
 interface ActiveBeaconNetwork extends BeaconNetwork {
@@ -94,3 +99,27 @@ export const connectWalletTemple = async (forcePermission: boolean, network: Act
 
   return { type: 'temple', pkh, pk, tezos, templeWallet: wallet };
 };
+
+const ever = new ProviderRpcClient();
+
+export const connectWalletEver = async () => {
+if (!(await ever.hasProvider())) {
+    throw new Error('Extension is not installed');
+  }
+  await ever.ensureInitialized();
+
+  const { accountInteraction } = await ever.requestPermissions({
+    permissions: ['basic', 'accountInteraction'],
+  });
+  if (accountInteraction == null) {
+    throw new Error('Insufficient permissions');
+  }
+
+  const selectedAddress = accountInteraction.address;
+
+  return selectedAddress
+}
+
+export const disconnectWalletEver = async () => {
+  await ever.disconnect()
+}
