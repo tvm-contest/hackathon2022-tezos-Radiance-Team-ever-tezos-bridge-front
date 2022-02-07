@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.4.0",
     "@taquito/beacon-wallet": "11.0.2",
     "@taquito/local-forging": "11.0.2",
     "@taquito/taquito": "11.0.2",
