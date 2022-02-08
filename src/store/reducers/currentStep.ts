@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { CurrentStepState, RootState } from "../../types";
 
 const initialState: CurrentStepState = {
-  value: 0,
+  value: 1,
 };
 
 export const currentStepSlice = createSlice({

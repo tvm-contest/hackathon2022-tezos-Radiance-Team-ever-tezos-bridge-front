@@ -1,7 +1,6 @@
 import { NetworkType as BeaconNetworkType } from "@airgap/beacon-sdk";
 import BigNumber from "bignumber.js";
 import React, { useState } from "react";
-import "./App.css";
 
 import {
   connectWalletBeacon,
