@@ -1,4 +1,5 @@
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
+
 import { SummaryProps } from "../types";
 
 export default function Summary({

@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import currentStep from "./reducers/currentStep";
 
 const store = configureStore({

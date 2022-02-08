@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { CurrentStepState, RootState } from "../../types";
 
 const initialState: CurrentStepState = {
