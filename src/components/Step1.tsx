@@ -1,5 +1,7 @@
 import useAppSelector from "../hooks/useAppSelector";
-import { selectCurrentStep } from "../store/reducers/currentStep";
+import {selectCurrentStep} from "../store/reducers/currentStep";
+import AddressInput from "./AddressInput";
+import BlockchainSelect from "./BlockchainSelect";
 
 export default function Step1() {
   const currentStep = useAppSelector(selectCurrentStep);
@@ -8,20 +10,16 @@ export default function Step1() {
 
   return (
     <>
-      <p>
-        From blockchain{" "}
-        <select>
-          <option>Everscale</option>
-          <option>Tezos</option>
-        </select>
-      </p>
-      <p>
-        To blockchain
-        <select>
-          <option>Everscale</option>
-          <option>Tezos</option>
-        </select>
-      </p>
+      <div>
+        From
+        <BlockchainSelect />
+        <AddressInput label="Sender address" />
+      </div>
+      <div>
+        To
+        <BlockchainSelect />
+        <AddressInput label="Receiver address" />
+      </div>
     </>
   );
 }

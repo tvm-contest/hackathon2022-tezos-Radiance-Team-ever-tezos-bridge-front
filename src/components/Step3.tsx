@@ -1,5 +1,5 @@
 import useAppSelector from "../hooks/useAppSelector";
-import { selectCurrentStep } from "../store/reducers/currentStep";
+import {selectCurrentStep} from "../store/reducers/currentStep";
 
 export default function Step3() {
   const currentStep = useAppSelector(selectCurrentStep);

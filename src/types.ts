@@ -35,3 +35,7 @@ export interface SummaryProps {
   toAddress?: string;
   amount?: number | "-";
 }
+
+export interface AddressInputProps {
+  label: string;
+}

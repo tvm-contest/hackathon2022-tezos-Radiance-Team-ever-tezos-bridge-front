@@ -1,6 +1,6 @@
-import { NetworkType as BeaconNetworkType } from "@airgap/beacon-sdk";
+import {NetworkType as BeaconNetworkType} from "@airgap/beacon-sdk";
 import BigNumber from "bignumber.js";
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 import {
   connectWalletBeacon,
@@ -27,7 +27,7 @@ const networksTokensData = {
 
 const AUTHOR_ADDRESS = "tz1LSMu9PugfVyfX2ynNU9y4eVvSACJKP7sg";
 
-function hasMessage(value: unknown): value is { message: string } {
+function hasMessage(value: unknown): value is {message: string} {
   return typeof value === "object" && value !== null && "message" in value;
 }
 
@@ -83,8 +83,8 @@ export default function Header() {
 
   const donate = async () => {
     try {
-      const { tezos, pkh } = connection!;
-      const { address, id, decimals } = networksTokensData[network];
+      const {tezos, pkh} = connection!;
+      const {address, id, decimals} = networksTokensData[network];
       const tokenContract = await tezos.wallet.at(address);
       const op = await tokenContract.methods
         .transfer([
