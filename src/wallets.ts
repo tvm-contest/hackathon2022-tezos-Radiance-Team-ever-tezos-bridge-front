@@ -1,37 +1,44 @@
-import { Network as BeaconNetwork, NetworkType as BeaconNetworkType } from '@airgap/beacon-sdk';
-import { BeaconWallet } from '@taquito/beacon-wallet';
-import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
-import { TempleWallet } from '@temple-wallet/dapp';
-import { 
-  Address, 
-  ProviderRpcClient, 
-  TvmException 
-} from 'everscale-inpage-provider';
-import { ReadOnlySigner } from './ReadOnlySigner';
+import {
+  Network as BeaconNetwork,
+  NetworkType as BeaconNetworkType,
+} from "@airgap/beacon-sdk";
+import { BeaconWallet } from "@taquito/beacon-wallet";
+import { MichelCodecPacker, TezosToolkit } from "@taquito/taquito";
+import { TempleWallet } from "@temple-wallet/dapp";
+import {
+  Address,
+  ProviderRpcClient,
+  TvmException,
+} from "everscale-inpage-provider";
+
+import { ReadOnlySigner } from "./ReadOnlySigner";
 
 interface ActiveBeaconNetwork extends BeaconNetwork {
   type: BeaconNetworkType.MAINNET | BeaconNetworkType.HANGZHOUNET;
 }
 
 export interface DAppConnection {
-  type: 'temple' | 'beacon';
+  type: "temple" | "beacon";
   pkh: string;
   pk: string;
   tezos: TezosToolkit;
   templeWallet?: TempleWallet;
 }
 
-type ActiveTempleDAppNetwork = 'mainnet' | 'hangzhounet' | { name: string; rpc: string };
+type ActiveTempleDAppNetwork =
+  | "mainnet"
+  | "hangzhounet"
+  | { name: string; rpc: string };
 
 export class WalletNotConnectedError extends Error {
   constructor() {
-    super('Wallet was not connected');
+    super("Wallet was not connected");
   }
 }
 
 const michelEncoder = new MichelCodecPacker();
 
-const APP_NAME = 'Test app';
+const APP_NAME = "Test app";
 
 export const beaconWallet = new BeaconWallet({
   name: APP_NAME,
@@ -40,11 +47,14 @@ export const beaconWallet = new BeaconWallet({
 });
 
 export const defaultRpcUrls = {
-  mainnet: 'https://mainnet.api.tez.ie',
-  hangzhounet: 'https://hangzhounet.api.tez.ie',
+  mainnet: "https://mainnet.api.tez.ie",
+  hangzhounet: "https://hangzhounet.api.tez.ie",
 };
 
-export const connectWalletBeacon = async (forcePermission: boolean, network: ActiveBeaconNetwork): Promise<DAppConnection> => {
+export const connectWalletBeacon = async (
+  forcePermission: boolean,
+  network: ActiveBeaconNetwork,
+): Promise<DAppConnection> => {
   beaconWallet.client.preferredNetwork = network.type;
   const activeAccount = await beaconWallet.client.getActiveAccount();
   if (forcePermission || !activeAccount) {
@@ -54,7 +64,9 @@ export const connectWalletBeacon = async (forcePermission: boolean, network: Act
     await beaconWallet.requestPermissions({ network });
   }
 
-  const tezos = new TezosToolkit(network.rpcUrl ?? defaultRpcUrls[network.type]);
+  const tezos = new TezosToolkit(
+    network.rpcUrl ?? defaultRpcUrls[network.type],
+  );
   tezos.setPackerProvider(michelEncoder);
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();
@@ -62,15 +74,27 @@ export const connectWalletBeacon = async (forcePermission: boolean, network: Act
     throw new Error("Wallet wasn't connected");
   }
 
-  tezos.setSignerProvider(new ReadOnlySigner(activeAcc.address, activeAcc.publicKey));
+  tezos.setSignerProvider(
+    new ReadOnlySigner(activeAcc.address, activeAcc.publicKey),
+  );
 
-  return { type: 'beacon', pkh: activeAcc.address, pk: activeAcc.publicKey, tezos };
+  return {
+    type: "beacon",
+    pkh: activeAcc.address,
+    pk: activeAcc.publicKey,
+    tezos,
+  };
 };
 
-export const connectWalletTemple = async (forcePermission: boolean, network: ActiveTempleDAppNetwork): Promise<DAppConnection> => {
+export const connectWalletTemple = async (
+  forcePermission: boolean,
+  network: ActiveTempleDAppNetwork,
+): Promise<DAppConnection> => {
   const available = await TempleWallet.isAvailable();
   if (!available) {
-    throw new Error("Temple wallet isn't available. Make sure it is installed and unlocked");
+    throw new Error(
+      "Temple wallet isn't available. Make sure it is installed and unlocked",
+    );
   }
 
   let perm;
@@ -84,7 +108,9 @@ export const connectWalletTemple = async (forcePermission: boolean, network: Act
     await wallet.connect(network, { forcePermission: true });
   }
 
-  const tezos = new TezosToolkit(typeof network === 'string' ? defaultRpcUrls[network] : network.rpc);
+  const tezos = new TezosToolkit(
+    typeof network === "string" ? defaultRpcUrls[network] : network.rpc,
+  );
   tezos.setWalletProvider(wallet);
   tezos.setPackerProvider(michelEncoder);
   const pkh = wallet.connected ? await wallet.getPKH() : undefined;
@@ -97,29 +123,29 @@ export const connectWalletTemple = async (forcePermission: boolean, network: Act
     throw new Error("Wallet wasn't connected");
   }
 
-  return { type: 'temple', pkh, pk, tezos, templeWallet: wallet };
+  return { type: "temple", pkh, pk, tezos, templeWallet: wallet };
 };
 
 const ever = new ProviderRpcClient();
 
 export const connectWalletEver = async () => {
-if (!(await ever.hasProvider())) {
-    throw new Error('Extension is not installed');
+  if (!(await ever.hasProvider())) {
+    throw new Error("Extension is not installed");
   }
   await ever.ensureInitialized();
 
   const { accountInteraction } = await ever.requestPermissions({
-    permissions: ['basic', 'accountInteraction'],
+    permissions: ["basic", "accountInteraction"],
   });
   if (accountInteraction == null) {
-    throw new Error('Insufficient permissions');
+    throw new Error("Insufficient permissions");
   }
 
   const selectedAddress = accountInteraction.address;
 
-  return selectedAddress
-}
+  return selectedAddress;
+};
 
 export const disconnectWalletEver = async () => {
-  await ever.disconnect()
-}
+  await ever.disconnect();
+};
