@@ -5,7 +5,17 @@ const theme = createTheme({
   status: {
     danger: orange[500],
   },
+  palette: {
+    primary: {
+      main: "#3569f0",
+    },
+  },
   components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiTypography: {
       styleOverrides: {
         h1: {

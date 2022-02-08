@@ -1,3 +1,5 @@
+import {Button} from "@mui/material";
+
 import useAppSelector from "../hooks/useAppSelector";
 import {selectCurrentStep} from "../store/reducers/currentStep";
 import AddressInput from "./AddressInput";
@@ -20,6 +22,7 @@ export default function Step1() {
         <BlockchainSelect />
         <AddressInput label="Receiver address" />
       </div>
+      <Button variant="contained">Next</Button>
     </>
   );
 }
