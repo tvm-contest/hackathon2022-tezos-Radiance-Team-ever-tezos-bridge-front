@@ -7,11 +7,19 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.4.0",
+    "@reduxjs/toolkit": "^1.7.2",
     "@taquito/beacon-wallet": "11.0.2",
     "@taquito/local-forging": "11.0.2",
     "@taquito/taquito": "11.0.2",
     "@taquito/utils": "11.0.2",
     "@temple-wallet/dapp": "^6.1.0",
+    "everscale-inpage-provider": "^0.3.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "web-vitals": "^1.0.1"
+  },
+  "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -19,12 +27,8 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "everscale-inpage-provider": "^0.3.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "typescript": "^4.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
