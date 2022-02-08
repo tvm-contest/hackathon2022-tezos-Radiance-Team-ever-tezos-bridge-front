@@ -1,3 +1,5 @@
+import {CssBaseline} from "@mui/material";
+
 import Header from "./components/Header";
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
@@ -8,6 +10,7 @@ import Summary from "./components/Summary";
 export default function App() {
   return (
     <>
+      <CssBaseline />
       <Header />
       <Subheader />
       <Summary />

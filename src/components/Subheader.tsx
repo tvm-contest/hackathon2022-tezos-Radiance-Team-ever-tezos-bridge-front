@@ -1,3 +1,5 @@
+import {Typography} from "@mui/material";
+
 export default function Subheader() {
-  return <p>Cross-chain transfer</p>;
+  return <Typography variant="h1">Cross-chain transfer</Typography>;
 }
