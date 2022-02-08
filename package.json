@@ -49,7 +49,8 @@
     ],
     "rules": {
       "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error"
+      "simple-import-sort/exports": "error",
+      "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}]
     }
   },
   "browserslist": {

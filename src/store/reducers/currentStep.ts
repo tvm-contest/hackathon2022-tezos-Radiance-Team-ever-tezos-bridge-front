@@ -1,14 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
-import { CurrentStepState, RootState } from "../../types";
+import {CurrentStepState, RootState} from "../../types";
 
 const initialState: CurrentStepState = {
   value: 1,
 };
 
 export const currentStepSlice = createSlice({
-  name: "currentStep",
   initialState,
+  name: "currentStep",
   reducers: {
     next(state) {
       state.value += 1;
@@ -19,7 +19,7 @@ export const currentStepSlice = createSlice({
   },
 });
 
-export const { next, prev } = currentStepSlice.actions;
+export const {next, prev} = currentStepSlice.actions;
 
 export const selectCurrentStep = (state: RootState) => state.currentStep.value;
 
