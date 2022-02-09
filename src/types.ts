@@ -20,8 +20,12 @@ declare module "@mui/material/styles" {
   }
 }
 
+interface Token {
+  balance: number;
+}
+
 /**
- * Store states's types
+ * Redux store states's types
  */
 export interface CurrentStepState {
   value: number;
@@ -38,4 +42,9 @@ export interface SummaryProps {
 
 export interface AddressInputProps {
   label: string;
+}
+
+export interface InputProps {
+  label: string;
+  token?: Token;
 }

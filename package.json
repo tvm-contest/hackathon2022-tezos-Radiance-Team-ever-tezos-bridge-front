@@ -6,6 +6,7 @@
     "@airgap/beacon-sdk": "^2.3.9",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.4.1",
     "@mui/material": "^5.4.0",
     "@reduxjs/toolkit": "^1.7.2",
     "@taquito/beacon-wallet": "11.2.0",
@@ -70,7 +71,8 @@
           "natural": false,
           "minKeys": 2
         }
-      ]
+      ],
+      "react/jsx-sort-props": "error"
     },
     "overrides": [
       {

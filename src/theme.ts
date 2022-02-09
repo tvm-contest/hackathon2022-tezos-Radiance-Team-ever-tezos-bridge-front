@@ -4,6 +4,9 @@ import {orange} from "@mui/material/colors";
 const theme = createTheme({
   components: {
     MuiButton: {
+      defaultProps: {
+        variant: "contained",
+      },
       styleOverrides: {
         root: {
           "&:hover": {
@@ -22,6 +25,27 @@ const theme = createTheme({
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
+      },
+    },
+    MuiFormControl: {
+      defaultProps: {
+        variant: "standard",
+      },
+    },
+    MuiInputLabel: {
+      defaultProps: {
+        shrink: true,
+      },
+    },
+    MuiPaper: {
+      defaultProps: {
+        variant: "outlined",
+      },
+      styleOverrides: {
+        root: {
+          borderColor: "rgba(0, 0, 0, 0.1)",
+          borderStyle: "solid",
+        },
       },
     },
     MuiTypography: {
