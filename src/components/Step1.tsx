@@ -4,6 +4,7 @@ import useAppSelector from "../hooks/useAppSelector";
 import {selectCurrentStep} from "../store/reducers/currentStep";
 import AddressInput from "./AddressInput";
 import BlockchainSelect from "./BlockchainSelect";
+import StepIndicator from "./StepIndicator";
 
 export default function Step1() {
   const currentStep = useAppSelector(selectCurrentStep);
@@ -12,6 +13,7 @@ export default function Step1() {
 
   return (
     <Stack spacing={2}>
+      <StepIndicator />
       <Paper sx={{p: 4}}>
         <Grid container>
           <Grid item xs={3}>
