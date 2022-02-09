@@ -12,7 +12,7 @@ export default function Step1() {
 
   return (
     <Stack spacing={2}>
-      <Paper>
+      <Paper sx={{p: 4}}>
         <Grid container>
           <Grid item xs={3}>
             <Typography>From</Typography>
@@ -25,7 +25,7 @@ export default function Step1() {
           </Grid>
         </Grid>
       </Paper>
-      <Paper>
+      <Paper sx={{p: 4}}>
         <Grid container>
           <Grid item xs={3}>
             <Typography>To</Typography>
@@ -38,7 +38,7 @@ export default function Step1() {
           </Grid>
         </Grid>
       </Paper>
-      <Button variant="contained">Next</Button>
+      <Button>Next</Button>
     </Stack>
   );
 }
