@@ -1,20 +1,20 @@
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 
-import TokenInput from "../components/TokenInput";
+import TokenInputComponent from "../components/TokenInput";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  component: TokenInput,
-  title: "Input",
-} as ComponentMeta<typeof TokenInput>;
+  component: TokenInputComponent,
+  title: "Inputs",
+} as ComponentMeta<typeof TokenInputComponent>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof TokenInput> = (args) => (
-  <TokenInput {...args} />
+const Template: ComponentStory<typeof TokenInputComponent> = (args) => (
+  <TokenInputComponent {...args} />
 );
 
-export const Primary = Template.bind({});
+export const TokenInput = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Primary.args = {
-  label: "Token Input",
+TokenInput.args = {
+  label: "Input",
 };

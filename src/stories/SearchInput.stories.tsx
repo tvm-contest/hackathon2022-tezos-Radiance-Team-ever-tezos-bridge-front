@@ -1,18 +1,18 @@
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 
-import SearchInput from "../components/SearchInput";
+import SearchInputComponent from "../components/SearchInput";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  component: SearchInput,
-  title: "Search Input",
-} as ComponentMeta<typeof SearchInput>;
+  component: SearchInputComponent,
+  title: "Inputs",
+} as ComponentMeta<typeof SearchInputComponent>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof SearchInput> = (args) => (
-  <SearchInput {...args} />
+const Template: ComponentStory<typeof SearchInputComponent> = (args) => (
+  <SearchInputComponent {...args} />
 );
 
-export const Primary = Template.bind({});
+export const SearchInput = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Primary.args = {};
+SearchInput.args = {};
