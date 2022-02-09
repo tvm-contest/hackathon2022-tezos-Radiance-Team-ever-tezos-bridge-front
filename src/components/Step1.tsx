@@ -11,26 +11,30 @@ export default function Step1() {
   if (currentStep !== 1) return null;
 
   return (
-    <Stack>
+    <Stack spacing={2}>
       <Paper>
         <Grid container>
-          <Grid item>
+          <Grid item xs={3}>
             <Typography>From</Typography>
           </Grid>
-          <Grid item>
-            <BlockchainSelect />
-            <AddressInput label="Sender address" />
+          <Grid item xs={9}>
+            <Stack spacing={4}>
+              <BlockchainSelect />
+              <AddressInput label="Sender address" />
+            </Stack>
           </Grid>
         </Grid>
       </Paper>
       <Paper>
         <Grid container>
-          <Grid item>
+          <Grid item xs={3}>
             <Typography>To</Typography>
           </Grid>
-          <Grid item>
-            <BlockchainSelect />
-            <AddressInput label="Receiver address" />
+          <Grid item xs={9}>
+            <Stack spacing={4}>
+              <BlockchainSelect />
+              <AddressInput label="Receiver address" />
+            </Stack>
           </Grid>
         </Grid>
       </Paper>
