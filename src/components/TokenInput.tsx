@@ -48,7 +48,7 @@ const StyledInput = styled(InputBase)(({theme}) => ({
   },
 }));
 
-export default function Input({label, token}: InputProps) {
+export default function TokenInput({label, token}: InputProps) {
   return (
     <StyledPaper>
       <FormControl>
