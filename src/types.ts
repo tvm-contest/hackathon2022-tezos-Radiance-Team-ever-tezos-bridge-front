@@ -22,6 +22,7 @@ declare module "@mui/material/styles" {
 
 interface Token {
   balance: number;
+  name: string;
 }
 
 /**
@@ -44,7 +45,8 @@ export interface AddressInputProps {
   label: string;
 }
 
-export interface InputProps {
+export interface TokenInputProps {
   label: string;
   token?: Token;
+  tokens?: Token[];
 }

@@ -3,11 +3,7 @@ import {Step, StepLabel, Stepper} from "@mui/material";
 import useAppSelector from "../hooks/useAppSelector";
 import {selectCurrentStep} from "../store/reducers/currentStep";
 
-const steps = [
-  "Select the route",
-  "Select token and amount",
-  "Transfer status",
-];
+const steps = ["Select the route, token and amount", "Transfer status"];
 
 export default function StepIndicator() {
   const currentStep = useAppSelector(selectCurrentStep);

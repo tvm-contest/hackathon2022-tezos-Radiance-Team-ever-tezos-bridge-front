@@ -6,10 +6,12 @@ import {
   InputLabel,
   Paper,
   Stack,
+  Typography,
 } from "@mui/material";
 import {alpha, styled} from "@mui/material/styles";
+import {useMemo} from "react";
 
-import {InputProps} from "../types";
+import {TokenInputProps} from "../types";
 
 const StyledPaper = styled(Paper)(({theme}) => ({
   "&": {
@@ -48,16 +50,36 @@ const StyledInput = styled(InputBase)(({theme}) => ({
   },
 }));
 
-export default function TokenInput({label, token}: InputProps) {
+export default function TokenInput({label, token, tokens}: TokenInputProps) {
+  const currentButton = useMemo(() => {
+    if (token && tokens && tokens.length)
+      return (
+        <Stack justifyContent="space-between">
+          <Typography>Balance: {token.balance}</Typography>
+          <Button>{token.name}</Button>
+        </Stack>
+      );
+    else if (token && tokens?.length)
+      return (
+        <Stack justifyContent="flex-end">
+          <Button endIcon={<KeyboardArrowDownIcon />}>Select a token</Button>
+        </Stack>
+      );
+    else
+      return (
+        <Stack justifyContent="flex-end">
+          <Button>Connect wallet</Button>
+        </Stack>
+      );
+  }, [tokens, token]);
+
   return (
     <StyledPaper>
       <FormControl>
         <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
         <StyledInput id="standard-input" />
       </FormControl>
-      <Stack justifyContent={token ? "space-between" : "flex-end"}>
-        <Button endIcon={<KeyboardArrowDownIcon />}>Select a token</Button>
-      </Stack>
+      {currentButton}
     </StyledPaper>
   );
 }
