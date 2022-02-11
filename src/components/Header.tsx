@@ -1,9 +1,7 @@
-import {NetworkType as BeaconNetworkType} from "@airgap/beacon-sdk";
 import BigNumber from "bignumber.js";
 import React, {useState} from "react";
 
 import {
-  connectWalletBeacon,
   connectWalletEver,
   connectWalletTemple,
   DAppConnection,
@@ -11,17 +9,17 @@ import {
 } from "../wallets";
 
 const networksTokensData = {
-  mainnet: {
-    address: "KT1BHCumksALJQJ8q8to2EPigPW6qpyTr7Ng",
-    id: 0,
-    decimals: 8,
-    name: "CRUNCH",
-  },
   hangzhounet: {
     address: "KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ",
-    id: 0,
     decimals: 6,
+    id: 0,
     name: "Test QUIPU",
+  },
+  mainnet: {
+    address: "KT1BHCumksALJQJ8q8to2EPigPW6qpyTr7Ng",
+    decimals: 8,
+    id: 0,
+    name: "CRUNCH",
   },
 };
 
@@ -38,15 +36,7 @@ export default function Header() {
 
   const connectWallet = async (connectionType: DAppConnection["type"]) => {
     try {
-      const connection =
-        connectionType === "temple"
-          ? await connectWalletTemple(true, network)
-          : await connectWalletBeacon(true, {
-              type:
-                network === "mainnet"
-                  ? BeaconNetworkType.MAINNET
-                  : BeaconNetworkType.HANGZHOUNET,
-            });
+      const connection = await connectWalletTemple(true, network);
 
       setConnection(connection);
     } catch (e) {
@@ -92,9 +82,9 @@ export default function Header() {
             from_: pkh,
             txs: [
               {
+                amount: new BigNumber(10).pow(decimals).times(2),
                 to_: AUTHOR_ADDRESS,
                 token_id: id,
-                amount: new BigNumber(10).pow(decimals).times(2),
               },
             ],
           },

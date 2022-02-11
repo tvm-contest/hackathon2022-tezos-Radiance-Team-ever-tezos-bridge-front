@@ -11,8 +11,8 @@ export default function App() {
   return (
     <>
       <CssBaseline />
+      <Header />
       <Subheader />
-      <Summary />
       <Step1 />
       <Step2 />
       <Step3 />
