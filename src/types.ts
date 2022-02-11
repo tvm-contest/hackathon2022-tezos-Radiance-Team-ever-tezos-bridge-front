@@ -32,6 +32,11 @@ export interface CurrentStepState {
   value: number;
 }
 
+export interface WalletState {
+  address: string;
+  balance: number;
+}
+
 /**
  * Components's props
  */

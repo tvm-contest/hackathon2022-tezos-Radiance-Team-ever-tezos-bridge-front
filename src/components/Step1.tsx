@@ -1,12 +1,14 @@
 import {Box, Button, Stack} from "@mui/material";
+import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
-import {selectCurrentStep} from "../store/reducers/currentStep";
+import {next, selectCurrentStep} from "../store/reducers/currentStep";
 import StepIndicator from "./StepIndicator";
 import SwapButton from "./SwapButton";
 import TokenInput from "./TokenInput";
 
 export default function Step1() {
+  const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
 
   if (currentStep !== 1) return null;
@@ -19,7 +21,13 @@ export default function Step1() {
         <SwapButton />
       </Box>
       <TokenInput label="To (Everscale)" />
-      <Button>Next</Button>
+      <Button
+        onClick={() => {
+          dispatch(next());
+        }}
+      >
+        Next
+      </Button>
     </Stack>
   );
 }
