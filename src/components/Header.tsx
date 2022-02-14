@@ -37,13 +37,13 @@ export default function Header() {
 
   return (
     <Stack component="header" direction="row-reverse" spacing={1} sx={{my: 2}}>
-      {tezosWallet ? (
+      {tezosWallet.data ? (
         <Button
           onClick={handleDisconnectTezosWallet}
           size="small"
           variant="text"
         >
-          {_.truncate(tezosWallet.address, {length: 10})}
+          {_.truncate(tezosWallet.data.address, {length: 10})}
         </Button>
       ) : (
         <>
@@ -56,13 +56,13 @@ export default function Header() {
           </Button>
         </>
       )}
-      {everWallet ? (
+      {everWallet.data ? (
         <Button
           onClick={handleDisconnectEverWallet}
           size="small"
           variant="text"
         >
-          {_.truncate(everWallet.address, {length: 10})}
+          {_.truncate(everWallet.data.address, {length: 10})}
         </Button>
       ) : (
         <Button onClick={handleConnectEverWallet} size="small" variant="text">

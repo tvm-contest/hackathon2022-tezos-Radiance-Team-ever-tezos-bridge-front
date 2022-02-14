@@ -1,3 +1,6 @@
+import {Address, Permissions} from "everscale-inpage-provider";
+import {SagaReturnType} from "redux-saga/effects";
+
 import store from "./store";
 
 /**
@@ -25,7 +28,7 @@ interface Token {
   name: string;
 }
 
-interface Wallet {
+export interface Wallet {
   address: string;
   balance: number;
 }
@@ -37,7 +40,12 @@ export interface CurrentStepState {
   value: number;
 }
 
-export type WalletState = Wallet | null;
+export interface WalletState {
+  data: Wallet | null;
+  error: string | null;
+  fetched: boolean;
+  loading: boolean;
+}
 
 /**
  * Components's props
@@ -59,3 +67,12 @@ export interface TokenInputProps {
   onConnectWallet: () => void;
   onSelectToken: () => void;
 }
+
+/**
+ * Saga's types
+ */
+export type RequestPermissionsReturn = SagaReturnType<
+  () => Promise<Partial<Permissions<Address>>>
+>;
+
+export type HasProviderReturn = SagaReturnType<() => Promise<boolean>>;

@@ -2,17 +2,22 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {RootState, WalletState} from "../../types";
 
-const initialState: WalletState = null as WalletState;
+const initialState: WalletState = {
+  data: null,
+  error: null,
+  fetched: false,
+  loading: false,
+};
 
 export const tezosWalletSlice = createSlice({
   initialState,
   name: "tezosWallet",
   reducers: {
-    connect() {
+    connect(_) {
       // Handled by saga
     },
     disconnect() {
-      return null;
+      return initialState;
     },
   },
 });
