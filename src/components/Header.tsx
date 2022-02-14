@@ -1,125 +1,74 @@
-import BigNumber from "bignumber.js";
-import React, {useState} from "react";
+import {Button, Stack} from "@mui/material";
+import _ from "lodash";
 
+import useAppDispatch from "../hooks/useAppDispatch";
+import useAppSelector from "../hooks/useAppSelector";
 import {
-  connectWalletEver,
-  connectWalletTemple,
-  DAppConnection,
-  disconnectWalletEver,
-} from "../wallets";
-
-const networksTokensData = {
-  hangzhounet: {
-    address: "KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ",
-    decimals: 6,
-    id: 0,
-    name: "Test QUIPU",
-  },
-  mainnet: {
-    address: "KT1BHCumksALJQJ8q8to2EPigPW6qpyTr7Ng",
-    decimals: 8,
-    id: 0,
-    name: "CRUNCH",
-  },
-};
-
-const AUTHOR_ADDRESS = "tz1LSMu9PugfVyfX2ynNU9y4eVvSACJKP7sg";
-
-function hasMessage(value: unknown): value is {message: string} {
-  return typeof value === "object" && value !== null && "message" in value;
-}
+  connect as connectEverWallet,
+  disconnect as disconnectEverWallet,
+  selectEverWallet,
+} from "../store/reducers/everWallet";
+import {
+  connect as connectTezosWallet,
+  disconnect as disconnectTezosWallet,
+  selectTezosWallet,
+} from "../store/reducers/tezosWallet";
 
 export default function Header() {
-  const [connection, setConnection] = useState<DAppConnection>();
-  const [network, setNetwork] = useState<"mainnet" | "hangzhounet">("mainnet");
-  const [everAddress, setEverAddress] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const everWallet = useAppSelector(selectEverWallet);
+  const tezosWallet = useAppSelector(selectTezosWallet);
 
-  const connectWallet = async (connectionType: DAppConnection["type"]) => {
-    try {
-      const connection = await connectWalletTemple(true, network);
+  function handleConnectTezosWallet() {
+    dispatch(connectTezosWallet());
+  }
 
-      setConnection(connection);
-    } catch (e) {
-      if ((e as any)?.name === "NotGrantedTempleWalletError") {
-        return;
-      }
+  function handleDisconnectTezosWallet() {
+    dispatch(disconnectTezosWallet());
+  }
 
-      const outputArg = hasMessage(e) ? e.message : e;
-      console.error(e);
-      alert(`Error: ${outputArg}`);
-    }
-  };
+  function handleConnectEverWallet() {
+    dispatch(connectEverWallet());
+  }
 
-  const handleConnectTempleClick = () => connectWallet("temple");
-  const handleConnectBeaconClick = () => connectWallet("beacon");
-  const handleConnectEver = async () => {
-    const address = await connectWalletEver();
-    setEverAddress(address.toString());
-  };
-
-  const resetConnection = async () => {
-    setConnection(undefined);
-  };
-
-  const resetEver = () => {
-    disconnectWalletEver();
-    setEverAddress("");
-  };
-
-  const handleNetworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    resetConnection();
-    setNetwork(e.target.value as "mainnet" | "hangzhounet");
-  };
-
-  const donate = async () => {
-    try {
-      const {tezos, pkh} = connection!;
-      const {address, id, decimals} = networksTokensData[network];
-      const tokenContract = await tezos.wallet.at(address);
-      const op = await tokenContract.methods
-        .transfer([
-          {
-            from_: pkh,
-            txs: [
-              {
-                amount: new BigNumber(10).pow(decimals).times(2),
-                to_: AUTHOR_ADDRESS,
-                token_id: id,
-              },
-            ],
-          },
-        ])
-        .send();
-      alert("Thank you, the donation is being processed!");
-      await op.confirmation(1);
-      alert("Donation has been processed successfully!");
-    } catch (e) {
-      if ((e as any)?.name === "NotGrantedTempleWalletError") {
-        return;
-      }
-
-      const outputArg = hasMessage(e) ? e.message : e;
-      console.error(e);
-      alert(`Error while donating: ${outputArg}`);
-    }
-  };
+  function handleDisconnectEverWallet() {
+    dispatch(disconnectEverWallet());
+  }
 
   return (
-    <div>
-      {connection ? (
-        <button onClick={resetConnection}>{connection.pkh}</button>
+    <Stack component="header" direction="row-reverse" spacing={1} sx={{my: 2}}>
+      {tezosWallet ? (
+        <Button
+          onClick={handleDisconnectTezosWallet}
+          size="small"
+          variant="text"
+        >
+          {_.truncate(tezosWallet.address, {length: 10})}
+        </Button>
       ) : (
         <>
-          <button onClick={handleConnectTempleClick}>
-            Connect Temple Wallet
-          </button>
+          <Button
+            onClick={handleConnectTezosWallet}
+            size="small"
+            variant="text"
+          >
+            Connect Tezos Wallet
+          </Button>
         </>
       )}
-      {everAddress ? (
-        <button onClick={resetEver}>{everAddress}</button>
+      {everWallet ? (
+        <Button
+          onClick={handleDisconnectEverWallet}
+          size="small"
+          variant="text"
+        >
+          {_.truncate(everWallet.address, {length: 10})}
+        </Button>
       ) : (
-        <button onClick={handleConnectEver}>Connect Ever Wallet</button>
+        <Button onClick={handleConnectEverWallet} size="small" variant="text">
+          Connect Ever Wallet
+        </Button>
       )}
-    </div>
+    </Stack>
   );
 }

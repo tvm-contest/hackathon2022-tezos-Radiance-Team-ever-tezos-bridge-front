@@ -1,5 +1,9 @@
-import {Typography} from "@mui/material";
+import {Typography, TypographyProps} from "@mui/material";
 
-export default function Subheader() {
-  return <Typography variant="h1">Cross-chain transfer</Typography>;
+export default function Subheader(props: TypographyProps) {
+  return (
+    <Typography variant="h1" {...props}>
+      Cross-chain transfer
+    </Typography>
+  );
 }

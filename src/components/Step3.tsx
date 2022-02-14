@@ -2,7 +2,6 @@ import {Button, Grid, Paper, Stack, Typography} from "@mui/material";
 
 import useAppSelector from "../hooks/useAppSelector";
 import {selectCurrentStep} from "../store/reducers/currentStep";
-import StepIndicator from "./StepIndicator";
 
 export default function Step3() {
   const currentStep = useAppSelector(selectCurrentStep);
@@ -12,7 +11,6 @@ export default function Step3() {
   return (
     <Paper sx={{p: 4}}>
       <Stack spacing={2}>
-        <StepIndicator />
         <Grid container>
           <Grid item xs={3}>
             <Typography>Status</Typography>

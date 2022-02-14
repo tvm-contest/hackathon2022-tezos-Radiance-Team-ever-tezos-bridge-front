@@ -25,6 +25,11 @@ interface Token {
   name: string;
 }
 
+interface Wallet {
+  address: string;
+  balance: number;
+}
+
 /**
  * Redux store states's types
  */
@@ -32,10 +37,7 @@ export interface CurrentStepState {
   value: number;
 }
 
-export interface WalletState {
-  address: string;
-  balance: number;
-}
+export type WalletState = Wallet | null;
 
 /**
  * Components's props
@@ -54,4 +56,6 @@ export interface TokenInputProps {
   label: string;
   token?: Token;
   tokens?: Token[];
+  onConnectWallet: () => void;
+  onSelectToken: () => void;
 }
