@@ -1,3 +1,4 @@
+import {TempleDAppPermission} from "@temple-wallet/dapp";
 import {Address, Permissions} from "everscale-inpage-provider";
 import {SagaReturnType} from "redux-saga/effects";
 
@@ -76,3 +77,11 @@ export type RequestPermissionsReturn = SagaReturnType<
 >;
 
 export type HasProviderReturn = SagaReturnType<() => Promise<boolean>>;
+
+export type IsAvailableReturn = SagaReturnType<() => Promise<boolean>>;
+
+export type GetCurrentPermissionsReturn = SagaReturnType<
+  () => Promise<TempleDAppPermission>
+>;
+
+export type GetPKHReturn = SagaReturnType<() => Promise<string>>;

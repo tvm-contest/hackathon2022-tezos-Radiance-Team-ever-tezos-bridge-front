@@ -1,6 +1,6 @@
-import {ProviderRpcClient} from "everscale-inpage-provider";
 import {call, put, takeLatest} from "redux-saga/effects";
 
+import everRpcClient from "../../lib/everRpcClient";
 // import everRpcClient from "../../lib/everRpcClient";
 import {HasProviderReturn, RequestPermissionsReturn} from "../../types";
 import {
@@ -11,8 +11,6 @@ import {
 } from "../reducers/everWallet";
 
 function* connectWalletEver() {
-  const everRpcClient = new ProviderRpcClient();
-
   yield put(setConnecting());
 
   const has: HasProviderReturn = yield call(
