@@ -17,11 +17,19 @@ export default function Step1() {
 
   if (currentStep !== 1) return null;
 
+  function handleConnectTezosWallet() {
+    dispatch(connectTezos());
+  }
+
+  function handleConnectEverWallet() {
+    dispatch(connectEver());
+  }
+
   return (
     <Stack spacing={2}>
       <TokenInput
         label="From (Tezos)"
-        onConnectWallet={() => dispatch(connectTezos())}
+        onConnectWallet={handleConnectTezosWallet}
         onSelectToken={() => {}}
       />
       <Box sx={{display: "flex", justifyContent: "center"}}>
@@ -29,7 +37,7 @@ export default function Step1() {
       </Box>
       <TokenInput
         label="To (Everscale)"
-        onConnectWallet={() => dispatch(connectEver())}
+        onConnectWallet={handleConnectEverWallet}
         onSelectToken={() => {}}
       />
       <Button

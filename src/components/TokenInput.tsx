@@ -52,14 +52,14 @@ const StyledInput = styled(InputBase)(({theme}) => ({
 
 export default function TokenInput({label, token, tokens}: TokenInputProps) {
   const currentButton = useMemo(() => {
-    if (token && tokens && tokens.length)
+    if (token)
       return (
         <Stack justifyContent="space-between">
           <Typography>Balance: {token.balance}</Typography>
           <Button>{token.name}</Button>
         </Stack>
       );
-    else if (token && tokens?.length)
+    else if (tokens)
       return (
         <Stack justifyContent="flex-end">
           <Button endIcon={<KeyboardArrowDownIcon />}>Select a token</Button>

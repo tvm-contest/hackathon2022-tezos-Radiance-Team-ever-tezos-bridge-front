@@ -69,6 +69,15 @@ export interface TokenInputProps {
   onSelectToken: () => void;
 }
 
+export interface TokenListPopupProps {
+  onClose: () => void;
+  tokens: Token[];
+}
+
+export type TokenListItemProps = {
+  token: Token;
+};
+
 /**
  * Saga's types
  */
