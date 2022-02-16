@@ -3,7 +3,9 @@ import createSagaMiddleware from "redux-saga";
 import {all} from "redux-saga/effects";
 
 import currentStep from "./reducers/currentStep";
+import everTokens from "./reducers/everTokens";
 import everWallet from "./reducers/everWallet";
+import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
 import connectEverWallet from "./sagas/connectEverWallet";
 import connectTezosWallet from "./sagas/connectTezosWallet";
@@ -17,7 +19,9 @@ const store = configureStore({
   middleware: [sagaMiddleware],
   reducer: {
     currentStep,
+    everTokens,
     everWallet,
+    tezosTokens,
     tezosWallet,
   },
 });
