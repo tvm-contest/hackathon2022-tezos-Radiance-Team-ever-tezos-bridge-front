@@ -9,6 +9,7 @@ import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
 import connectEverWallet from "./sagas/connectEverWallet";
 import connectTezosWallet from "./sagas/connectTezosWallet";
+import fetchEverTokensSaga from "./sagas/fetchEverTokens";
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -28,7 +29,7 @@ const store = configureStore({
 
 // then run the saga
 sagaMiddleware.run(function* () {
-  yield all([connectEverWallet(), connectTezosWallet()]);
+  yield all([connectEverWallet(), connectTezosWallet(), fetchEverTokensSaga()]);
 });
 
 export default store;

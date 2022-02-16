@@ -41,6 +41,6 @@ export const everWalletSlice = createSlice({
 export const {connect, disconnect, setConnecting, setError, setConnected} =
   everWalletSlice.actions;
 
-export const selectEverWallet = (state: RootState) => state.everWallet;
+export const selectEverWallet = (state: RootState) => state.everWallet.data;
 
 export default everWalletSlice.reducer;

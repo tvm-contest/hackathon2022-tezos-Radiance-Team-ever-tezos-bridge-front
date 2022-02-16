@@ -24,7 +24,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-interface Token {
+export interface Token {
   balance: number;
   name: string;
 }
@@ -34,11 +34,27 @@ export interface Wallet {
   balance: number;
 }
 
+export type WalletAddressRequest = {
+  root: Address;
+  owner: Address;
+};
+
+export type BalanceWalletRequest = {
+  wallet: Address;
+};
+
 /**
  * Redux store states's types
  */
 export interface CurrentStepState {
   value: number;
+}
+
+export interface TokensState {
+  data: Token[] | null;
+  error: string | null;
+  fetched: boolean;
+  loading: boolean;
 }
 
 export interface WalletState {
@@ -94,3 +110,7 @@ export type GetCurrentPermissionsReturn = SagaReturnType<
 >;
 
 export type GetPKHReturn = SagaReturnType<() => Promise<string>>;
+
+export type EverWalletSelect = SagaReturnType<() => Wallet | null>;
+
+export type BalanceArray = SagaReturnType<() => Promise<string>>;

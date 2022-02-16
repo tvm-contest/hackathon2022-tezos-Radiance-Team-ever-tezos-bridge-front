@@ -11,7 +11,7 @@
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "sort-keys": [
-      "error",
+      "warn",
       "asc",
       {
         "caseSensitive": true,

@@ -41,6 +41,6 @@ export const tezosWalletSlice = createSlice({
 export const {connect, disconnect, setConnecting, setError, setConnected} =
   tezosWalletSlice.actions;
 
-export const selectTezosWallet = (state: RootState) => state.tezosWallet;
+export const selectTezosWallet = (state: RootState) => state.tezosWallet.data;
 
 export default tezosWalletSlice.reducer;
