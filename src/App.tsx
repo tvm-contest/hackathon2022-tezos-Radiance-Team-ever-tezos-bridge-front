@@ -9,13 +9,20 @@ import Subheader from "./components/Subheader";
 import useAppSelector from "./hooks/useAppSelector";
 import {fetch as fetchEverTokens} from "./store/reducers/everTokens";
 import {selectEverWallet} from "./store/reducers/everWallet";
+import {fetch as fetchTezosTokens} from "./store/reducers/tezosTokens";
+import { selectTezosWallet } from "./store/reducers/tezosWallet";
 
 export default function App() {
   const everWallet = useAppSelector(selectEverWallet);
+  const tezosWallet = useAppSelector(selectTezosWallet);
 
   useEffect(() => {
     if (everWallet) fetchEverTokens();
   }, [everWallet]);
+
+  useEffect(() => {
+    if (tezosWallet) fetchTezosTokens();
+  }, [tezosWallet]);
 
   return (
     <>

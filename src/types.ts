@@ -43,6 +43,17 @@ export type BalanceWalletRequest = {
   wallet: Address;
 };
 
+export interface TezosToken {
+  contract: string;
+  network: string;
+  token_id: number;
+  symbol: string;
+  name: string;
+  decimals: number;
+  is_transferable: boolean;
+  balance: string;
+}
+
 /**
  * Redux store states's types
  */
@@ -111,6 +122,13 @@ export type GetCurrentPermissionsReturn = SagaReturnType<
 
 export type GetPKHReturn = SagaReturnType<() => Promise<string>>;
 
-export type EverWalletSelect = SagaReturnType<() => Wallet | null>;
+export type WalletSelect = SagaReturnType<() => Wallet | null>;
 
 export type BalanceArray = SagaReturnType<() => Promise<string>>;
+
+export type GetTezosTokensResponse = SagaReturnType<
+  () => Promise<{
+    balances: TezosToken[];
+    total: number;
+  }>
+>;

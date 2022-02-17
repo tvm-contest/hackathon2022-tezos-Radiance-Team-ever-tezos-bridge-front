@@ -3,13 +3,13 @@ import {all, call, put, select, takeLatest} from "redux-saga/effects";
 
 import EverApi from "../../misc/EverApi";
 import everTokens from "../../misc/everTokens.json";
-import {BalanceArray, EverWalletSelect, RootState} from "../../types";
+import {BalanceArray, RootState,WalletSelect} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/everTokens";
 
 function* fetchEverTokens() {
   yield put(setLoading());
 
-  const everWallet: EverWalletSelect = yield select(
+  const everWallet: WalletSelect = yield select(
     (state: RootState) => state.everWallet.data,
   );
   if (!everWallet) {
