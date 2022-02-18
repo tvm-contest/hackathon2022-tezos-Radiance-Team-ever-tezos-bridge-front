@@ -91,7 +91,7 @@ export interface AddressInputProps {
 export interface TokenInputProps {
   label: string;
   token?: Token;
-  tokens?: Token[];
+  tokens?: Token[] | null;
   onConnectWallet: () => void;
   onSelectToken: () => void;
 }
@@ -128,7 +128,9 @@ export type BalanceArray = SagaReturnType<() => Promise<string>>;
 
 export type GetTezosTokensResponse = SagaReturnType<
   () => Promise<{
-    balances: TezosToken[];
-    total: number;
+    data: {
+      balances: TezosToken[];
+      total: number;
+    };
   }>
 >;

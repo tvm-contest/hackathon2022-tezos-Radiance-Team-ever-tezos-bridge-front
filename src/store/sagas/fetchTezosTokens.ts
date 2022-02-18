@@ -15,12 +15,14 @@ function* fetchTezosTokens() {
     return;
   }
 
-  const res: GetTezosTokensResponse = yield call(
+  const {data}: GetTezosTokensResponse = yield call(
     tezosApiClient.get.bind(tezosApiClient),
     `/account/hangzhou2net/${tezosWallet.address}/token_balances`,
   );
 
-  yield put(setFetched(res.balances.map((t) => ({...t, balance: +t.balance}))));
+  yield put(
+    setFetched(data.balances.map((t) => ({...t, balance: +t.balance}))),
+  );
 }
 
 export default function* fetchTezosTokensSaga() {

@@ -50,7 +50,7 @@ const StyledInput = styled(InputBase)(({theme}) => ({
   },
 }));
 
-export default function TokenInput({label, token, tokens}: TokenInputProps) {
+export default function TokenInput({label, token, tokens, onConnectWallet}: TokenInputProps) {
   const currentButton = useMemo(() => {
     if (token)
       return (
@@ -68,10 +68,10 @@ export default function TokenInput({label, token, tokens}: TokenInputProps) {
     else
       return (
         <Stack justifyContent="flex-end">
-          <Button>Connect wallet</Button>
+          <Button onClick={onConnectWallet}>Connect wallet</Button>
         </Stack>
       );
-  }, [tokens, token]);
+  }, [tokens, token, onConnectWallet]);
 
   return (
     <StyledPaper>

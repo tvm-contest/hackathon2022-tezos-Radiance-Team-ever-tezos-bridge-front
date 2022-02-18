@@ -1,3 +1,5 @@
+/* eslint-disable sort-keys */
+
 export default class EverAbi {
   static Root = {
     "ABI version": 2,
