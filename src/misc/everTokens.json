@@ -1,9 +1,9 @@
 [
   {
-    "name": "test DefiSpace DEX token",
-    "symbol": "eDEX",
+    "name": "DefiSpace DEX token",
+    "symbol": "DEX",
     "decimals": 9,
-    "address": "0:aa0cbbd54174c812aec846a431136fc381be76a744115430a7e90242a093238f",
+    "address": "0:ed3458cc2d6d35763490ace13a67e302c4d72a98f36f00406341a9d382401450",
     "logoURI": "https://raw.githubusercontent.com/broxus/ton-assets/master/icons/WTONv3/logo.svg"
   }
 ]
