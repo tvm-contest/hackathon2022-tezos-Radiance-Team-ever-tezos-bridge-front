@@ -2,10 +2,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   FormControl,
   InputBase,
-  InputBaseProps,
   Paper,
   styled,
 } from "@mui/material";
+
+import { SearchInputProps } from "../types";
 
 const StyledPaper = styled(Paper)(() => ({
   "&": {
@@ -20,15 +21,18 @@ const StyledFormControl = styled(FormControl)(() => ({
   },
 }));
 
-export default function SearchInput(props: InputBaseProps) {
+export default function SearchInput({
+  containerProps,
+  inputProps,
+}: SearchInputProps) {
   return (
-    <StyledPaper>
+    <StyledPaper {...containerProps}>
       <StyledFormControl>
         <InputBase
           id="search-input"
           placeholder="Search name or paste address"
           startAdornment={<SearchIcon />}
-          {...props}
+          {...inputProps}
         />
       </StyledFormControl>
     </StyledPaper>

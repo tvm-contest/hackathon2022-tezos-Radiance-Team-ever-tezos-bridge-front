@@ -31,7 +31,7 @@ export default function TokenListPopup({onClose, tokens}: TokenListPopupProps) {
         <Typography
           id="modal-title"
           sx={{
-            mb: 1,
+            mb: 2,
             textAlign: "center",
           }}
           variant="h1"
@@ -41,7 +41,7 @@ export default function TokenListPopup({onClose, tokens}: TokenListPopupProps) {
         <Typography id="modal-description" sx={{display: "none"}}>
           List of a tokens to select from
         </Typography>
-        <SearchInput />
+        <SearchInput containerProps={{sx: {mb: 2}}} />
         {tokens.map((t) => (
           <TokenListItem key={t.name} token={t} />
         ))}

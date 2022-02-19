@@ -62,6 +62,10 @@ const theme = createTheme({
     primary: {
       main: "#3569f0",
     },
+    text: {
+      primary: "#626262",
+      secondary: "#333333",
+    },
   },
   status: {
     danger: orange[500],

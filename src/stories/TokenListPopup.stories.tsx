@@ -22,5 +22,5 @@ TokenListEmpty.args = {
 export const TokenListWithTonTokens = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 TokenListWithTonTokens.args = {
-  tokens: everTokens.map((t) => ({...t, balance: 0})),
+  tokens: everTokens.map((t) => ({...t, balance: 54.321})),
 };
