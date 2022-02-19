@@ -2,7 +2,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 
 import everRpcClient from "../../lib/everRpcClient";
 // import everRpcClient from "../../lib/everRpcClient";
-import {HasProviderReturn, RequestPermissionsReturn} from "../../types";
+import {CallReturnType} from "../../types";
 import {
   connect,
   setConnected,
@@ -13,7 +13,7 @@ import {
 function* connectWalletEver() {
   yield put(setConnecting());
 
-  const has: HasProviderReturn = yield call(
+  const has: CallReturnType<typeof everRpcClient.hasProvider> = yield call(
     everRpcClient.hasProvider.bind(everRpcClient),
   );
   if (!has) {
@@ -23,7 +23,9 @@ function* connectWalletEver() {
 
   yield call(everRpcClient.ensureInitialized.bind(everRpcClient));
 
-  const {accountInteraction}: RequestPermissionsReturn = yield call(
+  const {
+    accountInteraction,
+  }: CallReturnType<typeof everRpcClient.requestPermissions> = yield call(
     everRpcClient.requestPermissions.bind(everRpcClient),
     {
       permissions: ["basic", "accountInteraction"],

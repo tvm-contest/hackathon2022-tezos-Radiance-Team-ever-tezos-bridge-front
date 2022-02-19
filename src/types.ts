@@ -1,9 +1,7 @@
 import {ButtonProps, InputBaseProps, PaperProps} from "@mui/material";
-import {TempleDAppPermission} from "@temple-wallet/dapp";
-import {Address, Permissions} from "everscale-inpage-provider";
-import {SagaReturnType} from "redux-saga/effects";
+import {Address} from "everscale-inpage-provider";
+import {Effect, SimpleEffect} from "redux-saga/effects";
 
-import tezos from "./lib/tezosRpcClient";
 import store from "./store";
 
 /**
@@ -118,33 +116,29 @@ export interface SearchInputProps {
 /**
  * Saga's types
  */
-export type RequestPermissionsReturn = SagaReturnType<
-  () => Promise<Partial<Permissions<Address>>>
+/** Strip any saga effects from a type; this is typically useful to get the return type of a saga. */
+type StripEffects<T> = T extends IterableIterator<infer E>
+  ? E extends Effect | SimpleEffect<any, any>
+    ? never
+    : E
+  : never;
+
+/** Unwrap the type to be consistent with the runtime behavior of a call. */
+type DecideReturn<T> = T extends Promise<infer R>
+  ? R // If it's a promise, return the promised type.
+  : T extends IterableIterator<any>
+  ? StripEffects<T> // If it's a generator, strip any effects to get the return type.
+  : T; // Otherwise, it's a normal function and the return type is unaffected.
+
+/** Determine the return type of yielding a call effect to the provided function.
+ *
+ * Usage: const foo: CallReturnType&lt;typeof func&gt; = yield call(func, ...)
+ */
+export type CallReturnType<T extends (...args: any[]) => any> = DecideReturn<
+  ReturnType<T>
 >;
 
-export type HasProviderReturn = SagaReturnType<() => Promise<boolean>>;
-
-export type IsAvailableReturn = SagaReturnType<() => Promise<boolean>>;
-
-export type GetCurrentPermissionsReturn = SagaReturnType<
-  () => Promise<TempleDAppPermission>
->;
-
-export type GetPKHReturn = SagaReturnType<() => Promise<string>>;
-
-export type WalletSelect = SagaReturnType<() => Wallet | null>;
-
-export type BalanceArray = SagaReturnType<() => Promise<string>>;
-
-export type GetTezosTokensResponse = SagaReturnType<
-  () => Promise<{
-    data: {
-      balances: TezosToken[];
-      total: number;
-    };
-  }>
->;
-
-export type TezosContract = SagaReturnType<
-  () => ReturnType<typeof tezos["wallet"]["at"]>
+/** Get the return type of a saga, stripped of any effects the saga might yield, which will be handled by Saga. */
+export type SagaReturnType<T extends (...args: any[]) => any> = StripEffects<
+  ReturnType<T>
 >;

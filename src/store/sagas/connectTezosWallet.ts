@@ -1,12 +1,8 @@
-import {MichelCodecPacker, TezosToolkit} from "@taquito/taquito";
 import {TempleWallet} from "@temple-wallet/dapp";
 import {call, put, takeLatest} from "redux-saga/effects";
 
-import {
-  GetCurrentPermissionsReturn,
-  GetPKHReturn,
-  IsAvailableReturn,
-} from "../../types";
+import tezos from "../../lib/tezosRpcClient";
+import {CallReturnType} from "../../types";
 import {setError} from "../reducers/everWallet";
 import {setConnected, setConnecting} from "../reducers/tezosWallet";
 import {connect} from "../reducers/tezosWallet";
@@ -14,7 +10,7 @@ import {connect} from "../reducers/tezosWallet";
 function* connectTezosWallet() {
   yield put(setConnecting());
 
-  const available: IsAvailableReturn = yield call(
+  const available: CallReturnType<typeof TempleWallet.isAvailable> = yield call(
     TempleWallet.isAvailable.bind(TempleWallet),
   );
   if (!available) {
@@ -26,9 +22,8 @@ function* connectTezosWallet() {
     return;
   }
 
-  const permissions: GetCurrentPermissionsReturn = yield call(
-    TempleWallet.getCurrentPermission.bind(TempleWallet),
-  );
+  const permissions: CallReturnType<typeof TempleWallet.getCurrentPermission> =
+    yield call(TempleWallet.getCurrentPermission.bind(TempleWallet));
 
   const wallet = new TempleWallet("everscale-bridge-front", permissions);
   if (!wallet.connected) {
@@ -37,17 +32,16 @@ function* connectTezosWallet() {
     });
   }
 
-  const michelEncoder = new MichelCodecPacker();
-  const tezos = new TezosToolkit("https://hangzhounet.api.tez.ie");
   tezos.setWalletProvider(wallet);
-  tezos.setPackerProvider(michelEncoder);
 
   if (!wallet.connected) {
     yield put(setError("Wallet wasn't connected"));
     return;
   }
 
-  const pkh: GetPKHReturn = yield call(wallet.getPKH.bind(wallet));
+  const pkh: CallReturnType<typeof wallet.getPKH> = yield call(
+    wallet.getPKH.bind(wallet),
+  );
   if (!pkh) {
     yield put(setError("Wallet wasn't connected"));
     return;

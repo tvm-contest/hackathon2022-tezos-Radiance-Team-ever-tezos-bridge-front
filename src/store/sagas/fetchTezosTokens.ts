@@ -1,23 +1,28 @@
-import {call, put, select, takeLatest} from "redux-saga/effects";
+import {
+  call,
+  put,
+  SagaReturnType,
+  select,
+  takeLatest,
+} from "redux-saga/effects";
 
-import tezosApiClient from "../../lib/tezosApiClient";
-import {GetTezosTokensResponse, RootState, WalletSelect} from "../../types";
+import {getTezosWallets} from "../../lib/tezosApiClient";
+import {CallReturnType, RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/tezosTokens";
 
 function* fetchTezosTokens() {
   yield put(setLoading());
 
-  const tezosWallet: WalletSelect = yield select(
-    (state: RootState) => state.tezosWallet.data,
-  );
+  const tezosWallet: SagaReturnType<() => RootState["tezosWallet"]["data"]> =
+    yield select((state: RootState) => state.tezosWallet.data);
   if (!tezosWallet) {
     yield put(setError("Tezos wallet not connected"));
     return;
   }
 
-  const {data}: GetTezosTokensResponse = yield call(
-    tezosApiClient.get.bind(tezosApiClient),
-    `/account/hangzhou2net/${tezosWallet.address}/token_balances`,
+  const {data}: CallReturnType<typeof getTezosWallets> = yield call(
+    getTezosWallets,
+    tezosWallet.address,
   );
 
   yield put(
