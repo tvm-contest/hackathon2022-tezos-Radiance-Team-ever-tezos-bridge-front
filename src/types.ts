@@ -1,7 +1,9 @@
+import {ButtonProps, InputBaseProps, PaperProps} from "@mui/material";
 import {TempleDAppPermission} from "@temple-wallet/dapp";
 import {Address, Permissions} from "everscale-inpage-provider";
 import {SagaReturnType} from "redux-saga/effects";
 
+import tezos from "./lib/tezosRpcClient";
 import store from "./store";
 
 /**
@@ -27,6 +29,7 @@ declare module "@mui/material/styles" {
 export interface Token {
   balance: number;
   name: string;
+  symbol: string;
 }
 
 export interface Wallet {
@@ -90,20 +93,27 @@ export interface AddressInputProps {
 
 export interface TokenInputProps {
   label: string;
-  token?: Token;
-  tokens?: Token[] | null;
+  token?: Token | null;
   onConnectWallet: () => void;
   onSelectToken: () => void;
+  wallet?: Wallet | null;
 }
 
 export interface TokenListPopupProps {
-  onClose: () => void;
-  tokens: Token[];
+  onClose?: () => void;
+  onTokenSelect: (t: Token) => void;
+  tokens?: Token[] | null;
+  open?: boolean;
 }
 
 export type TokenListItemProps = {
   token: Token;
-};
+} & ButtonProps;
+
+export interface SearchInputProps {
+  inputProps?: InputBaseProps;
+  containerProps?: PaperProps;
+}
 
 /**
  * Saga's types
@@ -133,4 +143,8 @@ export type GetTezosTokensResponse = SagaReturnType<
       total: number;
     };
   }>
+>;
+
+export type TezosContract = SagaReturnType<
+  () => ReturnType<typeof tezos["wallet"]["at"]>
 >;

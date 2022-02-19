@@ -6,7 +6,7 @@ import {selectCurrentStep} from "../store/reducers/currentStep";
 export default function Step3() {
   const currentStep = useAppSelector(selectCurrentStep);
 
-  if (currentStep !== 3) return null;
+  if (currentStep !== 2) return null;
 
   return (
     <Paper sx={{p: 4}}>
