@@ -50,19 +50,34 @@ const StyledInput = styled(InputBase)(({theme}) => ({
   },
 }));
 
-export default function TokenInput({label, token, tokens, onConnectWallet}: TokenInputProps) {
+const Balance = styled("span")(({theme}) => ({
+  color: theme.palette.text.secondary,
+  fontSize: "1.125rem",
+  fontWeight: 700,
+  textAlign: "end",
+}));
+
+export default function TokenInput({
+  label,
+  token,
+  onConnectWallet,
+  onSelectToken,
+  wallet,
+}: TokenInputProps) {
   const currentButton = useMemo(() => {
     if (token)
       return (
-        <Stack justifyContent="space-between">
-          <Typography>Balance: {token.balance}</Typography>
-          <Button>{token.name}</Button>
+        <Stack justifyContent="space-between" spacing={1}>
+          <Balance>Balance: {token.balance}</Balance>
+          <Button onClick={onSelectToken}>{token.name}</Button>
         </Stack>
       );
-    else if (tokens)
+    else if (wallet)
       return (
         <Stack justifyContent="flex-end">
-          <Button endIcon={<KeyboardArrowDownIcon />}>Select a token</Button>
+          <Button endIcon={<KeyboardArrowDownIcon />} onClick={onSelectToken}>
+            Select a token
+          </Button>
         </Stack>
       );
     else
@@ -71,7 +86,7 @@ export default function TokenInput({label, token, tokens, onConnectWallet}: Toke
           <Button onClick={onConnectWallet}>Connect wallet</Button>
         </Stack>
       );
-  }, [tokens, token, onConnectWallet]);
+  }, [wallet, token, onSelectToken, onConnectWallet]);
 
   return (
     <StyledPaper>

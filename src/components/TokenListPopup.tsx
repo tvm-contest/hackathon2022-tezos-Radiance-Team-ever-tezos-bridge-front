@@ -18,17 +18,32 @@ const StyledModal = styled(ModalUnstyled)(({theme}) => ({
   zIndex: 1300,
 }));
 
-export default function TokenListPopup({onClose, tokens}: TokenListPopupProps) {
+const StyledContainer = styled(Box)(({theme}) => ({
+  background: "rgba(255, 255, 255, 0.6)",
+  border: "1px solid #eee",
+  borderRadius: 30,
+  maxWidth: 600,
+  padding: 30,
+  width: "90%",
+}));
+
+export default function TokenListPopup({
+  onClose,
+  tokens,
+  open = false,
+  onTokenSelect,
+}: TokenListPopupProps) {
   return (
     <StyledModal
       BackdropComponent={Backdrop}
       aria-describedby="modal-description"
       aria-labelledby="modal-title"
       onClose={onClose}
-      open
+      open={open}
     >
-      <Box sx={{maxWidth: 400, width: "100%"}}>
+      <StyledContainer>
         <Typography
+          color="textSecondary"
           id="modal-title"
           sx={{
             mb: 2,
@@ -42,10 +57,14 @@ export default function TokenListPopup({onClose, tokens}: TokenListPopupProps) {
           List of a tokens to select from
         </Typography>
         <SearchInput containerProps={{sx: {mb: 2}}} />
-        {tokens.map((t) => (
-          <TokenListItem key={t.name} token={t} />
+        {tokens?.map((t) => (
+          <TokenListItem
+            key={t.name}
+            onClick={() => onTokenSelect(t)}
+            token={t}
+          />
         ))}
-      </Box>
+      </StyledContainer>
     </StyledModal>
   );
 }
