@@ -1,5 +1,5 @@
 import {Box, Button, Stack} from "@mui/material";
-import {useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
@@ -33,36 +33,61 @@ export default function Step1() {
   const everPopup = useTokensPopup();
   const tezosPopup = useTokensPopup();
 
-  if (currentStep !== 1) return null;
+  const [direction, setDirection] = useState<"AB" | "BA">("AB");
 
-  function handleConnectTezosWallet() {
+  const handleConnectTezosWallet = useCallback(() => {
     dispatch(connectTezos());
+  }, [dispatch]);
+
+  const handleConnectEverWallet = useCallback(() => {
+    dispatch(connectEver());
+  }, [dispatch]);
+
+  const tokenInputs = useMemo(() => {
+    const inputArray = [
+      <TokenInput
+        label="From (Tezos)"
+        onConnectWallet={handleConnectTezosWallet}
+        onSelectToken={tezosPopup.handleOpen}
+        token={tezosPopup.token}
+        wallet={tezosWallet}
+      />,
+      <TokenInput
+        label="To (Everscale)"
+        onConnectWallet={handleConnectEverWallet}
+        onSelectToken={everPopup.handleOpen}
+        token={everPopup.token}
+        wallet={everWallet}
+      />,
+    ];
+
+    return direction === "AB"
+      ? [inputArray[0], inputArray[1]]
+      : [inputArray[1], inputArray[0]];
+  }, [
+    direction,
+    tezosPopup,
+    everPopup,
+    tezosWallet,
+    everWallet,
+    handleConnectTezosWallet,
+    handleConnectEverWallet,
+  ]);
+
+  function handleSwap() {
+    setDirection(direction === "AB" ? "BA" : "AB");
   }
 
-  function handleConnectEverWallet() {
-    dispatch(connectEver());
-  }
+  if (currentStep !== 1) return null;
 
   return (
     <>
       <Stack spacing={2}>
-        <TokenInput
-          label="From (Tezos)"
-          onConnectWallet={handleConnectTezosWallet}
-          onSelectToken={tezosPopup.handleOpen}
-          token={tezosPopup.token}
-          wallet={tezosWallet}
-        />
+        {tokenInputs[0]}
         <Box sx={{display: "flex", justifyContent: "center"}}>
-          <SwapButton />
+          <SwapButton onClick={handleSwap} />
         </Box>
-        <TokenInput
-          label="To (Everscale)"
-          onConnectWallet={handleConnectEverWallet}
-          onSelectToken={everPopup.handleOpen}
-          token={everPopup.token}
-          wallet={everWallet}
-        />
+        {tokenInputs[1]}
         <Button
           onClick={() => {
             dispatch(nextStep());
@@ -102,5 +127,12 @@ function useTokensPopup() {
     handleTokenSelect,
     open,
     token,
+  };
+}
+
+function useTokenInputProxy() {
+  return {
+    handleSwitch: () => {},
+    inputs: [],
   };
 }
