@@ -129,10 +129,3 @@ function useTokensPopup() {
     token,
   };
 }
-
-function useTokenInputProxy() {
-  return {
-    handleSwitch: () => {},
-    inputs: [],
-  };
-}

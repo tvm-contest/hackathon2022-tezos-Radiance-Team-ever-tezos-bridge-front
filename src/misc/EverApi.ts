@@ -13,7 +13,7 @@ export default class EverApi {
     let {wallet} = args as BalanceWalletRequest;
 
     if (wallet == null) {
-      wallet = await this.walletAddress(args as WalletAddressRequest);
+      wallet = await EverApi.walletAddress(args as WalletAddressRequest);
     }
 
     const tokenWalletContract = new Contract(
@@ -23,9 +23,10 @@ export default class EverApi {
     );
     const {value0: balance} = await tokenWalletContract.methods
       .balance({
-        _answer_id: 0,
+        answerId: 0,
       })
       .call({cachedState: state});
+
     debug(
       `%cToken Wallet%c Request token wallet %c${wallet.toString()}%c balance
                Result: %c${balance}`,
@@ -63,10 +64,9 @@ export default class EverApi {
   ): Promise<Address> {
     const rootContract = new Contract(everRpcClient, EverAbi.Root, args.root);
     const {value0: tokenWallet} = await rootContract.methods
-      .getWalletAddress({
-        _answer_id: 0,
-        owner_address_: args.owner,
-        wallet_public_key_: 0,
+      .walletOf({
+        answerId: 0,
+        walletOwner: args.owner,
       })
       .call({cachedState: state});
 

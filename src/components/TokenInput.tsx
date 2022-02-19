@@ -6,7 +6,6 @@ import {
   InputLabel,
   Paper,
   Stack,
-  Typography,
 } from "@mui/material";
 import {alpha, styled} from "@mui/material/styles";
 import {useMemo} from "react";

@@ -3,7 +3,6 @@
     "name": "DefiSpace DEX token",
     "symbol": "DEX",
     "decimals": 9,
-    "address": "0:ed3458cc2d6d35763490ace13a67e302c4d72a98f36f00406341a9d382401450",
-    "logoURI": "https://raw.githubusercontent.com/broxus/ton-assets/master/icons/WTONv3/logo.svg"
+    "address": "0:0cdacfbb4372309a5264e1c23e56e0938f8e47d00d39af776fbb75fd13375aa1"
   }
 ]
