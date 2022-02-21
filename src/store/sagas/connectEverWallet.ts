@@ -3,6 +3,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 
 import {getBalance} from "../../lib/everApiClient";
 import everRpcClient from "../../lib/everRpcClient";
+import {DECIMAL_PLACES, EVER_DECIMALS} from "../../misc/constants";
 import {CallReturnType} from "../../types";
 import {
   connect,
@@ -47,10 +48,15 @@ function* connectWalletEver() {
     accountInteraction.address.toString(),
   );
 
+  console.log(new BigNumber(balance, 16).toNumber());
+
   yield put(
     setConnected({
       address: accountInteraction.address.toString(),
-      balance: new BigNumber(balance, 16).div(1e9).dp(3).toNumber(),
+      balance: new BigNumber(balance, 16)
+        .div(10 ** EVER_DECIMALS)
+        .dp(DECIMAL_PLACES)
+        .toNumber(),
     }),
   );
 }

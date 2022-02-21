@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import {
   call,
   put,
@@ -7,6 +8,7 @@ import {
 } from "redux-saga/effects";
 
 import {getTezosWallets} from "../../lib/tezosApiClient";
+import {DECIMAL_PLACES} from "../../misc/constants";
 import {CallReturnType, RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/tezosTokens";
 
@@ -26,7 +28,15 @@ function* fetchTezosTokens() {
   );
 
   yield put(
-    setFetched(data.balances.map((t) => ({...t, balance: +t.balance}))),
+    setFetched(
+      data.balances.map((t) => ({
+        ...t,
+        balance: new BigNumber(t.balance)
+          .div(10 ** t.decimals)
+          .dp(DECIMAL_PLACES)
+          .toNumber(),
+      })),
+    ),
   );
 }
 

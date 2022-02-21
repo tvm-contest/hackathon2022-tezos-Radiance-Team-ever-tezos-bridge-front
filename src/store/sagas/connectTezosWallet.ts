@@ -4,6 +4,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 
 import {getAccount} from "../../lib/tezosApiClient";
 import tezos from "../../lib/tezosRpcClient";
+import {DECIMAL_PLACES, TEZOS_DECIMALS} from "../../misc/constants";
 import {CallReturnType} from "../../types";
 import {setError} from "../reducers/everWallet";
 import {setConnected, setConnecting} from "../reducers/tezosWallet";
@@ -56,7 +57,10 @@ function* connectTezosWallet() {
   yield put(
     setConnected({
       address: pkh,
-      balance: new BigNumber(balance).div(1e6).dp(3).toNumber(),
+      balance: new BigNumber(balance)
+        .div(10 ** TEZOS_DECIMALS)
+        .dp(DECIMAL_PLACES)
+        .toNumber(),
     }),
   );
 }
