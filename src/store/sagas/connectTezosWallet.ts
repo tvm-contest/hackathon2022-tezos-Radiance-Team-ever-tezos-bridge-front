@@ -1,6 +1,8 @@
 import {TempleWallet} from "@temple-wallet/dapp";
+import BigNumber from "bignumber.js";
 import {call, put, takeLatest} from "redux-saga/effects";
 
+import {getAccount} from "../../lib/tezosApiClient";
 import tezos from "../../lib/tezosRpcClient";
 import {CallReturnType} from "../../types";
 import {setError} from "../reducers/everWallet";
@@ -47,10 +49,14 @@ function* connectTezosWallet() {
     return;
   }
 
+  const {
+    data: {balance},
+  }: CallReturnType<typeof getAccount> = yield call(getAccount, pkh);
+
   yield put(
     setConnected({
       address: pkh,
-      balance: 0,
+      balance: new BigNumber(balance).div(1e6).dp(3).toNumber(),
     }),
   );
 }

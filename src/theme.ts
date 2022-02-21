@@ -20,6 +20,9 @@ const theme = createTheme({
           padding: "16px 20px",
           textTransform: "none",
         },
+        sizeSmall: {
+          padding: "15px 18.75px",
+        },
       },
     },
     MuiButtonBase: {

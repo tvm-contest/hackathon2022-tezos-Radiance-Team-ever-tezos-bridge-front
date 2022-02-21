@@ -142,3 +142,31 @@ export type CallReturnType<T extends (...args: any[]) => any> = DecideReturn<
 export type SagaReturnType<T extends (...args: any[]) => any> = StripEffects<
   ReturnType<T>
 >;
+
+/**
+ * Tezos and Ever API Responses
+ */
+
+export interface GetTezosWalletsRes {
+  balances: TezosToken[];
+  total: number;
+}
+
+export interface GetAccountRes {
+  address: string;
+  alias: string;
+  balance: number;
+  last_action: string;
+  network: string;
+  tx_count: number;
+}
+
+export interface GetBalanceRes {
+  data: {
+    accounts: [
+      {
+        balance: string;
+      },
+    ];
+  };
+}

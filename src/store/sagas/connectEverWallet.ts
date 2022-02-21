@@ -1,7 +1,8 @@
+import BigNumber from "bignumber.js";
 import {call, put, takeLatest} from "redux-saga/effects";
 
+import {getBalance} from "../../lib/everApiClient";
 import everRpcClient from "../../lib/everRpcClient";
-// import everRpcClient from "../../lib/everRpcClient";
 import {CallReturnType} from "../../types";
 import {
   connect,
@@ -35,11 +36,21 @@ function* connectWalletEver() {
     yield put(setError("Insufficient permissions"));
     return;
   }
+  const {
+    data: {
+      data: {
+        accounts: [{balance}],
+      },
+    },
+  }: CallReturnType<typeof getBalance> = yield call(
+    getBalance,
+    accountInteraction.address.toString(),
+  );
 
   yield put(
     setConnected({
       address: accountInteraction.address.toString(),
-      balance: 0,
+      balance: new BigNumber(balance, 16).div(1e9).dp(3).toNumber(),
     }),
   );
 }

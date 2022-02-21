@@ -1,4 +1,5 @@
-import {Button, Stack} from "@mui/material";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import {Button, Paper, Stack, Typography} from "@mui/material";
 import _ from "lodash";
 
 import useAppDispatch from "../hooks/useAppDispatch";
@@ -38,32 +39,64 @@ export default function Header() {
   return (
     <Stack component="header" direction="row-reverse" spacing={1} sx={{my: 2}}>
       {tezosWallet ? (
-        <Button
-          onClick={handleDisconnectTezosWallet}
-          size="small"
-          variant="text"
-        >
-          {_.truncate(tezosWallet.address, {length: 10})}
-        </Button>
+        <Paper sx={{borderRadius: "18px", p: 1}}>
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <Typography
+              component="span"
+              sx={{
+                color: "text.secondary",
+                fontSize: "1.25rem",
+                fontWeight: 700,
+              }}
+            >
+              Balance: {tezosWallet.balance} XTZ
+            </Typography>
+            <Button
+              endIcon={<FiberManualRecordIcon />}
+              href={`https://hangzhou2net.tzkt.io/${encodeURIComponent(
+                tezosWallet.address,
+              )}`}
+              onClick={handleDisconnectTezosWallet}
+              size="small"
+              target="_blank"
+              variant="outlined"
+            >
+              {tezosWallet.address.replace(/(?<=^.{5}).*(?=.{5}$)/, "...")}
+            </Button>
+          </Stack>
+        </Paper>
       ) : (
-        <>
-          <Button
-            onClick={handleConnectTezosWallet}
-            size="small"
-            variant="text"
-          >
-            Connect Tezos Wallet
-          </Button>
-        </>
+        <Button onClick={handleConnectTezosWallet} size="small" variant="text">
+          Connect Tezos Wallet
+        </Button>
       )}
       {everWallet ? (
-        <Button
-          onClick={handleDisconnectEverWallet}
-          size="small"
-          variant="text"
-        >
-          {_.truncate(everWallet.address, {length: 10})}
-        </Button>
+        <Paper sx={{borderRadius: "18px", p: 1}}>
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <Typography
+              component="span"
+              sx={{
+                color: "text.secondary",
+                fontSize: "1.25rem",
+                fontWeight: 700,
+              }}
+            >
+              Balance: {everWallet.balance} EVER
+            </Typography>
+            <Button
+              endIcon={<FiberManualRecordIcon />}
+              href={`https://net.ever.live/accounts/accountDetails?id=${encodeURIComponent(
+                everWallet.address,
+              )}`}
+              onClick={handleDisconnectEverWallet}
+              size="small"
+              target="_blank"
+              variant="outlined"
+            >
+              {everWallet.address.replace(/(?<=^.{5}).*(?=.{5}$)/, "...")}
+            </Button>
+          </Stack>
+        </Paper>
       ) : (
         <Button onClick={handleConnectEverWallet} size="small" variant="text">
           Connect Ever Wallet
