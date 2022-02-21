@@ -1,6 +1,5 @@
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {Button, Paper, Stack, Typography} from "@mui/material";
-import _ from "lodash";
 
 import useAppDispatch from "../hooks/useAppDispatch";
 import useAppSelector from "../hooks/useAppSelector";
