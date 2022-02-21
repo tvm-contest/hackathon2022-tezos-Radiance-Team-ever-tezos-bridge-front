@@ -11,7 +11,7 @@ import {
 
 import {balanceByTokenRoot} from "../../lib/everRpcClient";
 import {DECIMAL_PLACES} from "../../misc/constants";
-import everTokens from "../../misc/everTokens";
+import everTokens from "../../misc/ever-tokens";
 import {RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/everTokens";
 

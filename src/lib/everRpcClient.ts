@@ -5,7 +5,7 @@ import {
   ProviderRpcClient,
 } from "everscale-inpage-provider";
 
-import {TokenRoot, TokenWallet} from "../misc/everAbi";
+import {TokenRoot, TokenWallet} from "../misc/ever-abi";
 import {BalanceWalletRequest, WalletAddressRequest} from "../types";
 import {debug, error} from "../utils/console";
 
