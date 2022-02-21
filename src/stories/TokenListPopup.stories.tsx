@@ -1,7 +1,7 @@
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 
 import TokenListPopup from "../components/TokenListPopup";
-import everTokens from "../misc/everTokens.json";
+import everTokens from "../misc/everTokens";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

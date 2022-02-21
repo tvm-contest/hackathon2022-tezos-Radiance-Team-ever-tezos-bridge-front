@@ -8,8 +8,8 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 
-import EverApi from "../../misc/EverApi";
-import everTokens from "../../misc/everTokens.json";
+import {balanceByTokenRoot} from "../../lib/everRpcClient";
+import everTokens from "../../misc/everTokens";
 import {RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/everTokens";
 
@@ -26,7 +26,7 @@ function* fetchEverTokens() {
   const balances: SagaReturnType<() => string[]> = yield all(
     everTokens.map((t) =>
       call(
-        EverApi.balanceByTokenRoot,
+        balanceByTokenRoot,
         new Address(everWallet.address),
         new Address(t.address),
       ),
