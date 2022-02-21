@@ -43,27 +43,31 @@ export default function Step1() {
     dispatch(connectEver());
   }, [dispatch]);
 
-  const tokenInputs = useMemo(() => {
-    const inputArray = [
-      <TokenInput
-        label="From (Tezos)"
-        onConnectWallet={handleConnectTezosWallet}
-        onSelectToken={tezosPopup.handleOpen}
-        token={tezosPopup.token}
-        wallet={tezosWallet}
-      />,
-      <TokenInput
-        label="To (Everscale)"
-        onConnectWallet={handleConnectEverWallet}
-        onSelectToken={everPopup.handleOpen}
-        token={everPopup.token}
-        wallet={everWallet}
-      />,
+  const TokenInputs = useMemo(() => {
+    const initialInputs = [
+      ({prefixLabel}: {prefixLabel: string}) => (
+        <TokenInput
+          label={`${prefixLabel} (Tezos)`}
+          onConnectWallet={handleConnectTezosWallet}
+          onSelectToken={tezosPopup.handleOpen}
+          token={tezosPopup.token}
+          wallet={tezosWallet}
+        />
+      ),
+      ({prefixLabel}: {prefixLabel: string}) => (
+        <TokenInput
+          label={`${prefixLabel} (Everscale)`}
+          onConnectWallet={handleConnectEverWallet}
+          onSelectToken={everPopup.handleOpen}
+          token={everPopup.token}
+          wallet={everWallet}
+        />
+      ),
     ];
 
     return direction === "AB"
-      ? [inputArray[0], inputArray[1]]
-      : [inputArray[1], inputArray[0]];
+      ? {A: initialInputs[0], B: initialInputs[1]}
+      : {A: initialInputs[1], B: initialInputs[0]};
   }, [
     direction,
     tezosPopup,
@@ -87,11 +91,11 @@ export default function Step1() {
   return (
     <>
       <Stack spacing={2}>
-        {tokenInputs[0]}
+        <TokenInputs.A prefixLabel="From" />
         <Box sx={{display: "flex", justifyContent: "center"}}>
           <SwapButton onClick={handleSwap} />
         </Box>
-        {tokenInputs[1]}
+        <TokenInputs.B prefixLabel="To" />
         <Button onClick={handleNext}>Next</Button>
       </Stack>
       <TokenListPopup
