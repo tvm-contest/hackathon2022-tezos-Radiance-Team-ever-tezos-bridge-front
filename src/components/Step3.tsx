@@ -1,43 +1,55 @@
 import {Button, Grid, Paper, Stack, Typography} from "@mui/material";
+import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
-import {selectCurrentStep} from "../store/reducers/currentStep";
+import {
+  prev as prevStep,
+  selectCurrentStep,
+} from "../store/reducers/currentStep";
 
 export default function Step3() {
+  const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
+
+  function handleBack() {
+    dispatch(prevStep());
+  }
 
   if (currentStep !== 2) return null;
 
   return (
-    <Paper sx={{p: 4}}>
-      <Stack spacing={2}>
-        <Grid container>
-          <Grid item xs={3}>
-            <Typography>Status</Typography>
+    <Stack spacing={2}>
+      <Paper sx={{p: 4}}>
+        <Stack spacing={2}>
+          <Grid container>
+            <Grid item xs={3}>
+              <Typography>Status</Typography>
+            </Grid>
+            <Grid item xs={9}>
+              <Typography>Prepare transfer</Typography>
+              <Button>Prepare</Button>
+            </Grid>
           </Grid>
-          <Grid item xs={9}>
-            <Typography>Prepare transfer</Typography>
-            <Button>Prepare</Button>
+          <Grid container>
+            <Grid item xs={3}>
+              <Typography>Status</Typography>
+            </Grid>
+            <Grid item xs={9}>
+              <Typography>Transfer checked by relayers</Typography>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item xs={3}>
-            <Typography>Status</Typography>
+          <Grid container>
+            <Grid item xs={3}>
+              <Typography>Status</Typography>
+            </Grid>
+            <Grid item xs={9}>
+              <Typography>Release transfer by relayers</Typography>
+              <Button>Release</Button>
+            </Grid>
           </Grid>
-          <Grid item xs={9}>
-            <Typography>Transfer checked by relayers</Typography>
-          </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item xs={3}>
-            <Typography>Status</Typography>
-          </Grid>
-          <Grid item xs={9}>
-            <Typography>Release transfer by relayers</Typography>
-            <Button>Release</Button>
-          </Grid>
-        </Grid>
-      </Stack>
-    </Paper>
+        </Stack>
+      </Paper>
+      <Button onClick={handleBack}>Back</Button>
+    </Stack>
   );
 }

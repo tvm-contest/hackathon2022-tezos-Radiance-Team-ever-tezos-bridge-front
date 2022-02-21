@@ -78,6 +78,10 @@ export default function Step1() {
     setDirection(direction === "AB" ? "BA" : "AB");
   }
 
+  function handleNext() {
+    dispatch(nextStep());
+  }
+
   if (currentStep !== 1) return null;
 
   return (
@@ -88,13 +92,7 @@ export default function Step1() {
           <SwapButton onClick={handleSwap} />
         </Box>
         {tokenInputs[1]}
-        <Button
-          onClick={() => {
-            dispatch(nextStep());
-          }}
-        >
-          Next
-        </Button>
+        <Button onClick={handleNext}>Next</Button>
       </Stack>
       <TokenListPopup
         onClose={everPopup.handleClose}
