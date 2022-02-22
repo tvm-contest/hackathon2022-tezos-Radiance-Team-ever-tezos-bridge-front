@@ -75,6 +75,7 @@ export default function TokenInput({
           <Button onClick={onSelectToken}>{token.name}</Button>
         </Stack>
       );
+    else if (wallet && !onSelectToken) return () => null;
     else if (wallet)
       return (props: StackProps) => (
         <Stack justifyContent="flex-end" {...props}>
@@ -93,17 +94,12 @@ export default function TokenInput({
 
   return (
     <StyledPaper>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        spacing={1}
-        sx={{width: "100%"}}
-      >
-        <FormControl>
+      <Stack direction="row" justifyContent="space-between" spacing={1}>
+        <FormControl sx={{width: "100%"}}>
           <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
           <StyledInput id="standard-input" {...rest} />
         </FormControl>
-        <CurrentButton sx={{flexBasis: 300}} />
+        <CurrentButton sx={{flexBasis: 350}} />
       </Stack>
     </StyledPaper>
   );

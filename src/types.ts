@@ -89,13 +89,18 @@ export interface AddressInputProps {
   label: string;
 }
 
-export interface TokenInputProps {
+export type TokenInputProps = InputBaseProps & {
   label: string;
   token?: Token | null;
   onConnectWallet: () => void;
-  onSelectToken: () => void;
+  onSelectToken?: () => void;
   wallet?: Wallet | null;
-}
+};
+
+export type WrappedTokenInputProps = {
+  prefixLabel: string;
+  selectToken?: boolean;
+};
 
 export interface TokenListPopupProps {
   onClose?: () => void;

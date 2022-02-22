@@ -18,7 +18,7 @@ import {
   connect as connectTezos,
   selectTezosWallet,
 } from "../store/reducers/tezosWallet";
-import {Token} from "../types";
+import {Token, WrappedTokenInputProps} from "../types";
 import SwapButton from "./SwapButton";
 import TokenInput from "./TokenInput";
 import TokenListPopup from "./TokenListPopup";
@@ -57,27 +57,27 @@ export default function Step1() {
 
   const TokenInputs = useMemo(() => {
     const initialInputs = [
-      ({prefixLabel}: {prefixLabel: string}) => (
+      ({prefixLabel, selectToken}: WrappedTokenInputProps) => (
         <TokenInput
           label={`${prefixLabel} (Tezos)`}
           name="tezosValue"
           onBlur={handleBlur}
           onChange={handleChange}
           onConnectWallet={handleConnectTezosWallet}
-          onSelectToken={tezosPopup.handleOpen}
+          onSelectToken={selectToken ? tezosPopup.handleOpen : undefined}
           token={tezosPopup.token}
           value={values.tezosValue}
           wallet={tezosWallet}
         />
       ),
-      ({prefixLabel}: {prefixLabel: string}) => (
+      ({prefixLabel, selectToken}: WrappedTokenInputProps) => (
         <TokenInput
           label={`${prefixLabel} (Everscale)`}
           name="everValue"
           onBlur={handleBlur}
           onChange={handleChange}
           onConnectWallet={handleConnectEverWallet}
-          onSelectToken={everPopup.handleOpen}
+          onSelectToken={selectToken ? everPopup.handleOpen : undefined}
           token={everPopup.token}
           value={values.everValue}
           wallet={everWallet}
@@ -114,7 +114,7 @@ export default function Step1() {
   return (
     <>
       <Stack spacing={2}>
-        <TokenInputs.A prefixLabel="From" />
+        <TokenInputs.A prefixLabel="From" selectToken />
         <Box sx={{display: "flex", justifyContent: "center"}}>
           <SwapButton onClick={handleSwap} />
         </Box>
