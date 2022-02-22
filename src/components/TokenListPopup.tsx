@@ -11,6 +11,7 @@ const StyledModal = styled(ModalUnstyled)(({theme}) => ({
   display: "flex",
   justifyContent: "center",
   left: 0,
+  marginBottom: theme.spacing(8),
   marginTop: theme.spacing(8),
   position: "fixed",
   right: 0,
