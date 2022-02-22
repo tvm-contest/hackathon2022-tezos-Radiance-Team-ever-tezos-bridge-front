@@ -1,4 +1,5 @@
 import {Box, Button, Stack} from "@mui/material";
+import {useFormik} from "formik";
 import {useCallback, useMemo, useState} from "react";
 import {useDispatch} from "react-redux";
 
@@ -35,6 +36,17 @@ export default function Step1() {
 
   const [direction, setDirection] = useState<"AB" | "BA">("AB");
 
+  const {values, handleChange, handleBlur} = useFormik({
+    initialValues: {
+      direction: "AB",
+      everToken: null,
+      everValue: "",
+      tezosToken: null,
+      tezosValue: "",
+    },
+    onSubmit() {},
+  });
+
   const handleConnectTezosWallet = useCallback(() => {
     dispatch(connectTezos());
   }, [dispatch]);
@@ -48,18 +60,26 @@ export default function Step1() {
       ({prefixLabel}: {prefixLabel: string}) => (
         <TokenInput
           label={`${prefixLabel} (Tezos)`}
+          name="tezosValue"
+          onBlur={handleBlur}
+          onChange={handleChange}
           onConnectWallet={handleConnectTezosWallet}
           onSelectToken={tezosPopup.handleOpen}
           token={tezosPopup.token}
+          value={values.tezosValue}
           wallet={tezosWallet}
         />
       ),
       ({prefixLabel}: {prefixLabel: string}) => (
         <TokenInput
           label={`${prefixLabel} (Everscale)`}
+          name="everValue"
+          onBlur={handleBlur}
+          onChange={handleChange}
           onConnectWallet={handleConnectEverWallet}
           onSelectToken={everPopup.handleOpen}
           token={everPopup.token}
+          value={values.everValue}
           wallet={everWallet}
         />
       ),
@@ -76,6 +96,9 @@ export default function Step1() {
     everWallet,
     handleConnectTezosWallet,
     handleConnectEverWallet,
+    values,
+    handleChange,
+    handleBlur,
   ]);
 
   function handleSwap() {

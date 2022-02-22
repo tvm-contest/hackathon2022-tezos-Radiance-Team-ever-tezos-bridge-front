@@ -65,6 +65,7 @@ export default function TokenInput({
   onConnectWallet,
   onSelectToken,
   wallet,
+  ...rest
 }: TokenInputProps) {
   const CurrentButton = useMemo(() => {
     if (token)
@@ -100,7 +101,7 @@ export default function TokenInput({
       >
         <FormControl>
           <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
-          <StyledInput id="standard-input" />
+          <StyledInput id="standard-input" {...rest} />
         </FormControl>
         <CurrentButton sx={{flexBasis: 300}} />
       </Stack>
