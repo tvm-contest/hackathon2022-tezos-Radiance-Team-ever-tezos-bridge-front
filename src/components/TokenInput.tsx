@@ -6,6 +6,7 @@ import {
   InputLabel,
   Paper,
   Stack,
+  StackProps,
 } from "@mui/material";
 import {alpha, styled} from "@mui/material/styles";
 import {useMemo} from "react";
@@ -30,6 +31,7 @@ const StyledLabel = styled(InputLabel)(({theme}) => ({
 
 const StyledInput = styled(InputBase)(({theme}) => ({
   "&": {
+    height: "100%",
     marginTop: theme.spacing(3),
   },
   "& .MuiInputBase-input": {
@@ -37,15 +39,16 @@ const StyledInput = styled(InputBase)(({theme}) => ({
       borderColor: theme.palette.primary.main,
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
     },
-    fontSize: 16,
-    padding: "10px 12px",
+    fontSize: "2.5rem",
+    fontWeight: 700,
+    height: "inherit",
+    padding: 0,
     position: "relative",
     transition: theme.transitions.create([
       "border-color",
       "background-color",
       "box-shadow",
     ]),
-    width: "auto",
   },
 }));
 
@@ -63,25 +66,25 @@ export default function TokenInput({
   onSelectToken,
   wallet,
 }: TokenInputProps) {
-  const currentButton = useMemo(() => {
+  const CurrentButton = useMemo(() => {
     if (token)
-      return (
-        <Stack justifyContent="space-between" spacing={1}>
+      return (props: StackProps) => (
+        <Stack justifyContent="space-between" spacing={1} {...props}>
           <Balance>Balance: {token.balance}</Balance>
           <Button onClick={onSelectToken}>{token.name}</Button>
         </Stack>
       );
     else if (wallet)
-      return (
-        <Stack justifyContent="flex-end">
+      return (props: StackProps) => (
+        <Stack justifyContent="flex-end" {...props}>
           <Button endIcon={<KeyboardArrowDownIcon />} onClick={onSelectToken}>
             Select a token
           </Button>
         </Stack>
       );
     else
-      return (
-        <Stack justifyContent="flex-end">
+      return (props: StackProps) => (
+        <Stack justifyContent="flex-end" {...props}>
           <Button onClick={onConnectWallet}>Connect wallet</Button>
         </Stack>
       );
@@ -89,11 +92,18 @@ export default function TokenInput({
 
   return (
     <StyledPaper>
-      <FormControl>
-        <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
-        <StyledInput id="standard-input" />
-      </FormControl>
-      {currentButton}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        spacing={1}
+        sx={{width: "100%"}}
+      >
+        <FormControl>
+          <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
+          <StyledInput id="standard-input" />
+        </FormControl>
+        <CurrentButton sx={{flexBasis: 300}} />
+      </Stack>
     </StyledPaper>
   );
 }
