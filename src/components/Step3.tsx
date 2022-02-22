@@ -1,4 +1,10 @@
-import {Button, Grid, Paper, Stack, Typography} from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
@@ -19,34 +25,22 @@ export default function Step3() {
 
   return (
     <Stack spacing={2}>
-      <Paper sx={{p: 4}}>
-        <Stack spacing={2}>
-          <Grid container>
-            <Grid item xs={3}>
-              <Typography>Status</Typography>
-            </Grid>
-            <Grid item xs={9}>
-              <Typography>Prepare transfer</Typography>
-              <Button>Prepare</Button>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs={3}>
-              <Typography>Status</Typography>
-            </Grid>
-            <Grid item xs={9}>
-              <Typography>Transfer checked by relayers</Typography>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs={3}>
-              <Typography>Status</Typography>
-            </Grid>
-            <Grid item xs={9}>
-              <Typography>Release transfer by relayers</Typography>
-              <Button>Release</Button>
-            </Grid>
-          </Grid>
+      <Paper sx={{borderRadius: "40px", p: 4}}>
+        <Stack component="ol" spacing={2} sx={{m: 0, p: 0}}>
+          <Stack alignItems="flex-start" component="li" spacing={1}>
+            <Typography>
+              Approve access by the vault to the selected token
+            </Typography>
+            <Button>Approve</Button>
+          </Stack>
+          <Stack alignItems="flex-start" component="li" spacing={1}>
+            <Typography>Deposit tokens to the vault</Typography>
+            <Button>Deposit</Button>
+          </Stack>
+          <Stack alignItems="flex-start" component="li" spacing={1}>
+            <Typography>Waiting for tokens to be received</Typography>
+            <CircularProgress />
+          </Stack>
         </Stack>
       </Paper>
       <Button onClick={handleBack}>Back</Button>
