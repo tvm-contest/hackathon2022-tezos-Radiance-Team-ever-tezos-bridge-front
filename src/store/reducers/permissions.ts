@@ -13,10 +13,10 @@ export const permissionsSlice = createSlice({
   initialState,
   name: "permissions",
   reducers: {
-    getTezosPermissions(_, action: PayloadAction<string>) {
+    getTezosPermissions() {
       // Handled by saga
     },
-    permitTezosToken(_, action: PayloadAction<string>) {
+    permitTezosToken() {
       // Handled by saga
     },
     setError(state, action: PayloadAction<string>) {
