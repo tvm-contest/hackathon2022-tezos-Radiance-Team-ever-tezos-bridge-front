@@ -13,10 +13,10 @@ export const tezosWalletSlice = createSlice({
   initialState,
   name: "tezosWallet",
   reducers: {
-    connect(_) {
+    connect() {
       // Handled by saga
     },
-    disconnect(_) {
+    disconnect() {
       // handled by saga
     },
     setConnected(state, action: PayloadAction<Wallet>) {

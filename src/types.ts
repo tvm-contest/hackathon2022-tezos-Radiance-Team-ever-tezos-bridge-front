@@ -83,6 +83,18 @@ export interface PermissionsState {
   permittedTezosTokens: string[];
 }
 
+export interface TransactionsState {
+  error: string | null;
+  fetched: boolean;
+  loading: boolean;
+  allTransactions: string[];
+}
+
+export interface DepositAction {
+  amount: number;
+  everscaleReceiver: string;
+}
+
 /**
  * Components's props
  */

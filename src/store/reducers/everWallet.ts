@@ -13,10 +13,10 @@ export const everWalletSlice = createSlice({
   initialState,
   name: "everWallet",
   reducers: {
-    connect(_) {
+    connect() {
       // Handled by saga
     },
-    disconnect(_) {
+    disconnect() {
       // handled by saga
     },
     setConnected(state, action: PayloadAction<Wallet>) {

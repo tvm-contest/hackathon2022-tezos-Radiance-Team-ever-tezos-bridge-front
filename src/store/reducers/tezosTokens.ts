@@ -13,7 +13,7 @@ export const tezosTokensSlice = createSlice({
   initialState,
   name: "tezosTokens",
   reducers: {
-    fetch(_) {
+    fetch() {
       // Handled by saga
     },
     reset() {
