@@ -23,7 +23,7 @@ export default function Step2() {
   }
 
   function handleApprove() {
-    dispatch(permitTezosToken("<TOKEN_ADDRESS>"));
+    dispatch(permitTezosToken());
   }
 
   if (currentStep !== 2) return null;

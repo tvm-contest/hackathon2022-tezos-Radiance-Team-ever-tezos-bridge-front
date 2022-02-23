@@ -3,6 +3,7 @@ import createSagaMiddleware from "redux-saga";
 import {all} from "redux-saga/effects";
 
 import currentStep from "./reducers/currentStep";
+import enteredValues from "./reducers/enteredValues";
 import everTokens from "./reducers/everTokens";
 import everWallet from "./reducers/everWallet";
 import permissions from "./reducers/permissions";
@@ -22,6 +23,7 @@ const store = configureStore({
   middleware: [sagaMiddleware],
   reducer: {
     currentStep,
+    enteredValues,
     everTokens,
     everWallet,
     permissions,

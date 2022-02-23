@@ -95,6 +95,18 @@ export interface DepositAction {
   everscaleReceiver: string;
 }
 
+export interface EnteredValuesState {
+  data: {
+    amount: number;
+    selectedToken: string;
+  } | null;
+}
+
+export interface EnteredValuesAction {
+  amount: number;
+  selectedToken: string;
+}
+
 /**
  * Components's props
  */
@@ -119,6 +131,7 @@ export type TokenInputProps = InputBaseProps & {
 export type WrappedTokenInputProps = {
   prefixLabel: string;
   selectToken?: boolean;
+  readOnly?: boolean;
 };
 
 export interface TokenListPopupProps {

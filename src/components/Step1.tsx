@@ -8,6 +8,7 @@ import {
   next as nextStep,
   selectCurrentStep,
 } from "../store/reducers/currentStep";
+import {setValues} from "../store/reducers/enteredValues";
 import {selectEverTokens} from "../store/reducers/everTokens";
 import {
   connect as connectEver,
@@ -57,7 +58,7 @@ export default function Step1() {
 
   const TokenInputs = useMemo(() => {
     const initialInputs = [
-      ({prefixLabel, selectToken}: WrappedTokenInputProps) => (
+      ({prefixLabel, readOnly, selectToken}: WrappedTokenInputProps) => (
         <TokenInput
           label={`${prefixLabel} (Tezos)`}
           name="tezosValue"
@@ -65,12 +66,13 @@ export default function Step1() {
           onChange={handleChange}
           onConnectWallet={handleConnectTezosWallet}
           onSelectToken={selectToken ? tezosPopup.handleOpen : undefined}
+          readOnly={readOnly}
           token={tezosPopup.token}
           value={values.tezosValue}
           wallet={tezosWallet}
         />
       ),
-      ({prefixLabel, selectToken}: WrappedTokenInputProps) => (
+      ({prefixLabel, readOnly, selectToken}: WrappedTokenInputProps) => (
         <TokenInput
           label={`${prefixLabel} (Everscale)`}
           name="everValue"
@@ -78,6 +80,7 @@ export default function Step1() {
           onChange={handleChange}
           onConnectWallet={handleConnectEverWallet}
           onSelectToken={selectToken ? everPopup.handleOpen : undefined}
+          readOnly={readOnly}
           token={everPopup.token}
           value={values.everValue}
           wallet={everWallet}
@@ -106,6 +109,12 @@ export default function Step1() {
   }
 
   function handleNext() {
+    dispatch(
+      setValues({
+        amount: +values.tezosValue,
+        selectedToken: "",
+      }),
+    );
     dispatch(nextStep());
   }
 
@@ -118,7 +127,7 @@ export default function Step1() {
         <Box sx={{display: "flex", justifyContent: "center"}}>
           <SwapButton onClick={handleSwap} />
         </Box>
-        <TokenInputs.B prefixLabel="To" />
+        <TokenInputs.B prefixLabel="To" readOnly />
         <Button onClick={handleNext}>Next</Button>
       </Stack>
       <TokenListPopup
