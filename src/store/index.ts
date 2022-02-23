@@ -5,6 +5,7 @@ import {all} from "redux-saga/effects";
 import currentStep from "./reducers/currentStep";
 import everTokens from "./reducers/everTokens";
 import everWallet from "./reducers/everWallet";
+import permissions from "./reducers/permissions";
 import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
 import connectEverWallet from "./sagas/connectEverWallet";
@@ -23,6 +24,7 @@ const store = configureStore({
     currentStep,
     everTokens,
     everWallet,
+    permissions,
     tezosTokens,
     tezosWallet,
   },

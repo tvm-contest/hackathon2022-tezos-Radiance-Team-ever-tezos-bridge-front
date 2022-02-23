@@ -76,6 +76,13 @@ export interface WalletState {
   loading: boolean;
 }
 
+export interface PermissionsState {
+  error: string | null;
+  fetched: boolean;
+  loading: boolean;
+  permittedTezosTokens: string[];
+}
+
 /**
  * Components's props
  */
@@ -175,3 +182,18 @@ export interface GetBalanceRes {
     ];
   };
 }
+
+export type GetBigMapKeysRes = {
+  id: number;
+  active: boolean;
+  hash: string;
+  key: {
+    nat: string;
+    address_0: string;
+    address_1: string;
+  };
+  value: {};
+  firstLevel: number;
+  lastLevel: number;
+  updates: number;
+}[];

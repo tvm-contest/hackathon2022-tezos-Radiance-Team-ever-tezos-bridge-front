@@ -1,21 +1,27 @@
 import axios from "axios";
 
-import {GetAccountRes, GetTezosWalletsRes} from "../types";
+import {GetAccountRes, GetBigMapKeysRes, GetTezosWalletsRes} from "../types";
 
-const tezosApiClient = axios.create({
+const bcdApiClient = axios.create({
   baseURL: "https://api.better-call.dev/v1",
 });
 
+const tzktApiClient = axios.create({
+  baseURL: "https://api.hangzhou2net.tzkt.io/v1",
+});
+
 export function getTezosWallets(tezosWalletAddress: string) {
-  return tezosApiClient.get<GetTezosWalletsRes>(
+  return bcdApiClient.get<GetTezosWalletsRes>(
     `/account/hangzhou2net/${tezosWalletAddress}/token_balances`,
   );
 }
 
 export function getAccount(accountAddress: string) {
-  return tezosApiClient.get<GetAccountRes>(
+  return bcdApiClient.get<GetAccountRes>(
     `/account/hangzhou2net/${accountAddress}`,
   );
 }
 
-export default tezosApiClient;
+export function getBigMapKeys(bigMapId: number) {
+  return tzktApiClient.get<GetBigMapKeysRes>(`/bigmaps/${bigMapId}/keys`);
+}

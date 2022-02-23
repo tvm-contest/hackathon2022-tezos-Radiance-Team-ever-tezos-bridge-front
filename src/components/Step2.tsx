@@ -12,13 +12,18 @@ import {
   prev as prevStep,
   selectCurrentStep,
 } from "../store/reducers/currentStep";
+import {permitTezosToken} from "../store/reducers/permissions";
 
-export default function Step3() {
+export default function Step2() {
   const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
 
   function handleBack() {
     dispatch(prevStep());
+  }
+
+  function handleApprove() {
+    dispatch(permitTezosToken("<TOKEN_ADDRESS>"));
   }
 
   if (currentStep !== 2) return null;
@@ -31,7 +36,7 @@ export default function Step3() {
             <Typography>
               Approve access by the vault to the selected token
             </Typography>
-            <Button>Approve</Button>
+            <Button onClick={handleApprove}>Approve</Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
             <Typography>Deposit tokens to the vault</Typography>
