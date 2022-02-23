@@ -1,3 +1,4 @@
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
   Button,
   CircularProgress,
@@ -12,11 +13,17 @@ import {
   prev as prevStep,
   selectCurrentStep,
 } from "../store/reducers/currentStep";
-import {permitTezosToken} from "../store/reducers/permissions";
+import {selectEnteredValues} from "../store/reducers/enteredValues";
+import {
+  permitTezosToken,
+  selectPermittedTezosTokens,
+} from "../store/reducers/permissions";
 
 export default function Step2() {
   const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
+  const enteredValues = useAppSelector(selectEnteredValues);
+  const permittedTezosTokens = useAppSelector(selectPermittedTezosTokens);
 
   function handleBack() {
     dispatch(prevStep());
@@ -26,7 +33,7 @@ export default function Step2() {
     dispatch(permitTezosToken());
   }
 
-  if (currentStep !== 2) return null;
+  if (currentStep !== 2 || !enteredValues.data) return null;
 
   return (
     <Stack spacing={2}>
@@ -36,7 +43,19 @@ export default function Step2() {
             <Typography>
               Approve access by the vault to the selected token
             </Typography>
-            <Button onClick={handleApprove}>Approve</Button>
+            {permittedTezosTokens.includes(enteredValues.data.selectedToken) ? (
+              <Typography
+                sx={{
+                  color: "text.secondary",
+                  fontWeight: 700,
+                }}
+              >
+                Approved
+                <ThumbUpIcon sx={{ml: 1, verticalAlign: "text-bottom"}} />
+              </Typography>
+            ) : (
+              <Button onClick={handleApprove}>Approve</Button>
+            )}
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
             <Typography>Deposit tokens to the vault</Typography>

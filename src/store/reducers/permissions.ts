@@ -47,6 +47,6 @@ export const {
 } = permissionsSlice.actions;
 
 export const selectPermittedTezosTokens = (state: RootState) =>
-  state.permissions;
+  state.permissions.permittedTezosTokens;
 
 export default permissionsSlice.reducer;
