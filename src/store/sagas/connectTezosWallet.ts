@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import {call, put, takeLatest} from "redux-saga/effects";
 
 import {getAccount} from "../../lib/tezosApiClient";
-import tezos from "../../lib/tezosRpcClient";
+import {getWallet} from "../../lib/tezosRpcClient";
 import {DECIMAL_PLACES, TEZOS_DECIMALS} from "../../misc/constants";
 import {CallReturnType} from "../../types";
 import {setError} from "../reducers/everWallet";
@@ -25,17 +25,7 @@ function* connectTezosWallet() {
     return;
   }
 
-  const permissions: CallReturnType<typeof TempleWallet.getCurrentPermission> =
-    yield call(TempleWallet.getCurrentPermission.bind(TempleWallet));
-
-  const wallet = new TempleWallet("everscale-bridge-front", permissions);
-  if (!wallet.connected) {
-    yield call(wallet.connect.bind(wallet), "hangzhounet", {
-      forcePermission: true,
-    });
-  }
-
-  tezos.setWalletProvider(wallet);
+  const wallet: CallReturnType<typeof getWallet> = yield call(getWallet);
 
   if (!wallet.connected) {
     yield put(setError("Wallet wasn't connected"));
