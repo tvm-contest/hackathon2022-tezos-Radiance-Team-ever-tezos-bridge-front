@@ -1,4 +1,3 @@
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
   Button,
   CircularProgress,
@@ -56,19 +55,12 @@ export default function Step2() {
             <Typography>
               Approve access by the vault to the selected token
             </Typography>
-            {permittedTezosTokens.length ? (
-              <Typography
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: 700,
-                }}
-              >
-                Approved
-                <ThumbUpIcon sx={{ml: 1, verticalAlign: "text-bottom"}} />
-              </Typography>
-            ) : (
-              <Button onClick={handleApprove}>Approve</Button>
-            )}
+            <Button
+              disabled={permittedTezosTokens.length !== 0}
+              onClick={handleApprove}
+            >
+              Approve
+            </Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
             <Typography>Deposit tokens to the vault</Typography>
