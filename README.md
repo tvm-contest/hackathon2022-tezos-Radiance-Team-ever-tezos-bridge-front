@@ -1,5 +1,22 @@
 # Tezos-Everscale Bridge
 
+## Getting Started
+
+```sh
+# 1. Install dependencies
+yarn
+
+# [2. Start in the development mode]
+yarn dev
+
+# [2. Start in the production mode]
+yarn build
+yarn start
+
+# [2. Start storybook]
+yarn storybook
+```
+
 ## Project Stack
 
 ### Core ⚙️
