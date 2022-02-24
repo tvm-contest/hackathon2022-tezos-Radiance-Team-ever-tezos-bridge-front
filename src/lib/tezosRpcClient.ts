@@ -5,8 +5,6 @@ const tezos = new TezosToolkit("https://hangzhounet.api.tez.ie");
 const michelEncoder = new MichelCodecPacker();
 let wallet: TempleWallet | null = null;
 
-tezos.setPackerProvider(michelEncoder);
-
 export async function getWallet() {
   if (wallet) return wallet;
 
@@ -20,6 +18,7 @@ export async function getWallet() {
   }
 
   tezos.setWalletProvider(wallet);
+  tezos.setPackerProvider(michelEncoder);
 
   return wallet;
 }

@@ -26,7 +26,7 @@ function* checkTezosPermissions() {
   const allowedTokens: string[] = [];
   operatorsKeys.data.forEach((ent) => {
     if (ent.key.address_0 === tezosWallet?.address)
-      allowedTokens.push(ent.key.address_1);
+      allowedTokens.push(ent.key.nat);
   });
 
   yield put(setTezosPermissions(allowedTokens));

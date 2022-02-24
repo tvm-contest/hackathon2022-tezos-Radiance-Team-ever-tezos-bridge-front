@@ -7,13 +7,9 @@ import {
 } from "redux-saga/effects";
 
 import tezos from "../../lib/tezosRpcClient";
-import {FA2_ADDRESS} from "../../misc/constants";
+import {FA2_ADDRESS, VAULT_ADDRESS} from "../../misc/constants";
 import {CallReturnType, RootState} from "../../types";
-import {
-  getTezosPermissions,
-  setError,
-  setLoading,
-} from "../reducers/permissions";
+import {permitTezosToken, setError, setLoading} from "../reducers/permissions";
 
 function* requestTezosPermission() {
   yield put(setLoading());
@@ -25,21 +21,26 @@ function* requestTezosPermission() {
     return;
   }
 
-  const tokenContract: CallReturnType<typeof tezos.contract.at> = yield call(
-    tezos.contract.at.bind(tezos),
+  const tokenWallet: CallReturnType<typeof tezos.contract.at> = yield call(
+    tezos.wallet.at.bind(tezos.wallet),
     FA2_ADDRESS,
   );
-  const methodProvider = tokenContract.methods.update_operators();
 
+  const methodProvider = tokenWallet.methods.update_operators([
+    {
+      add_operator: {
+        operator: VAULT_ADDRESS,
+        owner: tezosWallet.address,
+        token_id: 0,
+      },
+    },
+  ]);
   const op: CallReturnType<typeof methodProvider.send> = yield call(
-    methodProvider.send,
+    methodProvider.send.bind(methodProvider),
   );
-
-  yield call(op.confirmation);
-
-  yield put(getTezosPermissions());
+  yield call(op.confirmation.bind(op));
 }
 
 export default function* requestTezosPermissionSaga() {
-  yield takeLatest(getTezosPermissions, requestTezosPermission);
+  yield takeLatest(permitTezosToken, requestTezosPermission);
 }

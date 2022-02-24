@@ -10,6 +10,7 @@ import useAppDispatch from "./hooks/useAppDispatch";
 import useAppSelector from "./hooks/useAppSelector";
 import {fetch as fetchEverTokens} from "./store/reducers/everTokens";
 import {selectEverWallet} from "./store/reducers/everWallet";
+import {getTezosPermissions} from "./store/reducers/permissions";
 import {fetch as fetchTezosTokens} from "./store/reducers/tezosTokens";
 import {selectTezosWallet} from "./store/reducers/tezosWallet";
 
@@ -23,7 +24,10 @@ export default function App() {
   }, [everWallet, dispatch]);
 
   useEffect(() => {
-    if (tezosWallet) dispatch(fetchTezosTokens());
+    if (tezosWallet) {
+      dispatch(fetchTezosTokens());
+      dispatch(getTezosPermissions());
+    }
   }, [tezosWallet, dispatch]);
 
   return (

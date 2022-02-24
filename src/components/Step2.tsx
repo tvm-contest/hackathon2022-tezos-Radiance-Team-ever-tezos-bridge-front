@@ -43,7 +43,7 @@ export default function Step2() {
             <Typography>
               Approve access by the vault to the selected token
             </Typography>
-            {permittedTezosTokens.includes(enteredValues.data.selectedToken) ? (
+            {permittedTezosTokens.length ? (
               <Typography
                 sx={{
                   color: "text.secondary",
