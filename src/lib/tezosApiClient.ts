@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import {FA2_ADDRESS} from "../misc/constants";
 import {GetAccountRes, GetBigMapKeysRes, GetTezosWalletsRes} from "../types";
 
 const bcdApiClient = axios.create({
@@ -13,6 +14,11 @@ const tzktApiClient = axios.create({
 export function getTezosWallets(tezosWalletAddress: string) {
   return bcdApiClient.get<GetTezosWalletsRes>(
     `/account/hangzhou2net/${tezosWalletAddress}/token_balances`,
+    {
+      params: {
+        contract: FA2_ADDRESS,
+      },
+    },
   );
 }
 
