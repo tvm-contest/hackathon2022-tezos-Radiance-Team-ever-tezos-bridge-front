@@ -20,4 +20,4 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/everscale-bridge-front.git
-    - git push -f -q heroku HEAD:main
+    - git push -f heroku HEAD:main
