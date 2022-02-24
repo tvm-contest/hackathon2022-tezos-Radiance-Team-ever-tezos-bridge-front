@@ -21,7 +21,7 @@ function* requestTezosPermission() {
     return;
   }
 
-  const tokenWallet: CallReturnType<typeof tezos.contract.at> = yield call(
+  const tokenWallet: CallReturnType<typeof tezos.wallet.at> = yield call(
     tezos.wallet.at.bind(tezos.wallet),
     FA2_ADDRESS,
   );

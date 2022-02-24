@@ -48,8 +48,6 @@ function* connectWalletEver() {
     accountInteraction.address.toString(),
   );
 
-  console.log(new BigNumber(balance, 16).toNumber());
-
   yield put(
     setConnected({
       address: accountInteraction.address.toString(),

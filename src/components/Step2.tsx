@@ -14,16 +14,19 @@ import {
   selectCurrentStep,
 } from "../store/reducers/currentStep";
 import {selectEnteredValues} from "../store/reducers/enteredValues";
+import {selectEverWallet} from "../store/reducers/everWallet";
 import {
   permitTezosToken,
   selectPermittedTezosTokens,
 } from "../store/reducers/permissions";
+import {deposit} from "../store/reducers/transactions";
 
 export default function Step2() {
   const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
   const enteredValues = useAppSelector(selectEnteredValues);
   const permittedTezosTokens = useAppSelector(selectPermittedTezosTokens);
+  const everWallet = useAppSelector(selectEverWallet);
 
   function handleBack() {
     dispatch(prevStep());
@@ -31,6 +34,16 @@ export default function Step2() {
 
   function handleApprove() {
     dispatch(permitTezosToken());
+  }
+
+  function handleDeposit() {
+    if (enteredValues.data && everWallet)
+      dispatch(
+        deposit({
+          amount: enteredValues.data.amount,
+          everscaleReceiver: everWallet.address,
+        }),
+      );
   }
 
   if (currentStep !== 2 || !enteredValues.data) return null;
@@ -59,7 +72,7 @@ export default function Step2() {
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
             <Typography>Deposit tokens to the vault</Typography>
-            <Button>Deposit</Button>
+            <Button onClick={handleDeposit}>Deposit</Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
             <Typography>Waiting for tokens to be received</Typography>

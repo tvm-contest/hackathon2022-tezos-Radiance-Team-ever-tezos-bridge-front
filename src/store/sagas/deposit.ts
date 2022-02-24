@@ -22,21 +22,20 @@ function* depositFn(action: PayloadAction<DepositAction>) {
     return;
   }
 
-  const tokenContract: CallReturnType<typeof tezos.contract.at> = yield call(
-    tezos.contract.at.bind(tezos),
+  const tokenContract: CallReturnType<typeof tezos.wallet.at> = yield call(
+    tezos.wallet.at.bind(tezos.wallet),
     VAULT_ADDRESS,
   );
-  const methodProvider = tokenContract.methods.deposit_to_vault([
-    {
-      amt_for_deposit: action.payload.amount,
-      everscale_receiver: action.payload.everscaleReceiver,
-    },
-  ]);
+  const methodProvider = tokenContract.methodsObject.deposit_to_vault({
+    amt_for_deposit: action.payload.amount,
+    everscale_receiver: action.payload.everscaleReceiver.slice(2),
+    requests: [{owner: tezosWallet.address, token_id: 0}],
+  });
 
   const op: CallReturnType<typeof methodProvider.send> = yield call(
-    methodProvider.send,
+    methodProvider.send.bind(methodProvider),
   );
-  yield call(op.confirmation, 3);
+  yield call(op.confirmation.bind(op));
 }
 
 export default function* depositSaga() {
