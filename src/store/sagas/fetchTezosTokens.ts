@@ -9,6 +9,7 @@ import {
 
 import {getTezosWallets} from "../../lib/tezosApiClient";
 import {DECIMAL_PLACES} from "../../misc/constants";
+import tezosTokens from "../../misc/tezos-tokens";
 import {CallReturnType, RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/tezosTokens";
 
@@ -30,9 +31,9 @@ function* fetchTezosTokens() {
   yield put(
     setFetched(
       data.balances.map((t) => ({
-        ...t,
+        ...tezosTokens[0],
         balance: new BigNumber(t.balance)
-          .div(10 ** t.decimals)
+          .div(10 ** tezosTokens[0].decimals)
           .dp(DECIMAL_PLACES)
           .toNumber(),
       })),
