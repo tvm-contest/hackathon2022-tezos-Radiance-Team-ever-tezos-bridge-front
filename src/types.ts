@@ -84,10 +84,13 @@ export interface PermissionsState {
 }
 
 export interface TransactionsState {
+  currentTransaction: {
+    id: number | null;
+    opHash: string | null;
+  };
   error: string | null;
   fetched: boolean;
   loading: boolean;
-  allTransactions: string[];
 }
 
 export interface DepositAction {

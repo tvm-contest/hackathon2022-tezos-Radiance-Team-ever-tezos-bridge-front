@@ -18,7 +18,10 @@ import {
   permitTezosToken,
   selectPermittedTezosTokens,
 } from "../store/reducers/permissions";
-import {deposit} from "../store/reducers/transactions";
+import {
+  deposit,
+  selectCurrentTransaction,
+} from "../store/reducers/transactions";
 
 export default function Step2() {
   const dispatch = useDispatch();
@@ -26,6 +29,7 @@ export default function Step2() {
   const enteredValues = useAppSelector(selectEnteredValues);
   const permittedTezosTokens = useAppSelector(selectPermittedTezosTokens);
   const everWallet = useAppSelector(selectEverWallet);
+  const currentTransaction = useAppSelector(selectCurrentTransaction);
 
   function handleBack() {
     dispatch(prevStep());
@@ -63,8 +67,19 @@ export default function Step2() {
             </Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
-            <Typography>Deposit tokens to the vault</Typography>
-            <Button onClick={handleDeposit}>Deposit</Button>
+            {currentTransaction.opHash && currentTransaction.id ? (
+              <Typography>Tokens deposited to the vault</Typography>
+            ) : (
+              <Typography>Deposit tokens to the vault</Typography>
+            )}
+            <Button
+              disabled={Boolean(
+                currentTransaction.opHash || currentTransaction.id,
+              )}
+              onClick={handleDeposit}
+            >
+              Deposit
+            </Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
             <Typography>Waiting for tokens to be received</Typography>

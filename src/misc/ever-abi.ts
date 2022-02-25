@@ -804,3 +804,107 @@ export const TokenWallet = {
     },
   ],
 } as const;
+
+export const TokenProxy = {
+  "ABI version": 2,
+  version: "2.1",
+  header: ["time", "expire"],
+  functions: [
+    {
+      name: "constructor",
+      inputs: [
+        {name: "owner", type: "address"},
+        {
+          name: "addrTezosEventConfiguration",
+          type: "address",
+        },
+        {name: "addrTokenRoot", type: "address"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "setConfiguration",
+      inputs: [
+        {name: "addrTezosEventConfiguration", type: "address"},
+        {
+          name: "addrTokenRoot",
+          type: "address",
+        },
+      ],
+      outputs: [],
+    },
+    {
+      name: "transferToken",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [],
+    },
+    {
+      name: "getInfo",
+      inputs: [],
+      outputs: [
+        {name: "owner", type: "address"},
+        {
+          name: "addrTokenRoot",
+          type: "address",
+        },
+        {name: "addrTezosEventConfiguration", type: "address"},
+      ],
+    },
+    {
+      name: "encodeTezosEventData",
+      inputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+        {
+          name: "amount",
+          type: "uint128",
+        },
+      ],
+      outputs: [{name: "data", type: "cell"}],
+    },
+    {
+      name: "decodeTezosEventData",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [
+        {name: "wid", type: "int8"},
+        {
+          name: "recipient",
+          type: "uint256",
+        },
+        {name: "amount", type: "uint128"},
+      ],
+    },
+  ],
+  data: [],
+  events: [
+    {
+      name: "burnToken",
+      inputs: [
+        {name: "collection_addr", type: "uint160"},
+        {
+          name: "token_id",
+          type: "uint256",
+        },
+        {name: "owner_addr", type: "uint160"},
+      ],
+      outputs: [],
+    },
+  ],
+  fields: [
+    {name: "_pubkey", type: "uint256"},
+    {
+      name: "_timestamp",
+      type: "uint64",
+    },
+    {name: "_constructorFlag", type: "bool"},
+    {
+      name: "_owner",
+      type: "address",
+    },
+    {name: "_addrTokenRoot", type: "address"},
+    {
+      name: "_addrTezosEventConfiguration",
+      type: "address",
+    },
+  ],
+} as const;

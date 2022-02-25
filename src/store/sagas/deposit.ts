@@ -10,7 +10,13 @@ import {
 import tezos from "../../lib/tezosRpcClient";
 import {VAULT_ADDRESS} from "../../misc/constants";
 import {CallReturnType, DepositAction, RootState} from "../../types";
-import {deposit, setError, setLoading} from "../reducers/transactions";
+import {debug} from "../../utils/console";
+import {
+  deposit,
+  setError,
+  setLoading,
+  setOpHash,
+} from "../reducers/transactions";
 
 function* depositFn(action: PayloadAction<DepositAction>) {
   yield put(setLoading());
@@ -35,7 +41,8 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   const op: CallReturnType<typeof methodProvider.send> = yield call(
     methodProvider.send.bind(methodProvider),
   );
-  yield call(op.confirmation.bind(op));
+  debug("deposit_operation", op);
+  yield put(setOpHash(op.opHash));
 }
 
 export default function* depositSaga() {

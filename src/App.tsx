@@ -13,6 +13,10 @@ import {selectEverWallet} from "./store/reducers/everWallet";
 import {getTezosPermissions} from "./store/reducers/permissions";
 import {fetch as fetchTezosTokens} from "./store/reducers/tezosTokens";
 import {selectTezosWallet} from "./store/reducers/tezosWallet";
+import {
+  subscribeDeposit,
+  subscribeReceive,
+} from "./store/reducers/transactions";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -20,13 +24,17 @@ export default function App() {
   const tezosWallet = useAppSelector(selectTezosWallet);
 
   useEffect(() => {
-    if (everWallet) dispatch(fetchEverTokens());
+    if (everWallet) {
+      dispatch(fetchEverTokens());
+      dispatch(subscribeReceive());
+    }
   }, [everWallet, dispatch]);
 
   useEffect(() => {
     if (tezosWallet) {
       dispatch(fetchTezosTokens());
       dispatch(getTezosPermissions());
+      dispatch(subscribeDeposit());
     }
   }, [tezosWallet, dispatch]);
 

@@ -9,6 +9,7 @@ import everWallet from "./reducers/everWallet";
 import permissions from "./reducers/permissions";
 import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
+import transactions from "./reducers/transactions";
 import checkTezosPermissionsSaga from "./sagas/checkTezosPermissions";
 import connectEverWallet from "./sagas/connectEverWallet";
 import connectTezosWallet from "./sagas/connectTezosWallet";
@@ -16,6 +17,8 @@ import depositSaga from "./sagas/deposit";
 import fetchEverTokensSaga from "./sagas/fetchEverTokens";
 import fetchTezosTokensSaga from "./sagas/fetchTezosTokens";
 import requestTezosPermissionSaga from "./sagas/requestTezosPermission";
+import subscribeToDepositSaga from "./sagas/subscribeToDeposit";
+import subscribeToReceiveSaga from "./sagas/subscribeToReceive";
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -32,6 +35,7 @@ const store = configureStore({
     permissions,
     tezosTokens,
     tezosWallet,
+    transactions,
   },
 });
 
@@ -45,6 +49,8 @@ sagaMiddleware.run(function* () {
     fetchEverTokensSaga(),
     fetchTezosTokensSaga(),
     requestTezosPermissionSaga(),
+    subscribeToDepositSaga(),
+    subscribeToReceiveSaga(),
   ]);
 });
 
