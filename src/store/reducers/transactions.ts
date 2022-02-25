@@ -4,8 +4,9 @@ import {DepositAction, RootState, TransactionsState} from "../../types";
 
 const initialState: TransactionsState = {
   currentTransaction: {
-    id: null,
-    opHash: null,
+    everId: null, // 3 step (simulated)
+    id: null, // 2 step
+    opHash: null, // 1 step
   },
   error: null,
   fetched: false,
@@ -19,10 +20,19 @@ export const transactionsSlice = createSlice({
     deposit(_, __: PayloadAction<DepositAction>) {
       // Handled by saga
     },
+    resetTransaction() {
+      return initialState;
+    },
     setError(state, action: PayloadAction<string>) {
       state.loading = false;
       state.fetched = true;
       state.error = action.payload;
+    },
+    setEverId(state, action: PayloadAction<string>) {
+      state.currentTransaction.everId = action.payload;
+      state.loading = false;
+      state.fetched = true;
+      state.error = null;
     },
     setId(state, action: PayloadAction<number>) {
       state.currentTransaction.id = action.payload;
@@ -52,7 +62,9 @@ export const transactionsSlice = createSlice({
 
 export const {
   deposit,
+  resetTransaction,
   setError,
+  setEverId,
   setId,
   setLoading,
   setOpHash,

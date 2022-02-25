@@ -8,7 +8,7 @@ import {
   next as nextStep,
   selectCurrentStep,
 } from "../store/reducers/currentStep";
-import {setValues} from "../store/reducers/enteredValues";
+import {selectEnteredValues, setValues} from "../store/reducers/enteredValues";
 import {selectEverTokens} from "../store/reducers/everTokens";
 import {
   connect as connectEver,
@@ -32,18 +32,20 @@ export default function Step1() {
   const tezosWallet = useAppSelector(selectTezosWallet);
   const everTokens = useAppSelector(selectEverTokens);
   const tezosTokens = useAppSelector(selectTezosTokens);
+  const enteredValues = useAppSelector(selectEnteredValues);
   const everPopup = useTokensPopup();
   const tezosPopup = useTokensPopup();
 
   const [direction, setDirection] = useState<"AB" | "BA">("AB");
 
   const {values, handleChange, handleBlur} = useFormik({
+    enableReinitialize: true,
     initialValues: {
       direction: "AB",
       everToken: null,
-      everValue: "",
+      everValue: enteredValues.data?.amount || "",
       tezosToken: null,
-      tezosValue: "",
+      tezosValue: enteredValues.data?.amount || "",
     },
     onSubmit() {},
   });

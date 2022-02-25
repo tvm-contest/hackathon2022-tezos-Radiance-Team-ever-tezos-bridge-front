@@ -1,13 +1,13 @@
-import {AbiModule} from "@eversdk/core";
+import {abiContract, AbiModule} from "@eversdk/core";
 import {channel} from "redux-saga";
-import {call, takeEvery, takeLatest} from "redux-saga/effects";
+import {call, put, select, takeEvery, takeLatest} from "redux-saga/effects";
 
 import client from "../../lib/everWSClient";
-import {PROXY_ADDRESS} from "../../misc/constants";
-import {TokenProxy} from "../../misc/ever-abi";
-import {CallReturnType} from "../../types";
+import {TOKEN_ROOT_PROXY} from "../../misc/constants";
+import {TokenRootProxy} from "../../misc/ever-abi";
+import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
-import {subscribeReceive} from "../reducers/transactions";
+import {setEverId, subscribeReceive} from "../reducers/transactions";
 
 const callbackChannel = channel();
 
@@ -19,7 +19,7 @@ function* subscribeToReceive() {
     {
       collection: "messages",
       filter: {
-        dst: {eq: PROXY_ADDRESS},
+        dst: {eq: TOKEN_ROOT_PROXY},
       },
       result: "id boc",
     },
@@ -27,7 +27,7 @@ function* subscribeToReceive() {
       debug("ever_callback", {d, responseType});
       abiModule
         .decode_message({
-          abi: TokenProxy as any,
+          abi: abiContract(TokenRootProxy),
           message: d.result.boc,
         })
         .then((r) => callbackChannel.put(r));
@@ -36,8 +36,17 @@ function* subscribeToReceive() {
 
   debug("ever_subscribe_id", id);
 
-  yield takeEvery(callbackChannel, function* (r) {
-    console.log(r);
+  yield takeEvery(callbackChannel, function* (r: any) {
+    debug("ever_decoded_callback", r);
+    const everAddr: string = yield select(
+      (state: RootState) => state.everWallet.data?.address,
+    );
+    const enteredAmount: number = yield select(
+      (state: RootState) => state.enteredValues.data?.amount,
+    );
+
+    if (r.value.addrRecipient === everAddr && +r.value.amount === enteredAmount)
+      yield put(setEverId(r.value.gasTo));
   });
 }
 

@@ -12,7 +12,10 @@ import {
   prev as prevStep,
   selectCurrentStep,
 } from "../store/reducers/currentStep";
-import {selectEnteredValues} from "../store/reducers/enteredValues";
+import {
+  resetValues,
+  selectEnteredValues,
+} from "../store/reducers/enteredValues";
 import {selectEverWallet} from "../store/reducers/everWallet";
 import {
   permitTezosToken,
@@ -20,6 +23,7 @@ import {
 } from "../store/reducers/permissions";
 import {
   deposit,
+  resetTransaction,
   selectCurrentTransaction,
 } from "../store/reducers/transactions";
 
@@ -37,6 +41,12 @@ export default function Step2() {
 
   function handleApprove() {
     dispatch(permitTezosToken());
+  }
+
+  function handleReset() {
+    dispatch(prevStep());
+    dispatch(resetValues());
+    dispatch(resetTransaction());
   }
 
   function handleDeposit() {
@@ -82,12 +92,20 @@ export default function Step2() {
             </Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
-            <Typography>Waiting for tokens to be received</Typography>
-            <CircularProgress />
+            {currentTransaction.everId ? (
+              <Typography>Your tokens have arrived!</Typography>
+            ) : (
+              <Typography>Waiting for tokens to be received</Typography>
+            )}
+            {!currentTransaction.everId && <CircularProgress />}
           </Stack>
         </Stack>
       </Paper>
-      <Button onClick={handleBack}>Back</Button>
+      {currentTransaction.everId ? (
+        <Button onClick={handleReset}>Make another transfer</Button>
+      ) : (
+        <Button onClick={handleBack}>Back</Button>
+      )}
     </Stack>
   );
 }

@@ -85,6 +85,7 @@ export interface PermissionsState {
 
 export interface TransactionsState {
   currentTransaction: {
+    everId: string | null;
     id: number | null;
     opHash: string | null;
   };

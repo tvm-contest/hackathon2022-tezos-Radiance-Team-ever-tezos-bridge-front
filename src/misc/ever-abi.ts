@@ -805,7 +805,7 @@ export const TokenWallet = {
   ],
 } as const;
 
-export const TokenProxy = {
+export const TokenRootProxy = {
   "ABI version": 2,
   version: "2.1",
   header: ["time", "expire"],
@@ -814,28 +814,33 @@ export const TokenProxy = {
       name: "constructor",
       inputs: [
         {name: "owner", type: "address"},
-        {
-          name: "addrTezosEventConfiguration",
-          type: "address",
-        },
-        {name: "addrTokenRoot", type: "address"},
+        {name: "addrTransferTokenProxy", type: "address"},
       ],
       outputs: [],
     },
     {
       name: "setConfiguration",
-      inputs: [
-        {name: "addrTezosEventConfiguration", type: "address"},
-        {
-          name: "addrTokenRoot",
-          type: "address",
-        },
-      ],
+      inputs: [{name: "addrTransferTokenProxy", type: "address"}],
       outputs: [],
     },
     {
       name: "transferToken",
-      inputs: [{name: "data", type: "cell"}],
+      inputs: [
+        {name: "gasTo", type: "address"},
+        {
+          name: "addrRecipient",
+          type: "address",
+        },
+        {name: "amount", type: "uint128"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "burnToken",
+      inputs: [
+        {name: "amount", type: "uint128"},
+        {name: "payload", type: "cell"},
+      ],
       outputs: [],
     },
     {
@@ -844,52 +849,26 @@ export const TokenProxy = {
       outputs: [
         {name: "owner", type: "address"},
         {
-          name: "addrTokenRoot",
+          name: "addrTransferTokenProxy",
           type: "address",
         },
-        {name: "addrTezosEventConfiguration", type: "address"},
-      ],
-    },
-    {
-      name: "encodeTezosEventData",
-      inputs: [
-        {name: "wid", type: "int8"},
-        {name: "recipient", type: "uint256"},
         {
-          name: "amount",
-          type: "uint128",
+          components: [
+            {name: "sender_msg", type: "address"},
+            {
+              name: "addrRecipient",
+              type: "address",
+            },
+            {name: "amount", type: "uint128"},
+          ],
+          name: "_transferCallbacks",
+          type: "map(uint128,tuple)",
         },
-      ],
-      outputs: [{name: "data", type: "cell"}],
-    },
-    {
-      name: "decodeTezosEventData",
-      inputs: [{name: "data", type: "cell"}],
-      outputs: [
-        {name: "wid", type: "int8"},
-        {
-          name: "recipient",
-          type: "uint256",
-        },
-        {name: "amount", type: "uint128"},
       ],
     },
   ],
   data: [],
-  events: [
-    {
-      name: "burnToken",
-      inputs: [
-        {name: "collection_addr", type: "uint160"},
-        {
-          name: "token_id",
-          type: "uint256",
-        },
-        {name: "owner_addr", type: "uint160"},
-      ],
-      outputs: [],
-    },
-  ],
+  events: [],
   fields: [
     {name: "_pubkey", type: "uint256"},
     {
@@ -901,10 +880,22 @@ export const TokenProxy = {
       name: "_owner",
       type: "address",
     },
-    {name: "_addrTokenRoot", type: "address"},
+    {name: "_addrTransferTokenProxy", type: "address"},
     {
-      name: "_addrTezosEventConfiguration",
-      type: "address",
+      name: "_idCallback",
+      type: "uint128",
+    },
+    {
+      components: [
+        {name: "sender_msg", type: "address"},
+        {
+          name: "addrRecipient",
+          type: "address",
+        },
+        {name: "amount", type: "uint128"},
+      ],
+      name: "transferCallbacks",
+      type: "map(uint128,tuple)",
     },
   ],
-} as const;
+};
