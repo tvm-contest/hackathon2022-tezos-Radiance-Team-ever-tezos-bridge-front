@@ -41,7 +41,9 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Header sx={{justifyContent: "center", mt: 2}} />
+      <Header
+        sx={{justifyContent: "center", mt: everWallet || tezosWallet ? 2 : 0}}
+      />
       <Container maxWidth="sm">
         <Subheader sx={{mb: 2, mt: 4}} />
         <StepIndicator sx={{mb: 4}} />
