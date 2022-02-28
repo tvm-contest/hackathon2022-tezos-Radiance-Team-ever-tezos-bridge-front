@@ -1,5 +1,4 @@
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import {Button, Paper, Stack, Typography} from "@mui/material";
+import {Button, Paper, Stack, StackProps, Typography} from "@mui/material";
 
 import useAppDispatch from "../hooks/useAppDispatch";
 import useAppSelector from "../hooks/useAppSelector";
@@ -14,7 +13,7 @@ import {
   selectTezosWallet,
 } from "../store/reducers/tezosWallet";
 
-export default function Header() {
+export default function Header(props: StackProps) {
   const dispatch = useAppDispatch();
   const everWallet = useAppSelector(selectEverWallet);
   const tezosWallet = useAppSelector(selectTezosWallet);
@@ -36,9 +35,9 @@ export default function Header() {
   }
 
   return (
-    <Stack component="header" direction="row-reverse" spacing={1} sx={{my: 2}}>
+    <Stack component="header" direction="row-reverse" spacing={1} {...props}>
       {tezosWallet ? (
-        <Paper sx={{borderRadius: "18px", p: 1}}>
+        <Paper sx={{borderRadius: "18px", p: 0.5}}>
           <Stack alignItems="center" direction="row" spacing={2}>
             <Typography
               component="span"
@@ -51,7 +50,6 @@ export default function Header() {
               Balance: {tezosWallet.balance} XTZ
             </Typography>
             <Button
-              endIcon={<FiberManualRecordIcon />}
               href={`https://hangzhou2net.tzkt.io/${encodeURIComponent(
                 tezosWallet.address,
               )}`}
@@ -70,7 +68,7 @@ export default function Header() {
         </Button>
       )}
       {everWallet ? (
-        <Paper sx={{borderRadius: "18px", p: 1}}>
+        <Paper sx={{borderRadius: "18px", p: 0.5}}>
           <Stack alignItems="center" direction="row" spacing={2}>
             <Typography
               component="span"
@@ -83,7 +81,6 @@ export default function Header() {
               Balance: {everWallet.balance} EVER
             </Typography>
             <Button
-              endIcon={<FiberManualRecordIcon />}
               href={`https://net.ever.live/accounts/accountDetails?id=${encodeURIComponent(
                 everWallet.address,
               )}`}

@@ -1,4 +1,4 @@
-import {Box, Container, CssBaseline} from "@mui/material";
+import {Container, CssBaseline} from "@mui/material";
 import {useEffect} from "react";
 
 import Header from "./components/Header";
@@ -41,14 +41,10 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Container>
-        <Header />
-        <Box sx={{mb: 2}}>
-          <Subheader sx={{mb: 1}} />
-          <StepIndicator />
-        </Box>
-      </Container>
+      <Header sx={{justifyContent: "center", mt: 2}} />
       <Container maxWidth="sm">
+        <Subheader sx={{mb: 2, mt: 4}} />
+        <StepIndicator sx={{mb: 4}} />
         <Step1 />
         <Step2 />
       </Container>

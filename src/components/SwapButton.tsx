@@ -1,11 +1,13 @@
-import {IconButton, IconButtonProps} from "@mui/material";
+import {IconButton, IconButtonProps, Tooltip} from "@mui/material";
 
 import SwapIcon from "./SwapIcon";
 
 export default function SwapButton(props: IconButtonProps) {
   return (
-    <IconButton size="large" {...props}>
-      <SwapIcon />
-    </IconButton>
+    <Tooltip title="Change bridge direction">
+      <IconButton size="large" sx={{borderRadius: "18px"}} {...props}>
+        <SwapIcon />
+      </IconButton>
+    </Tooltip>
   );
 }
