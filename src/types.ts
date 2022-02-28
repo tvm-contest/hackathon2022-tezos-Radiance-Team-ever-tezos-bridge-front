@@ -132,12 +132,6 @@ export type TokenInputProps = InputBaseProps & {
   wallet?: Wallet | null;
 };
 
-export type WrappedTokenInputProps = {
-  prefixLabel: string;
-  selectToken?: boolean;
-  readOnly?: boolean;
-};
-
 export interface TokenListPopupProps {
   onClose?: () => void;
   onTokenSelect: (t: Token) => void;

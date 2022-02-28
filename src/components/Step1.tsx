@@ -1,5 +1,6 @@
 import {Box, Button, Stack} from "@mui/material";
 import {useFormik} from "formik";
+import _ from "lodash";
 import {useCallback, useMemo, useState} from "react";
 import {useDispatch} from "react-redux";
 
@@ -19,7 +20,7 @@ import {
   connect as connectTezos,
   selectTezosWallet,
 } from "../store/reducers/tezosWallet";
-import {Token, WrappedTokenInputProps} from "../types";
+import {Token, TokenInputProps} from "../types";
 import SwapButton from "./SwapButton";
 import TokenInput from "./TokenInput";
 import TokenListPopup from "./TokenListPopup";
@@ -58,53 +59,74 @@ export default function Step1() {
     dispatch(connectEver());
   }, [dispatch]);
 
-  const TokenInputs = useMemo(() => {
-    const initialInputs = [
-      ({prefixLabel, readOnly, selectToken}: WrappedTokenInputProps) => (
-        <TokenInput
-          label={`${prefixLabel} (Tezos)`}
-          name="tezosValue"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          onConnectWallet={handleConnectTezosWallet}
-          onSelectToken={selectToken ? tezosPopup.handleOpen : undefined}
-          readOnly={readOnly}
-          token={tezosPopup.token}
-          value={values.tezosValue}
-          wallet={tezosWallet}
-        />
-      ),
-      ({prefixLabel, readOnly, selectToken}: WrappedTokenInputProps) => (
-        <TokenInput
-          label={`${prefixLabel} (Everscale)`}
-          name="everValue"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          onConnectWallet={handleConnectEverWallet}
-          onSelectToken={selectToken ? everPopup.handleOpen : undefined}
-          readOnly={readOnly}
-          token={everPopup.token}
-          value={values.everValue}
-          wallet={everWallet}
-        />
-      ),
-    ];
+  const inputProps = useMemo(() => {
+    const name =
+      direction === "AB"
+        ? ["tezosValue", "everValue"]
+        : ["everValue", "tezosValue"];
+    const onConnectWallet =
+      direction === "AB"
+        ? [handleConnectTezosWallet, handleConnectEverWallet]
+        : [handleConnectEverWallet, handleConnectTezosWallet];
+    const onSelectToken =
+      direction === "AB"
+        ? [tezosPopup.handleOpen, everPopup.handleOpen]
+        : [everPopup.handleOpen, tezosPopup.handleOpen];
+    const token =
+      direction === "AB"
+        ? [tezosPopup.token, everPopup.token]
+        : [everPopup.token, tezosPopup.token];
+    const value =
+      direction === "AB"
+        ? [values.tezosValue, values.everValue]
+        : [values.everValue, values.tezosValue];
+    const wallet =
+      direction === "AB"
+        ? [tezosWallet, everWallet]
+        : [everWallet, tezosWallet];
 
-    return direction === "AB"
-      ? {A: initialInputs[0], B: initialInputs[1]}
-      : {A: initialInputs[1], B: initialInputs[0]};
+    return {
+      name,
+      onConnectWallet,
+      onSelectToken,
+      token,
+      value,
+      wallet,
+    };
   }, [
     direction,
-    tezosPopup,
-    everPopup,
-    tezosWallet,
-    everWallet,
-    handleConnectTezosWallet,
     handleConnectEverWallet,
+    handleConnectTezosWallet,
+    everPopup,
+    everWallet,
+    tezosPopup,
+    tezosWallet,
     values,
-    handleChange,
-    handleBlur,
   ]);
+
+  const fromProps = useMemo(() => {
+    const label = direction === "AB" ? "From (Tezos)" : "From (Everscale)";
+
+    return {
+      ..._.zipObject(_.keys(inputProps), _.map(inputProps, "0")),
+      label,
+      onBlur: handleBlur,
+      onChange: handleChange,
+      readOnly: false,
+    } as TokenInputProps;
+  }, [direction, inputProps, handleBlur, handleChange]);
+
+  const toProps = useMemo(() => {
+    const label = direction === "AB" ? "To (Everscale)" : "To (Tezos)";
+
+    return {
+      ..._.zipObject(_.keys(inputProps), _.map(inputProps, "1")),
+      label,
+      onBlur: handleBlur,
+      onChange: handleChange,
+      readOnly: true,
+    } as TokenInputProps;
+  }, [direction, inputProps, handleBlur, handleChange]);
 
   function handleSwap() {
     setDirection(direction === "AB" ? "BA" : "AB");
@@ -125,11 +147,11 @@ export default function Step1() {
   return (
     <>
       <Stack spacing={2}>
-        <TokenInputs.A prefixLabel="From" selectToken />
+        <TokenInput {...fromProps} />
         <Box sx={{display: "flex", justifyContent: "center"}}>
           <SwapButton onClick={handleSwap} />
         </Box>
-        <TokenInputs.B prefixLabel="To" readOnly />
+        <TokenInput {...toProps} />
         <Button onClick={handleNext}>Next</Button>
       </Stack>
       <TokenListPopup
