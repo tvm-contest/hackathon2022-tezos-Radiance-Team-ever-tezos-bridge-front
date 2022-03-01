@@ -7,6 +7,8 @@ import {TOKEN_ROOT_PROXY} from "../../misc/constants";
 import {TokenRootProxy} from "../../misc/ever-abi";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
+import {fetch as fetchEverTokens} from "../reducers/everTokens";
+import {fetch as fetchTezosTokens} from "../reducers/tezosTokens";
 import {setEverId, subscribeReceive} from "../reducers/transactions";
 
 const callbackChannel = channel();
@@ -45,8 +47,16 @@ function* subscribeToReceive() {
       (state: RootState) => state.enteredValues.data?.amount,
     );
 
-    if (r.value.addrRecipient === everAddr && +r.value.amount === enteredAmount)
+    if (
+      r.value.addrRecipient === everAddr &&
+      +r.value.amount === enteredAmount
+    ) {
       yield put(setEverId(r.value.gasTo));
+
+      // Refetch tokens
+      yield put(fetchTezosTokens());
+      yield put(fetchEverTokens());
+    }
   });
 }
 
