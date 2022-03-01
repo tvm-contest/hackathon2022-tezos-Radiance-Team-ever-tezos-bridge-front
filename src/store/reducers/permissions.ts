@@ -46,6 +46,8 @@ export const {
   setTezosPermissions,
 } = permissionsSlice.actions;
 
+export const selectPermissionsLoading = (state: RootState) =>
+  state.permissions.loading;
 export const selectPermittedTezosTokens = (state: RootState) =>
   state.permissions.permittedTezosTokens;
 

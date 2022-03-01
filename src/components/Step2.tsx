@@ -19,6 +19,7 @@ import {
 import {selectEverWallet} from "../store/reducers/everWallet";
 import {
   permitTezosToken,
+  selectPermissionsLoading,
   selectPermittedTezosTokens,
 } from "../store/reducers/permissions";
 import {
@@ -32,6 +33,7 @@ export default function Step2() {
   const currentStep = useAppSelector(selectCurrentStep);
   const enteredValues = useAppSelector(selectEnteredValues);
   const permittedTezosTokens = useAppSelector(selectPermittedTezosTokens);
+  const permissionLoading = useAppSelector(selectPermissionsLoading);
   const everWallet = useAppSelector(selectEverWallet);
   const currentTransaction = useAppSelector(selectCurrentTransaction);
 
@@ -61,16 +63,27 @@ export default function Step2() {
 
   if (currentStep !== 2 || !enteredValues.data) return null;
 
+  const hasAccess = permittedTezosTokens.length !== 0;
+
   return (
     <Stack spacing={2}>
       <Paper sx={{borderRadius: "40px", p: 4}}>
         <Stack component="ol" spacing={2} sx={{m: 0, p: 0}}>
           <Stack alignItems="flex-start" component="li" spacing={1}>
-            <Typography>
-              Approve access by the vault to the selected token
-            </Typography>
+            {hasAccess ? (
+              <Typography>Access to the token has been given</Typography>
+            ) : (
+              <Typography>
+                Approve access by the vault to the selected token
+              </Typography>
+            )}
             <Button
-              disabled={permittedTezosTokens.length !== 0}
+              disabled={hasAccess}
+              endIcon={
+                permissionLoading ? (
+                  <CircularProgress color="inherit" size={25} />
+                ) : null
+              }
               onClick={handleApprove}
             >
               Approve

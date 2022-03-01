@@ -9,7 +9,12 @@ import {
 import tezos from "../../lib/tezosRpcClient";
 import {FA2_ADDRESS, VAULT_ADDRESS} from "../../misc/constants";
 import {CallReturnType, RootState} from "../../types";
-import {permitTezosToken, setError, setLoading} from "../reducers/permissions";
+import {
+  getTezosPermissions,
+  permitTezosToken,
+  setError,
+  setLoading,
+} from "../reducers/permissions";
 
 function* requestTezosPermission() {
   yield put(setLoading());
@@ -39,6 +44,9 @@ function* requestTezosPermission() {
     methodProvider.send.bind(methodProvider),
   );
   yield call(op.confirmation.bind(op));
+
+  // Lunch checkTezosPermissions saga
+  yield put(getTezosPermissions());
 }
 
 export default function* requestTezosPermissionSaga() {

@@ -3,6 +3,7 @@ import {put, SagaReturnType, select, takeLatest} from "redux-saga/effects";
 import {getBigMapKeys} from "../../lib/tezosApiClient";
 import {OPERATORS_MAP_ID} from "../../misc/constants";
 import {CallReturnType, RootState} from "../../types";
+import {debug} from "../../utils/console";
 import {
   getTezosPermissions,
   setError,
@@ -13,9 +14,6 @@ import {
 function* checkTezosPermissions() {
   yield put(setLoading());
 
-  const operatorsKeys: CallReturnType<typeof getBigMapKeys> =
-    yield getBigMapKeys(OPERATORS_MAP_ID);
-
   const tezosWallet: SagaReturnType<() => RootState["tezosWallet"]["data"]> =
     yield select((state: RootState) => state.tezosWallet.data);
   if (!tezosWallet) {
@@ -23,9 +21,13 @@ function* checkTezosPermissions() {
     return;
   }
 
+  const operatorsKeys: CallReturnType<typeof getBigMapKeys> =
+    yield getBigMapKeys(OPERATORS_MAP_ID);
+  debug("permissions_keys", operatorsKeys.data);
+
   const allowedTokens: string[] = [];
   operatorsKeys.data.forEach((ent) => {
-    if (ent.key.address_0 === tezosWallet?.address)
+    if (ent.key.address_0 === tezosWallet.address && ent.active)
       allowedTokens.push(ent.key.nat);
   });
 
