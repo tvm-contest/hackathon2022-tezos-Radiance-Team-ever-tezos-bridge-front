@@ -11,7 +11,7 @@ export default function Header(props: StackProps) {
   return (
     <Stack component="header" direction="row-reverse" spacing={1} {...props}>
       {tezosWallet ? (
-        <Paper sx={{borderRadius: "18px", p: 0.5}}>
+        <Paper sx={{borderRadius: "18px", px: 0.75, py: 0.5}}>
           <Stack alignItems="center" direction="row" spacing={2}>
             <Typography
               component="span"
@@ -37,7 +37,7 @@ export default function Header(props: StackProps) {
         </Paper>
       ) : null}
       {everWallet ? (
-        <Paper sx={{borderRadius: "18px", p: 0.5}}>
+        <Paper sx={{borderRadius: "18px", px: 0.75, py: 0.5}}>
           <Stack alignItems="center" direction="row" spacing={2}>
             <Typography
               component="span"

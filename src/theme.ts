@@ -21,7 +21,7 @@ const theme = createTheme({
           textTransform: "none",
         },
         sizeSmall: {
-          padding: "15px 18.75px",
+          padding: "12px 16px",
         },
       },
     },
