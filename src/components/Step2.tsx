@@ -55,7 +55,9 @@ export default function Step2() {
     if (enteredValues.data && everWallet)
       dispatch(
         deposit({
-          amount: enteredValues.data.amount,
+          amount:
+            enteredValues.data.amount *
+            10 ** enteredValues.data.selectedToken.decimals,
           everscaleReceiver: everWallet.address,
         }),
       );

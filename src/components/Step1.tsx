@@ -21,7 +21,7 @@ import {
   connect as connectTezos,
   selectTezosWallet,
 } from "../store/reducers/tezosWallet";
-import {Token, TokenInputProps, TokensPopupArgs} from "../types";
+import {Direction, Token, TokenInputProps, TokensPopupArgs} from "../types";
 import SwapButton from "./SwapButton";
 import TokenInput from "./TokenInput";
 import TokenListPopup from "./TokenListPopup";
@@ -36,12 +36,10 @@ export default function Step1() {
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
 
-  const [direction, setDirection] = useState<"AB" | "BA">("AB");
-
   const {values, handleChange, handleBlur, setFieldValue} = useFormik({
     enableReinitialize: true,
     initialValues: {
-      direction: "AB",
+      direction: "AB" as Direction,
       everToken: null as Token | null,
       everValue: enteredValues.data?.amount || "",
       tezosToken: null as Token | null,
@@ -91,6 +89,8 @@ export default function Step1() {
   }, [dispatch]);
 
   const inputProps = useMemo(() => {
+    const {direction} = values;
+
     const name =
       direction === "AB"
         ? ["tezosValue", "everValue"]
@@ -125,7 +125,6 @@ export default function Step1() {
       wallet,
     };
   }, [
-    direction,
     handleConnectEverWallet,
     handleConnectTezosWallet,
     everPopup,
@@ -136,7 +135,8 @@ export default function Step1() {
   ]);
 
   const fromProps = useMemo(() => {
-    const label = direction === "AB" ? "From (Tezos)" : "From (Everscale)";
+    const label =
+      values.direction === "AB" ? "From (Tezos)" : "From (Everscale)";
 
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "0")),
@@ -145,10 +145,10 @@ export default function Step1() {
       onChange: handleChange,
       readOnly: false,
     } as TokenInputProps;
-  }, [direction, inputProps, handleBlur, handleChange]);
+  }, [values.direction, inputProps, handleBlur, handleChange]);
 
   const toProps = useMemo(() => {
-    const label = direction === "AB" ? "To (Everscale)" : "To (Tezos)";
+    const label = values.direction === "AB" ? "To (Everscale)" : "To (Tezos)";
 
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "1")),
@@ -158,20 +158,23 @@ export default function Step1() {
       onSelectToken: undefined,
       readOnly: true,
     } as TokenInputProps;
-  }, [direction, inputProps, handleBlur, handleChange]);
+  }, [values.direction, inputProps, handleBlur, handleChange]);
 
   function handleSwap() {
-    setDirection(direction === "AB" ? "BA" : "AB");
+    setFieldValue("direction", values.direction === "AB" ? "BA" : "AB");
   }
 
   function handleNext() {
-    dispatch(
-      setValues({
-        amount: +values.tezosValue,
-        selectedToken: "",
-      }),
-    );
-    dispatch(nextStep());
+    if (values.tezosToken && values.everToken) {
+      dispatch(
+        setValues({
+          amount: +values.tezosValue,
+          selectedToken:
+            values.direction === "AB" ? values.tezosToken : values.everToken,
+        }),
+      );
+      dispatch(nextStep());
+    }
   }
 
   if (currentStep !== 1) return null;

@@ -26,6 +26,7 @@ declare module "@mui/material/styles" {
 
 export interface Token {
   address: string;
+  decimals: number;
   balance: number;
   name: string;
   symbol: string;
@@ -45,16 +46,7 @@ export type BalanceWalletRequest = {
   wallet: Address;
 };
 
-export interface TezosToken {
-  contract: string;
-  network: string;
-  token_id: number;
-  symbol: string;
-  name: string;
-  decimals: number;
-  is_transferable: boolean;
-  balance: string;
-}
+export type Direction = "AB" | "BA";
 
 /**
  * Redux store states's types
@@ -103,13 +95,13 @@ export interface DepositAction {
 export interface EnteredValuesState {
   data: {
     amount: number;
-    selectedToken: string;
+    selectedToken: Token;
   } | null;
 }
 
 export interface EnteredValuesAction {
   amount: number;
-  selectedToken: string;
+  selectedToken: Token;
 }
 
 /**
@@ -189,6 +181,16 @@ export type SagaReturnType<T extends (...args: any[]) => any> = StripEffects<
 /**
  * Tezos and Ever API Responses
  */
+export interface TezosToken {
+  contract: string;
+  network: string;
+  token_id: number;
+  symbol: string;
+  name: string;
+  decimals: number;
+  is_transferable: boolean;
+  balance: string;
+}
 
 export interface GetTezosWalletsRes {
   balances: TezosToken[];
