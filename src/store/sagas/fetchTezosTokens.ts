@@ -32,6 +32,7 @@ function* fetchTezosTokens() {
     setFetched(
       data.balances.map((t) => ({
         ...tezosTokens[0],
+        address: tezosTokens[0].contract,
         balance: new BigNumber(t.balance)
           .div(10 ** tezosTokens[0].decimals)
           .dp(DECIMAL_PLACES)

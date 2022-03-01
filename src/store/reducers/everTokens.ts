@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState, Token, TokensState} from "../../types";
 
 const initialState: TokensState = {
-  data: null,
+  data: [],
   error: null,
   fetched: false,
   loading: false,

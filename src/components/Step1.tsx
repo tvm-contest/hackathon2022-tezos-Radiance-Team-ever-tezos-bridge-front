@@ -1,10 +1,11 @@
 import {Box, Button, Stack} from "@mui/material";
 import {useFormik} from "formik";
 import _ from "lodash";
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
+import tokensRelation from "../misc/tokens-relation";
 import {
   next as nextStep,
   selectCurrentStep,
@@ -20,7 +21,7 @@ import {
   connect as connectTezos,
   selectTezosWallet,
 } from "../store/reducers/tezosWallet";
-import {Token, TokenInputProps} from "../types";
+import {Token, TokenInputProps, TokensPopupArgs} from "../types";
 import SwapButton from "./SwapButton";
 import TokenInput from "./TokenInput";
 import TokenListPopup from "./TokenListPopup";
@@ -29,27 +30,57 @@ export default function Step1() {
   const dispatch = useDispatch();
 
   const currentStep = useAppSelector(selectCurrentStep);
-  const everWallet = useAppSelector(selectEverWallet);
   const tezosWallet = useAppSelector(selectTezosWallet);
-  const everTokens = useAppSelector(selectEverTokens);
+  const everWallet = useAppSelector(selectEverWallet);
   const tezosTokens = useAppSelector(selectTezosTokens);
+  const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
-  const everPopup = useTokensPopup();
-  const tezosPopup = useTokensPopup();
 
   const [direction, setDirection] = useState<"AB" | "BA">("AB");
 
-  const {values, handleChange, handleBlur} = useFormik({
+  const {values, handleChange, handleBlur, setFieldValue} = useFormik({
     enableReinitialize: true,
     initialValues: {
       direction: "AB",
-      everToken: null,
+      everToken: null as Token | null,
       everValue: enteredValues.data?.amount || "",
-      tezosToken: null,
+      tezosToken: null as Token | null,
       tezosValue: enteredValues.data?.amount || "",
     },
     onSubmit() {},
   });
+
+  const tezosPopup = useTokensPopup({
+    setToken(t) {
+      setFieldValue("tezosToken", t);
+    },
+  });
+  const everPopup = useTokensPopup({
+    setToken(t) {
+      setFieldValue("everToken", t);
+    },
+  });
+
+  // Automatically select second token
+  useEffect(() => {
+    const {tezosToken, everToken} = values;
+
+    if ((tezosToken && everToken) || (!tezosToken && !everToken)) return;
+
+    if (everToken) {
+      const rel =
+        tokensRelation.find((r) => r.includes(everToken.address)) || [];
+      const opAddress = rel[0] === everToken.address ? rel[1] : rel[0];
+      const opToken = tezosTokens.find((t) => t.address === opAddress);
+      setFieldValue("tezosToken", opToken || null);
+    } else if (tezosToken) {
+      const rel =
+        tokensRelation.find((r) => r.includes(tezosToken.address)) || [];
+      const opAddress = rel[0] === tezosToken.address ? rel[1] : rel[0];
+      const opToken = everTokens.find((t) => t.address === opAddress);
+      setFieldValue("everToken", opToken || null);
+    }
+  }, [values, setFieldValue, everTokens, tezosTokens]);
 
   const handleConnectTezosWallet = useCallback(() => {
     dispatch(connectTezos());
@@ -74,8 +105,8 @@ export default function Step1() {
         : [everPopup.handleOpen, tezosPopup.handleOpen];
     const token =
       direction === "AB"
-        ? [tezosPopup.token, everPopup.token]
-        : [everPopup.token, tezosPopup.token];
+        ? [values.tezosToken, values.everToken]
+        : [values.everToken, values.tezosToken];
     const value =
       direction === "AB"
         ? [values.tezosValue, values.everValue]
@@ -124,6 +155,7 @@ export default function Step1() {
       label,
       onBlur: handleBlur,
       onChange: handleChange,
+      onSelectToken: undefined,
       readOnly: true,
     } as TokenInputProps;
   }, [direction, inputProps, handleBlur, handleChange]);
@@ -170,9 +202,8 @@ export default function Step1() {
   );
 }
 
-function useTokensPopup() {
+function useTokensPopup({setToken}: TokensPopupArgs) {
   const [open, setOpen] = useState(false);
-  const [token, setToken] = useState<Token | null>(null);
 
   function handleTokenSelect(t: Token) {
     setToken(t);
@@ -184,6 +215,5 @@ function useTokensPopup() {
     handleOpen: () => setOpen(true),
     handleTokenSelect,
     open,
-    token,
   };
 }

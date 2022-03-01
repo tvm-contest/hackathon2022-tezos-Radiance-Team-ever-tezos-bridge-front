@@ -25,6 +25,7 @@ declare module "@mui/material/styles" {
 }
 
 export interface Token {
+  address: string;
   balance: number;
   name: string;
   symbol: string;
@@ -63,7 +64,7 @@ export interface CurrentStepState {
 }
 
 export interface TokensState {
-  data: Token[] | null;
+  data: Token[];
   error: string | null;
   fetched: boolean;
   loading: boolean;
@@ -146,6 +147,13 @@ export type TokenListItemProps = {
 export interface SearchInputProps {
   inputProps?: InputBaseProps;
   containerProps?: PaperProps;
+}
+
+/**
+ * Components's functions
+ */
+export interface TokensPopupArgs {
+  setToken: (t: Token) => void;
 }
 
 /**
