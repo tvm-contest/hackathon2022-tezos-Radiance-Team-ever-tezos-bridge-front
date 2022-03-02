@@ -4,6 +4,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 import {getBalance} from "../../lib/everApiClient";
 import everRpcClient from "../../lib/everRpcClient";
 import {DECIMAL_PLACES, EVER_DECIMALS} from "../../misc/constants";
+import {NO_EXTENSION} from "../../misc/error-messages";
 import {CallReturnType} from "../../types";
 import {
   connect,
@@ -19,7 +20,7 @@ function* connectWalletEver() {
     everRpcClient.hasProvider.bind(everRpcClient),
   );
   if (!has) {
-    yield put(setError("Extension is not installed"));
+    yield put(setError(NO_EXTENSION));
     return;
   }
 

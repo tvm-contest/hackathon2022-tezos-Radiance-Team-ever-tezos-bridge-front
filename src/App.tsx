@@ -9,10 +9,16 @@ import Subheader from "./components/Subheader";
 import useAppDispatch from "./hooks/useAppDispatch";
 import useAppSelector from "./hooks/useAppSelector";
 import {fetch as fetchEverTokens} from "./store/reducers/everTokens";
-import {selectEverWallet} from "./store/reducers/everWallet";
+import {
+  check as checkEver,
+  selectEverWallet,
+} from "./store/reducers/everWallet";
 import {getTezosPermissions} from "./store/reducers/permissions";
 import {fetch as fetchTezosTokens} from "./store/reducers/tezosTokens";
-import {selectTezosWallet} from "./store/reducers/tezosWallet";
+import {
+  check as checkTezos,
+  selectTezosWallet,
+} from "./store/reducers/tezosWallet";
 import {
   subscribeDeposit,
   subscribeReceive,
@@ -23,20 +29,28 @@ export default function App() {
   const everWallet = useAppSelector(selectEverWallet);
   const tezosWallet = useAppSelector(selectTezosWallet);
 
+  // Check wallets extensions
   useEffect(() => {
-    if (everWallet) {
-      dispatch(fetchEverTokens());
-      dispatch(subscribeReceive());
-    }
-  }, [everWallet, dispatch]);
+    dispatch(checkTezos());
+    dispatch(checkEver());
+  }, [dispatch]);
 
+  // Fetch tokens after detecting wallets
   useEffect(() => {
-    if (tezosWallet) {
-      dispatch(fetchTezosTokens());
-      dispatch(getTezosPermissions());
-      dispatch(subscribeDeposit());
-    }
+    if (everWallet) dispatch(fetchEverTokens());
+    if (tezosWallet) dispatch(fetchTezosTokens());
+  }, [tezosWallet, everWallet, dispatch]);
+
+  // Fetch tezos permissions for its token manipulation
+  useEffect(() => {
+    if (tezosWallet) dispatch(getTezosPermissions());
   }, [tezosWallet, dispatch]);
+
+  // Subscriptions
+  useEffect(() => {
+    if (everWallet) dispatch(subscribeReceive());
+    if (tezosWallet) dispatch(subscribeDeposit());
+  }, [tezosWallet, everWallet, dispatch]);
 
   return (
     <>

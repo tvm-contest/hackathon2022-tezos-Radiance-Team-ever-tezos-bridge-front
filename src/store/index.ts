@@ -11,6 +11,7 @@ import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
 import transactions from "./reducers/transactions";
 import checkTezosPermissionsSaga from "./sagas/checkTezosPermissions";
+import checkWalletsAvailabilitySaga from "./sagas/checkWalletsAvailability";
 import connectEverWallet from "./sagas/connectEverWallet";
 import connectTezosWallet from "./sagas/connectTezosWallet";
 import depositSaga from "./sagas/deposit";
@@ -43,6 +44,7 @@ const store = configureStore({
 sagaMiddleware.run(function* () {
   yield all([
     checkTezosPermissionsSaga(),
+    checkWalletsAvailabilitySaga(),
     connectEverWallet(),
     connectTezosWallet(),
     depositSaga(),

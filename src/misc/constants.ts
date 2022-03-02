@@ -8,3 +8,7 @@ export const PROXY_ADDRESS =
   "0:3f908f63c6dcdef9d56ee43c1398dc0896dc0da107683ceea846a4b39727fda0";
 export const TOKEN_ROOT_PROXY =
   "0:a57a147b4004ce618d5c37f959155432ee0cacd3f5b9138ae7115933468272ec";
+export const TEMPLE_WALLET_URL =
+  "https://chrome.google.com/webstore/detail/temple-tezos-wallet-ex-th/ookjlbkiijinhpmnjffcofjonbfbgaoc";
+export const EVER_WALLET_URL =
+  "https://chrome.google.com/webstore/detail/ever-wallet/cgeeodpfagjceefieflmdfphplkenlfk";

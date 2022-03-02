@@ -13,6 +13,9 @@ export const tezosWalletSlice = createSlice({
   initialState,
   name: "tezosWallet",
   reducers: {
+    check() {
+      // Handled by saga
+    },
     connect() {
       // Handled by saga
     },
@@ -38,9 +41,17 @@ export const tezosWalletSlice = createSlice({
   },
 });
 
-export const {connect, disconnect, setConnecting, setError, setConnected} =
-  tezosWalletSlice.actions;
+export const {
+  check,
+  connect,
+  disconnect,
+  setConnecting,
+  setError,
+  setConnected,
+} = tezosWalletSlice.actions;
 
 export const selectTezosWallet = (state: RootState) => state.tezosWallet.data;
+export const selectTezosWalletError = (state: RootState) =>
+  state.tezosWallet.error;
 
 export default tezosWalletSlice.reducer;

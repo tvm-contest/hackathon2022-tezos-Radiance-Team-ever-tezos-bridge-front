@@ -1,4 +1,5 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LinkIcon from "@mui/icons-material/Link";
 import {
   Button,
   FormControl,
@@ -60,6 +61,9 @@ const Balance = styled("span")(({theme}) => ({
 }));
 
 export default function TokenInput({
+  extensionInstalled,
+  extensionLabel,
+  extensionLink,
   label,
   token,
   onConnectWallet,
@@ -76,7 +80,7 @@ export default function TokenInput({
           <Button onClick={onSelectToken}>{token.name}</Button>
         </Stack>
       );
-    else if (wallet && !onSelectToken) return () => null;
+    else if (wallet && rest.readOnly) return () => null;
     else if (wallet)
       return (props: StackProps) => (
         <Stack justifyContent="flex-end" {...props}>
@@ -85,13 +89,37 @@ export default function TokenInput({
           </Button>
         </Stack>
       );
-    else
+    else if (extensionInstalled)
       return (props: StackProps) => (
         <Stack justifyContent="flex-end" {...props}>
           <Button onClick={onConnectWallet}>{walletLabel}</Button>
         </Stack>
       );
-  }, [wallet, walletLabel, token, onSelectToken, onConnectWallet]);
+    else
+      return (props: StackProps) => (
+        <Stack justifyContent="flex-end" {...props}>
+          <Button
+            endIcon={<LinkIcon />}
+            href={extensionLink}
+            sx={{textAlign: "center"}}
+            target="_blank"
+            variant="outlined"
+          >
+            {extensionLabel}
+          </Button>
+        </Stack>
+      );
+  }, [
+    extensionLink,
+    extensionInstalled,
+    extensionLabel,
+    onSelectToken,
+    onConnectWallet,
+    rest.readOnly,
+    token,
+    wallet,
+    walletLabel,
+  ]);
 
   return (
     <StyledPaper>

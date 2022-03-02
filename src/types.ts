@@ -119,6 +119,9 @@ export interface AddressInputProps {
 
 export type TokenInputProps = InputBaseProps & {
   label: string;
+  extensionInstalled: boolean;
+  extensionLabel: string;
+  extensionLink: string;
   token?: Token | null;
   onConnectWallet: () => void;
   onSelectToken?: () => void;

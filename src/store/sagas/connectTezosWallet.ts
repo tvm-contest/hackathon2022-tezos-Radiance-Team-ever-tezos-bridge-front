@@ -5,6 +5,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 import {getAccount} from "../../lib/tezosApiClient";
 import {getWallet} from "../../lib/tezosRpcClient";
 import {DECIMAL_PLACES, TEZOS_DECIMALS} from "../../misc/constants";
+import {NO_EXTENSION} from "../../misc/error-messages";
 import {CallReturnType} from "../../types";
 import {setError} from "../reducers/everWallet";
 import {setConnected, setConnecting} from "../reducers/tezosWallet";
@@ -17,11 +18,7 @@ function* connectTezosWallet() {
     TempleWallet.isAvailable.bind(TempleWallet),
   );
   if (!available) {
-    yield put(
-      setError(
-        "Temple wallet isn't available. Make sure it is installed and unlocked",
-      ),
-    );
+    yield put(setError(NO_EXTENSION));
     return;
   }
 

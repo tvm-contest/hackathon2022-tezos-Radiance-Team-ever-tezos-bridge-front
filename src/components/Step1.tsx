@@ -5,6 +5,8 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
+import {EVER_WALLET_URL, TEMPLE_WALLET_URL} from "../misc/constants";
+import {NO_EXTENSION} from "../misc/error-messages";
 import tokensRelation from "../misc/tokens-relation";
 import {
   next as nextStep,
@@ -15,11 +17,13 @@ import {selectEverTokens} from "../store/reducers/everTokens";
 import {
   connect as connectEver,
   selectEverWallet,
+  selectEverWalletError,
 } from "../store/reducers/everWallet";
 import {selectTezosTokens} from "../store/reducers/tezosTokens";
 import {
   connect as connectTezos,
   selectTezosWallet,
+  selectTezosWalletError,
 } from "../store/reducers/tezosWallet";
 import {Direction, Token, TokenInputProps, TokensPopupArgs} from "../types";
 import SwapButton from "./SwapButton";
@@ -31,7 +35,9 @@ export default function Step1() {
 
   const currentStep = useAppSelector(selectCurrentStep);
   const tezosWallet = useAppSelector(selectTezosWallet);
+  const tezosWalletError = useAppSelector(selectTezosWalletError);
   const everWallet = useAppSelector(selectEverWallet);
+  const everWalletError = useAppSelector(selectEverWalletError);
   const tezosTokens = useAppSelector(selectTezosTokens);
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
@@ -88,6 +94,15 @@ export default function Step1() {
     dispatch(connectEver());
   }, [dispatch]);
 
+  const templeWalletInstalled = useMemo(() => {
+    return tezosWalletError !== NO_EXTENSION;
+  }, [tezosWalletError]);
+
+  const everWalletInstalled = useMemo(() => {
+    return everWalletError !== NO_EXTENSION;
+  }, [everWalletError]);
+  console.log(tezosWalletError, everWalletError);
+
   const inputProps = useMemo(() => {
     const {direction} = values;
 
@@ -119,8 +134,28 @@ export default function Step1() {
       direction === "AB"
         ? ["Connect Temple wallet", "Connect Ever wallet"]
         : ["Connect Ever wallet", "Connect Temple wallet"];
+    const label =
+      direction === "AB"
+        ? ["From (Tezos)", "From (Everscale)"]
+        : ["To (Everscale)", "To (Tezos)"];
+    const extensionInstalled =
+      direction === "AB"
+        ? [templeWalletInstalled, everWalletInstalled]
+        : [everWalletInstalled, templeWalletInstalled];
+    const extensionLink =
+      direction === "AB"
+        ? [TEMPLE_WALLET_URL, EVER_WALLET_URL]
+        : [EVER_WALLET_URL, TEMPLE_WALLET_URL];
+    const extensionLabel =
+      direction === "AB"
+        ? ["Install Temple wallet", "Install Ever wallet"]
+        : ["Install Ever wallet", "Install Temple wallet"];
 
     return {
+      extensionInstalled,
+      extensionLabel,
+      extensionLink,
+      label,
       name,
       onConnectWallet,
       onSelectToken,
@@ -134,36 +169,30 @@ export default function Step1() {
     handleConnectTezosWallet,
     everPopup,
     everWallet,
+    everWalletInstalled,
     tezosPopup,
     tezosWallet,
+    templeWalletInstalled,
     values,
   ]);
 
   const fromProps = useMemo(() => {
-    const label =
-      values.direction === "AB" ? "From (Tezos)" : "From (Everscale)";
-
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "0")),
-      label,
       onBlur: handleBlur,
       onChange: handleChange,
       readOnly: false,
     } as TokenInputProps;
-  }, [values.direction, inputProps, handleBlur, handleChange]);
+  }, [inputProps, handleBlur, handleChange]);
 
   const toProps = useMemo(() => {
-    const label = values.direction === "AB" ? "To (Everscale)" : "To (Tezos)";
-
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "1")),
-      label,
       onBlur: handleBlur,
       onChange: handleChange,
-      onSelectToken: undefined,
       readOnly: true,
     } as TokenInputProps;
-  }, [values.direction, inputProps, handleBlur, handleChange]);
+  }, [inputProps, handleBlur, handleChange]);
 
   function handleSwap() {
     setFieldValue("direction", values.direction === "AB" ? "BA" : "AB");

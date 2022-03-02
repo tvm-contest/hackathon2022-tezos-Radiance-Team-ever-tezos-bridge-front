@@ -13,6 +13,9 @@ export const everWalletSlice = createSlice({
   initialState,
   name: "everWallet",
   reducers: {
+    check() {
+      // Handled by saga
+    },
     connect() {
       // Handled by saga
     },
@@ -38,9 +41,17 @@ export const everWalletSlice = createSlice({
   },
 });
 
-export const {connect, disconnect, setConnecting, setError, setConnected} =
-  everWalletSlice.actions;
+export const {
+  check,
+  connect,
+  disconnect,
+  setConnecting,
+  setError,
+  setConnected,
+} = everWalletSlice.actions;
 
 export const selectEverWallet = (state: RootState) => state.everWallet.data;
+export const selectEverWalletError = (state: RootState) =>
+  state.everWallet.error;
 
 export default everWalletSlice.reducer;
