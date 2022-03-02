@@ -123,6 +123,7 @@ export type TokenInputProps = InputBaseProps & {
   onConnectWallet: () => void;
   onSelectToken?: () => void;
   wallet?: Wallet | null;
+  walletLabel: string;
 };
 
 export interface TokenListPopupProps {

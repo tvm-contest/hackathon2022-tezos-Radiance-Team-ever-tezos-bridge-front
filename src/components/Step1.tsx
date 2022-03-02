@@ -115,6 +115,10 @@ export default function Step1() {
       direction === "AB"
         ? [tezosWallet, everWallet]
         : [everWallet, tezosWallet];
+    const walletLabel =
+      direction === "AB"
+        ? ["Connect Temple wallet", "Connect Ever wallet"]
+        : ["Connect Ever wallet", "Connect Temple wallet"];
 
     return {
       name,
@@ -123,6 +127,7 @@ export default function Step1() {
       token,
       value,
       wallet,
+      walletLabel,
     };
   }, [
     handleConnectEverWallet,
