@@ -27,6 +27,7 @@ import {
   resetTransaction,
   selectCurrentTransaction,
 } from "../store/reducers/transactions";
+import {Step} from "../types";
 
 export default function Step2() {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ export default function Step2() {
       );
   }
 
-  if (currentStep !== 2 || !enteredValues.data) return null;
+  if (currentStep !== Step.ConfirmTezosEver || !enteredValues.data) return null;
 
   const hasAccess = permittedTezosTokens.length !== 0;
 

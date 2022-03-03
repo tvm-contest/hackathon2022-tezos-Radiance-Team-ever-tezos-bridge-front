@@ -2,13 +2,14 @@ import {configureStore} from "@reduxjs/toolkit";
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 import {Provider} from "react-redux";
 
-import Step1Component from "../components/Step1";
+import EnterValuesComponent from "../components/EnterValues";
 import currentStep from "../store/reducers/currentStep";
+import {Step} from "../types";
 
 const store = configureStore({
   preloadedState: {
     currentStep: {
-      value: 1,
+      value: Step.EnterValues,
     },
   },
   reducer: {
@@ -18,16 +19,16 @@ const store = configureStore({
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  component: Step1Component,
+  component: EnterValuesComponent,
   decorators: [(story) => <Provider store={store}>{story()}</Provider>],
   title: "Steps",
-} as ComponentMeta<typeof Step1Component>;
+} as ComponentMeta<typeof EnterValuesComponent>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Step1Component> = () => (
-  <Step1Component />
+const Template: ComponentStory<typeof EnterValuesComponent> = () => (
+  <EnterValuesComponent />
 );
 
-export const Step1 = Template.bind({});
+export const EnterValues = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Step1.args = {};
+EnterValues.args = {};

@@ -1,9 +1,10 @@
 import {Container, CssBaseline} from "@mui/material";
 import {useEffect} from "react";
 
+import ConfirmEverTezos from "./components/ConfirmEverTezos";
+import ConfirmTezosEver from "./components/ConfirmTezosEver";
+import EnterValues from "./components/EnterValues";
 import Header from "./components/Header";
-import Step1 from "./components/Step1";
-import Step2 from "./components/Step2";
 import StepIndicator from "./components/StepIndicator";
 import Subheader from "./components/Subheader";
 import useAppDispatch from "./hooks/useAppDispatch";
@@ -61,8 +62,9 @@ export default function App() {
       <Container maxWidth="sm">
         <Subheader sx={{mb: 2, mt: 4}} />
         <StepIndicator sx={{mb: 4}} />
-        <Step1 />
-        <Step2 />
+        <EnterValues />
+        <ConfirmTezosEver />
+        <ConfirmEverTezos />
       </Container>
     </>
   );

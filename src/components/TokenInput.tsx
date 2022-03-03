@@ -126,7 +126,11 @@ export default function TokenInput({
       <Stack direction="row" justifyContent="space-between" spacing={1}>
         <FormControl sx={{width: "100%"}}>
           <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
-          <StyledInput id="standard-input" {...rest} />
+          <StyledInput
+            id="standard-input"
+            {...rest}
+            sx={{color: "text.secondary"}}
+          />
         </FormControl>
         <CurrentButton sx={{flexBasis: 350}} />
       </Stack>

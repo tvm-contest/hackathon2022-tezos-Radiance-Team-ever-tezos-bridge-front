@@ -25,12 +25,20 @@ import {
   selectTezosWallet,
   selectTezosWalletError,
 } from "../store/reducers/tezosWallet";
-import {Direction, Token, TokenInputProps, TokensPopupArgs} from "../types";
+import {
+  Direction,
+  EnterErrorsFormik,
+  EnterValuesFormik,
+  Step,
+  Token,
+  TokenInputProps,
+  TokensPopupArgs,
+} from "../types";
 import SwapButton from "./SwapButton";
 import TokenInput from "./TokenInput";
 import TokenListPopup from "./TokenListPopup";
 
-export default function Step1() {
+export default function EnterValues() {
   const dispatch = useDispatch();
 
   const currentStep = useAppSelector(selectCurrentStep);
@@ -42,17 +50,19 @@ export default function Step1() {
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
 
-  const {values, handleChange, handleBlur, setFieldValue} = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      direction: "AB" as Direction,
-      everToken: null as Token | null,
-      everValue: enteredValues.data?.amount || "",
-      tezosToken: null as Token | null,
-      tezosValue: enteredValues.data?.amount || "",
-    },
-    onSubmit() {},
-  });
+  const {values, handleChange, handleBlur, setFieldValue, handleSubmit} =
+    useFormik<EnterValuesFormik>({
+      enableReinitialize: true,
+      initialValues: {
+        direction: Direction.TezosEver,
+        everToken: null,
+        everValue: enteredValues.data?.amount || "",
+        tezosToken: null,
+        tezosValue: enteredValues.data?.amount || "",
+      },
+      onSubmit: handleNext,
+      validate,
+    });
 
   const tezosPopup = useTokensPopup({
     setToken(t) {
@@ -107,47 +117,47 @@ export default function Step1() {
     const {direction} = values;
 
     const name =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? ["tezosValue", "everValue"]
         : ["everValue", "tezosValue"];
     const onConnectWallet =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [handleConnectTezosWallet, handleConnectEverWallet]
         : [handleConnectEverWallet, handleConnectTezosWallet];
     const onSelectToken =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [tezosPopup.handleOpen, everPopup.handleOpen]
         : [everPopup.handleOpen, tezosPopup.handleOpen];
     const token =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [values.tezosToken, values.everToken]
         : [values.everToken, values.tezosToken];
     const value =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [values.tezosValue, values.everValue]
         : [values.everValue, values.tezosValue];
     const wallet =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [tezosWallet, everWallet]
         : [everWallet, tezosWallet];
     const walletLabel =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? ["Connect Temple wallet", "Connect Ever wallet"]
         : ["Connect Ever wallet", "Connect Temple wallet"];
     const label =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? ["From (Tezos)", "From (Everscale)"]
         : ["To (Everscale)", "To (Tezos)"];
     const extensionInstalled =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [templeWalletInstalled, everWalletInstalled]
         : [everWalletInstalled, templeWalletInstalled];
     const extensionLink =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? [TEMPLE_WALLET_URL, EVER_WALLET_URL]
         : [EVER_WALLET_URL, TEMPLE_WALLET_URL];
     const extensionLabel =
-      direction === "AB"
+      direction === Direction.TezosEver
         ? ["Install Temple wallet", "Install Ever wallet"]
         : ["Install Ever wallet", "Install Temple wallet"];
 
@@ -176,6 +186,16 @@ export default function Step1() {
     values,
   ]);
 
+  // Update second filed according to the first one
+  useEffect(() => {
+    const {direction, everValue, tezosValue} = values;
+
+    if (direction === Direction.TezosEver && everValue !== tezosValue)
+      setFieldValue("everValue", tezosValue);
+    else if (direction === Direction.EverTezos && tezosValue !== everValue)
+      setFieldValue("tezosValues", tezosValue);
+  }, [values, setFieldValue]);
+
   const fromProps = useMemo(() => {
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "0")),
@@ -194,34 +214,53 @@ export default function Step1() {
     } as TokenInputProps;
   }, [inputProps, handleBlur, handleChange]);
 
+  function validate() {
+    const errors: EnterErrorsFormik = {};
+
+    if (!values.tezosToken) errors.tezosToken = "Select token";
+    if (!values.everToken) errors.everToken = "Select token";
+    if (!values.tezosValue) errors.tezosValue = "Enter value";
+    if (!values.everValue) errors.everValue = "Enter value";
+
+    return errors;
+  }
+
   function handleSwap() {
-    setFieldValue("direction", values.direction === "AB" ? "BA" : "AB");
+    setFieldValue(
+      "direction",
+      values.direction === Direction.TezosEver
+        ? Direction.EverTezos
+        : Direction.TezosEver,
+    );
   }
 
   function handleNext() {
-    if (values.tezosToken && values.everToken) {
-      dispatch(
-        setValues({
-          amount: +values.tezosValue,
-          selectedToken:
-            values.direction === "AB" ? values.tezosToken : values.everToken,
-        }),
-      );
-      dispatch(nextStep());
-    }
+    dispatch(
+      setValues({
+        amount: +values.tezosValue,
+        selectedToken:
+          values.direction === Direction.TezosEver
+            ? (values.tezosToken as Token)
+            : (values.everToken as Token),
+      }),
+    );
+
+    if (values.direction === Direction.TezosEver)
+      dispatch(nextStep(Step.ConfirmTezosEver));
+    else dispatch(nextStep(Step.ConfirmEverTezos));
   }
 
-  if (currentStep !== 1) return null;
+  if (currentStep !== Step.EnterValues) return null;
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack component="form" onSubmit={handleSubmit} spacing={2}>
         <TokenInput {...fromProps} />
         <Box sx={{display: "flex", justifyContent: "center"}}>
           <SwapButton onClick={handleSwap} />
         </Box>
         <TokenInput {...toProps} />
-        <Button onClick={handleNext}>Next</Button>
+        <Button type="submit">Next</Button>
       </Stack>
       <TokenListPopup
         onClose={everPopup.handleClose}

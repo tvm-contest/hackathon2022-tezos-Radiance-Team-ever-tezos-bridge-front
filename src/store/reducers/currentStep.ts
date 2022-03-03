@@ -1,20 +1,20 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {CurrentStepState, RootState} from "../../types";
+import {CurrentStepState, RootState, Step, StepAction} from "../../types";
 
 const initialState: CurrentStepState = {
-  value: 1,
+  value: Step.EnterValues,
 };
 
 export const currentStepSlice = createSlice({
   initialState,
   name: "currentStep",
   reducers: {
-    next(state) {
-      state.value += 1;
+    next(state, action: PayloadAction<StepAction>) {
+      state.value = action.payload;
     },
     prev(state) {
-      state.value -= 1;
+      state.value = Step.EnterValues;
     },
   },
 });

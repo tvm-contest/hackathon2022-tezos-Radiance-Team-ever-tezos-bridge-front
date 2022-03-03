@@ -2,13 +2,14 @@ import {configureStore} from "@reduxjs/toolkit";
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 import {Provider} from "react-redux";
 
-import Step2Component from "../components/Step2";
+import ConfirmTezosEverComponent from "../components/ConfirmTezosEver";
 import currentStep from "../store/reducers/currentStep";
+import {Step} from "../types";
 
 const store = configureStore({
   preloadedState: {
     currentStep: {
-      value: 2,
+      value: Step.ConfirmTezosEver,
     },
   },
   reducer: {
@@ -18,16 +19,16 @@ const store = configureStore({
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  component: Step2Component,
+  component: ConfirmTezosEverComponent,
   decorators: [(story) => <Provider store={store}>{story()}</Provider>],
   title: "Steps",
-} as ComponentMeta<typeof Step2Component>;
+} as ComponentMeta<typeof ConfirmTezosEverComponent>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Step2Component> = () => (
-  <Step2Component />
+const Template: ComponentStory<typeof ConfirmTezosEverComponent> = () => (
+  <ConfirmTezosEverComponent />
 );
 
-export const Step2 = Template.bind({});
+export const ConfirmTezosEver = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Step2.args = {};
+ConfirmTezosEver.args = {};

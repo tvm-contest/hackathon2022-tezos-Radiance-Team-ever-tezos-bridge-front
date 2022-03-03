@@ -46,13 +46,43 @@ export type BalanceWalletRequest = {
   wallet: Address;
 };
 
-export type Direction = "AB" | "BA";
+export enum Direction {
+  TezosEver = "tezos-ever",
+  EverTezos = "ever-tezos",
+}
+
+export enum Step {
+  EnterValues = "enter-values",
+  ConfirmTezosEver = "confirm-tezos-ever",
+  ConfirmEverTezos = "confirm-ever-tezos",
+}
+
+/**
+ * Formik values
+ */
+export interface EnterValuesFormik {
+  direction: Direction;
+  tezosToken: Token | null;
+  tezosValue: number | "";
+  everToken: Token | null;
+  everValue: number | "";
+}
+
+export type EnterErrorsFormik = Partial<{
+  tezosToken: string;
+  tezosValue: string;
+  everToken: string;
+  everValue: string;
+}>;
 
 /**
  * Redux store states's types
  */
+
+export type StepAction = Step.ConfirmTezosEver | Step.ConfirmEverTezos;
+
 export interface CurrentStepState {
-  value: number;
+  value: Step;
 }
 
 export interface TokensState {
