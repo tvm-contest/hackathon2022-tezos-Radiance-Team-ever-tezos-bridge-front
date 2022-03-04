@@ -46,7 +46,7 @@ export default function TokenListItem({token, ...rest}: TokenListItemProps) {
       <Thumb
         alt={`Logo ${token.name}`}
         height={54}
-        src="https://beta.defispace.com/5a2ab4d600bc56dccf89.svg"
+        src="https://trade.defispace.com/5a2ab4d600bc56dccf89.svg"
         width={54}
       />
       <Title>{token.symbol}</Title>
