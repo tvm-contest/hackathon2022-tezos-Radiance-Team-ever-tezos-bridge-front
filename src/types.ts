@@ -106,7 +106,7 @@ export interface PermissionsState {
   permittedTezosTokens: string[];
 }
 
-export interface TransactionsState {
+export interface TezosEverTransactionsState {
   currentTransaction: {
     everId: string | null;
     id: number | null;
@@ -117,9 +117,18 @@ export interface TransactionsState {
   loading: boolean;
 }
 
+export interface EverTezosTransactionsState {
+  currentTransaction: {
+    id: number | null;
+  };
+  error: string | null;
+  fetched: boolean;
+  loading: boolean;
+}
+
 export interface DepositAction {
   amount: number;
-  everscaleReceiver: string;
+  receiver: string;
 }
 
 export interface EnteredValuesState {

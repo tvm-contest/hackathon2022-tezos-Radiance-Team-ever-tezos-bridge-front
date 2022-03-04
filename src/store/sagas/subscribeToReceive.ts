@@ -4,12 +4,12 @@ import {call, put, select, takeEvery, takeLatest} from "redux-saga/effects";
 
 import client from "../../lib/everWSClient";
 import {TOKEN_ROOT_PROXY} from "../../misc/constants";
-import {TokenRootProxy} from "../../misc/ever-abi";
+import {TokenProxy} from "../../misc/ever-abi";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {fetch as fetchEverTokens} from "../reducers/everTokens";
+import {setEverId, subscribeReceive} from "../reducers/tezosEverTransactions";
 import {fetch as fetchTezosTokens} from "../reducers/tezosTokens";
-import {setEverId, subscribeReceive} from "../reducers/transactions";
 
 const callbackChannel = channel();
 
@@ -29,7 +29,7 @@ function* subscribeToReceive() {
       debug("ever_callback", {d, responseType});
       abiModule
         .decode_message({
-          abi: abiContract(TokenRootProxy),
+          abi: abiContract(TokenProxy as any),
           message: d.result.boc,
         })
         .then((r) => callbackChannel.put(r));

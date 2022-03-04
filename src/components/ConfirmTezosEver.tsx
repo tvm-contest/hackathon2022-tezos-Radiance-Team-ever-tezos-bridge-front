@@ -25,8 +25,8 @@ import {
 import {
   deposit,
   resetTransaction,
-  selectCurrentTransaction,
-} from "../store/reducers/transactions";
+  selectCurrentTezosEverTransaction,
+} from "../store/reducers/tezosEverTransactions";
 import {Step} from "../types";
 
 export default function Step2() {
@@ -36,7 +36,7 @@ export default function Step2() {
   const permittedTezosTokens = useAppSelector(selectPermittedTezosTokens);
   const permissionLoading = useAppSelector(selectPermissionsLoading);
   const everWallet = useAppSelector(selectEverWallet);
-  const currentTransaction = useAppSelector(selectCurrentTransaction);
+  const currentTransaction = useAppSelector(selectCurrentTezosEverTransaction);
 
   function handleBack() {
     dispatch(prevStep());
@@ -59,7 +59,7 @@ export default function Step2() {
           amount:
             enteredValues.data.amount *
             10 ** enteredValues.data.selectedToken.decimals,
-          everscaleReceiver: everWallet.address,
+          receiver: everWallet.address,
         }),
       );
   }

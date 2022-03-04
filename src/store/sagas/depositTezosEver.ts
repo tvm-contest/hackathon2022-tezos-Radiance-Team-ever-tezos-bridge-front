@@ -16,7 +16,7 @@ import {
   setError,
   setLoading,
   setOpHash,
-} from "../reducers/transactions";
+} from "../reducers/tezosEverTransactions";
 
 function* depositFn(action: PayloadAction<DepositAction>) {
   yield put(setLoading());
@@ -34,7 +34,7 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   );
   const methodProvider = tokenContract.methodsObject.deposit_to_vault({
     amt_for_deposit: action.payload.amount,
-    everscale_receiver: action.payload.everscaleReceiver.slice(2),
+    everscale_receiver: action.payload.receiver.slice(2),
     requests: [{owner: tezosWallet.address, token_id: 0}],
   });
 

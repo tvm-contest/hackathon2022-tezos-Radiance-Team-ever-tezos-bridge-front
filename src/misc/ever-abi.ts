@@ -805,40 +805,50 @@ export const TokenWallet = {
   ],
 } as const;
 
-export const TokenRootProxy = {
+export const TokenProxy = {
   "ABI version": 2,
-  version: "2.1",
+  version: "2.2",
   header: ["time", "expire"],
   functions: [
     {
       name: "constructor",
       inputs: [
         {name: "owner", type: "address"},
-        {name: "addrTransferTokenProxy", type: "address"},
+        {name: "addrTezosEventConfiguration", type: "address"},
+        {name: "addrEverscaleEventConfiguration", type: "address"},
+        {name: "addrTokenRoot", type: "address"},
       ],
       outputs: [],
     },
     {
       name: "setConfiguration",
-      inputs: [{name: "addrTransferTokenProxy", type: "address"}],
-      outputs: [],
-    },
-    {
-      name: "transferToken",
       inputs: [
-        {name: "gasTo", type: "address"},
-        {
-          name: "addrRecipient",
-          type: "address",
-        },
-        {name: "amount", type: "uint128"},
+        {name: "addrTezosEventConfiguration", type: "address"},
+        {name: "addrEverscaleEventConfiguration", type: "address"},
+        {name: "addrTokenRoot", type: "address"},
       ],
       outputs: [],
     },
     {
-      name: "burnToken",
+      name: "transferTokenCallback",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [],
+    },
+    {
+      name: "burnTokenCallback",
       inputs: [
         {name: "amount", type: "uint128"},
+        {name: "payload", type: "cell"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "onAcceptTokensBurn",
+      inputs: [
+        {name: "amount", type: "uint128"},
+        {name: "walletOwner", type: "address"},
+        {name: "wallet", type: "address"},
+        {name: "remainingGasTo", type: "address"},
         {name: "payload", type: "cell"},
       ],
       outputs: [],
@@ -848,54 +858,299 @@ export const TokenRootProxy = {
       inputs: [],
       outputs: [
         {name: "owner", type: "address"},
-        {
-          name: "addrTransferTokenProxy",
-          type: "address",
-        },
+        {name: "addrTokenRoot", type: "address"},
+        {name: "addrTezosEventConfiguration", type: "address"},
+        {name: "addrEverscaleEventConfiguration", type: "address"},
+      ],
+    },
+    {
+      name: "encodeTezosEventData",
+      inputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+        {name: "amount", type: "uint128"},
+      ],
+      outputs: [{name: "data", type: "cell"}],
+    },
+    {
+      name: "decodeTezosEventData",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+        {name: "amount", type: "uint128"},
+      ],
+    },
+    {
+      name: "encodeEverscaleEventData",
+      inputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+        {name: "amount", type: "uint128"},
+      ],
+      outputs: [{name: "data", type: "cell"}],
+    },
+    {
+      name: "decodeEverscaleEventData",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+        {name: "amount", type: "uint128"},
+      ],
+    },
+    {
+      name: "encodePayload",
+      inputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+      ],
+      outputs: [{name: "data", type: "cell"}],
+    },
+    {
+      name: "decodePayload",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+      ],
+    },
+    {
+      name: "encodeTezosAddrPayload",
+      inputs: [{name: "recipient", type: "string"}],
+      outputs: [{name: "data", type: "cell"}],
+    },
+    {
+      name: "decodeTezosAddrPayload",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [{name: "recipient", type: "string"}],
+    },
+    {
+      name: "encodeToTezosPayload",
+      inputs: [
+        {name: "recipient", type: "string"},
+        {name: "amt", type: "uint128"},
+      ],
+      outputs: [{name: "data", type: "cell"}],
+    },
+    {
+      name: "decodeToTezosPayload",
+      inputs: [{name: "data", type: "cell"}],
+      outputs: [
+        {name: "recipient", type: "string"},
+        {name: "amt", type: "uint128"},
+      ],
+    },
+  ],
+  data: [],
+  events: [
+    {
+      name: "Withdraw",
+      inputs: [
+        {name: "wid", type: "int8"},
+        {name: "recipient", type: "uint256"},
+        {name: "amount", type: "uint128"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "ToTezos",
+      inputs: [
+        {name: "recipient", type: "string"},
+        {name: "amount", type: "uint128"},
+      ],
+      outputs: [],
+    },
+  ],
+  fields: [
+    {name: "_pubkey", type: "uint256"},
+    {name: "_timestamp", type: "uint64"},
+    {name: "_constructorFlag", type: "bool"},
+    {name: "_owner", type: "address"},
+    {name: "_addrTokenRoot", type: "address"},
+    {name: "_addrTezosEventConfiguration", type: "address"},
+    {name: "_addrEverscaleEventConfiguration", type: "address"},
+  ],
+} as const;
+
+export const MultisigWallet = {
+  "ABI version": 2,
+  header: ["pubkey", "time", "expire"],
+  functions: [
+    {
+      name: "constructor",
+      inputs: [
+        {name: "owners", type: "uint256[]"},
+        {name: "reqConfirms", type: "uint8"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "acceptTransfer",
+      inputs: [{name: "payload", type: "bytes"}],
+      outputs: [],
+    },
+    {
+      name: "sendTransaction",
+      inputs: [
+        {name: "dest", type: "address"},
+        {name: "value", type: "uint128"},
+        {name: "bounce", type: "bool"},
+        {name: "flags", type: "uint8"},
+        {name: "payload", type: "cell"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "submitTransaction",
+      inputs: [
+        {name: "dest", type: "address"},
+        {name: "value", type: "uint128"},
+        {name: "bounce", type: "bool"},
+        {name: "allBalance", type: "bool"},
+        {name: "payload", type: "cell"},
+      ],
+      outputs: [{name: "transId", type: "uint64"}],
+    },
+    {
+      name: "confirmTransaction",
+      inputs: [{name: "transactionId", type: "uint64"}],
+      outputs: [],
+    },
+    {
+      name: "isConfirmed",
+      inputs: [
+        {name: "mask", type: "uint32"},
+        {name: "index", type: "uint8"},
+      ],
+      outputs: [{name: "confirmed", type: "bool"}],
+    },
+    {
+      name: "getParameters",
+      inputs: [],
+      outputs: [
+        {name: "maxQueuedTransactions", type: "uint8"},
+        {name: "maxCustodianCount", type: "uint8"},
+        {name: "expirationTime", type: "uint64"},
+        {name: "minValue", type: "uint128"},
+        {name: "requiredTxnConfirms", type: "uint8"},
+        {name: "requiredUpdConfirms", type: "uint8"},
+      ],
+    },
+    {
+      name: "getTransaction",
+      inputs: [{name: "transactionId", type: "uint64"}],
+      outputs: [
         {
           components: [
-            {name: "sender_msg", type: "address"},
-            {
-              name: "addrRecipient",
-              type: "address",
-            },
-            {name: "amount", type: "uint128"},
+            {name: "id", type: "uint64"},
+            {name: "confirmationsMask", type: "uint32"},
+            {name: "signsRequired", type: "uint8"},
+            {name: "signsReceived", type: "uint8"},
+            {name: "creator", type: "uint256"},
+            {name: "index", type: "uint8"},
+            {name: "dest", type: "address"},
+            {name: "value", type: "uint128"},
+            {name: "sendFlags", type: "uint16"},
+            {name: "payload", type: "cell"},
+            {name: "bounce", type: "bool"},
           ],
-          name: "_transferCallbacks",
-          type: "map(uint128,tuple)",
+          name: "trans",
+          type: "tuple",
+        },
+      ],
+    },
+    {
+      name: "getTransactions",
+      inputs: [],
+      outputs: [
+        {
+          components: [
+            {name: "id", type: "uint64"},
+            {name: "confirmationsMask", type: "uint32"},
+            {name: "signsRequired", type: "uint8"},
+            {name: "signsReceived", type: "uint8"},
+            {name: "creator", type: "uint256"},
+            {name: "index", type: "uint8"},
+            {name: "dest", type: "address"},
+            {name: "value", type: "uint128"},
+            {name: "sendFlags", type: "uint16"},
+            {name: "payload", type: "cell"},
+            {name: "bounce", type: "bool"},
+          ],
+          name: "transactions",
+          type: "tuple[]",
+        },
+      ],
+    },
+    {
+      name: "getTransactionIds",
+      inputs: [],
+      outputs: [{name: "ids", type: "uint64[]"}],
+    },
+    {
+      name: "getCustodians",
+      inputs: [],
+      outputs: [
+        {
+          components: [
+            {name: "index", type: "uint8"},
+            {name: "pubkey", type: "uint256"},
+          ],
+          name: "custodians",
+          type: "tuple[]",
+        },
+      ],
+    },
+    {
+      name: "submitUpdate",
+      inputs: [
+        {name: "codeHash", type: "uint256"},
+        {name: "owners", type: "uint256[]"},
+        {name: "reqConfirms", type: "uint8"},
+      ],
+      outputs: [{name: "updateId", type: "uint64"}],
+    },
+    {
+      name: "confirmUpdate",
+      inputs: [{name: "updateId", type: "uint64"}],
+      outputs: [],
+    },
+    {
+      name: "executeUpdate",
+      inputs: [
+        {name: "updateId", type: "uint64"},
+        {name: "code", type: "cell"},
+      ],
+      outputs: [],
+    },
+    {
+      name: "getUpdateRequests",
+      inputs: [],
+      outputs: [
+        {
+          components: [
+            {name: "id", type: "uint64"},
+            {name: "index", type: "uint8"},
+            {name: "signs", type: "uint8"},
+            {name: "confirmationsMask", type: "uint32"},
+            {name: "creator", type: "uint256"},
+            {name: "codeHash", type: "uint256"},
+            {name: "custodians", type: "uint256[]"},
+            {name: "reqConfirms", type: "uint8"},
+          ],
+          name: "updates",
+          type: "tuple[]",
         },
       ],
     },
   ],
   data: [],
-  events: [],
-  fields: [
-    {name: "_pubkey", type: "uint256"},
+  events: [
     {
-      name: "_timestamp",
-      type: "uint64",
-    },
-    {name: "_constructorFlag", type: "bool"},
-    {
-      name: "_owner",
-      type: "address",
-    },
-    {name: "_addrTransferTokenProxy", type: "address"},
-    {
-      name: "_idCallback",
-      type: "uint128",
-    },
-    {
-      components: [
-        {name: "sender_msg", type: "address"},
-        {
-          name: "addrRecipient",
-          type: "address",
-        },
-        {name: "amount", type: "uint128"},
-      ],
-      name: "transferCallbacks",
-      type: "map(uint128,tuple)",
+      name: "TransferAccepted",
+      inputs: [{name: "payload", type: "bytes"}],
+      outputs: [],
     },
   ],
-};
+} as const;

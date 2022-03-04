@@ -4,17 +4,18 @@ import {all} from "redux-saga/effects";
 
 import currentStep from "./reducers/currentStep";
 import enteredValues from "./reducers/enteredValues";
+import everTezosTransactions from "./reducers/everTezosTransactions";
 import everTokens from "./reducers/everTokens";
 import everWallet from "./reducers/everWallet";
 import permissions from "./reducers/permissions";
+import tezosEverTransactions from "./reducers/tezosEverTransactions";
 import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
-import transactions from "./reducers/transactions";
 import checkTezosPermissionsSaga from "./sagas/checkTezosPermissions";
 import checkWalletsAvailabilitySaga from "./sagas/checkWalletsAvailability";
 import connectEverWallet from "./sagas/connectEverWallet";
 import connectTezosWallet from "./sagas/connectTezosWallet";
-import depositSaga from "./sagas/deposit";
+import depositTezosEverSaga from "./sagas/depositTezosEver";
 import fetchEverTokensSaga from "./sagas/fetchEverTokens";
 import fetchTezosTokensSaga from "./sagas/fetchTezosTokens";
 import requestTezosPermissionSaga from "./sagas/requestTezosPermission";
@@ -31,12 +32,13 @@ const store = configureStore({
   reducer: {
     currentStep,
     enteredValues,
+    everTezosTransactions,
     everTokens,
     everWallet,
     permissions,
+    tezosEverTransactions,
     tezosTokens,
     tezosWallet,
-    transactions,
   },
 });
 
@@ -47,7 +49,7 @@ sagaMiddleware.run(function* () {
     checkWalletsAvailabilitySaga(),
     connectEverWallet(),
     connectTezosWallet(),
-    depositSaga(),
+    depositTezosEverSaga(),
     fetchEverTokensSaga(),
     fetchTezosTokensSaga(),
     requestTezosPermissionSaga(),

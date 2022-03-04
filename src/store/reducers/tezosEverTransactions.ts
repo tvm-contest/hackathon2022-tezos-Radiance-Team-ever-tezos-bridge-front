@@ -1,8 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {DepositAction, RootState, TransactionsState} from "../../types";
+import {
+  DepositAction,
+  RootState,
+  TezosEverTransactionsState,
+} from "../../types";
 
-const initialState: TransactionsState = {
+const initialState: TezosEverTransactionsState = {
   currentTransaction: {
     everId: null, // 3 step (simulated)
     id: null, // 2 step
@@ -13,9 +17,9 @@ const initialState: TransactionsState = {
   loading: false,
 };
 
-export const transactionsSlice = createSlice({
+export const tezosEverTransactionsSlice = createSlice({
   initialState,
-  name: "transactions",
+  name: "tezosEverTransactions",
   reducers: {
     deposit(_, __: PayloadAction<DepositAction>) {
       // Handled by saga
@@ -70,9 +74,9 @@ export const {
   setOpHash,
   subscribeDeposit,
   subscribeReceive,
-} = transactionsSlice.actions;
+} = tezosEverTransactionsSlice.actions;
 
-export const selectCurrentTransaction = (state: RootState) =>
-  state.transactions.currentTransaction;
+export const selectCurrentTezosEverTransaction = (state: RootState) =>
+  state.tezosEverTransactions.currentTransaction;
 
-export default transactionsSlice.reducer;
+export default tezosEverTransactionsSlice.reducer;

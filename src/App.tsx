@@ -15,15 +15,15 @@ import {
   selectEverWallet,
 } from "./store/reducers/everWallet";
 import {getTezosPermissions} from "./store/reducers/permissions";
+import {
+  subscribeDeposit,
+  subscribeReceive,
+} from "./store/reducers/tezosEverTransactions";
 import {fetch as fetchTezosTokens} from "./store/reducers/tezosTokens";
 import {
   check as checkTezos,
   selectTezosWallet,
 } from "./store/reducers/tezosWallet";
-import {
-  subscribeDeposit,
-  subscribeReceive,
-} from "./store/reducers/transactions";
 
 export default function App() {
   const dispatch = useAppDispatch();

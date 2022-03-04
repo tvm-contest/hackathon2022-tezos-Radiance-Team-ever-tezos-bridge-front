@@ -11,6 +11,7 @@ import {
 
 import {balanceByTokenRoot} from "../../lib/everRpcClient";
 import {DECIMAL_PLACES} from "../../misc/constants";
+import {NO_WALLET} from "../../misc/error-messages";
 import everTokens from "../../misc/ever-tokens";
 import {RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/everTokens";
@@ -21,7 +22,7 @@ function* fetchEverTokens() {
   const everWallet: SagaReturnType<() => RootState["everWallet"]["data"]> =
     yield select((state: RootState) => state.everWallet.data);
   if (!everWallet) {
-    yield put(setError("Ever wallet not connected"));
+    yield put(setError(NO_WALLET));
     return;
   }
 
