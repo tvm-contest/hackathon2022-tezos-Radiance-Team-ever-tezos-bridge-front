@@ -9,15 +9,16 @@ import {
 } from "redux-saga/effects";
 
 import everRpcClient from "../../lib/everRpcClient";
-import client from "../../lib/everWSClient";
 import {TOKEN_PROXY_ADDRESS} from "../../misc/constants";
 import {NO_WALLET} from "../../misc/error-messages";
-import {MultisigWallet, TokenProxy, TokenWallet} from "../../misc/ever-abi";
+import {TokenProxy, TokenRoot, TokenWallet} from "../../misc/ever-abi";
 import {CallReturnType, DepositAction, RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {deposit, setError, setLoading} from "../reducers/everTezosTransactions";
 
 function* depositFn(action: PayloadAction<DepositAction>) {
+  debug("params", action.payload);
+
   yield put(setLoading());
 
   const everWallet: SagaReturnType<() => RootState["everWallet"]["data"]> =
@@ -41,38 +42,42 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   );
   debug("encode_tezos_addr", resEncode);
 
-  const {body}: CallReturnType<typeof client.abi.encode_message_body> =
-    yield call(client.abi.encode_message_body.bind(client.abi), {
-      abi: {type: "Contract", value: TokenWallet as any},
-      call_set: {
-        function_name: "burn",
-        input: {
-          amount: action.payload.amount,
-          callbackTo: TOKEN_PROXY_ADDRESS,
-          payload: resEncode.data,
-          remainingGasTo: everWallet.address,
-        },
-      },
-      is_internal: true,
-      signer: {type: "None"},
-    });
-  debug("encoded_body", body);
-
-  const multisigContract = new Contract(
+  const rootContract = new Contract(
     everRpcClient,
-    MultisigWallet,
-    new Address(everWallet.address),
+    TokenRoot,
+    new Address(
+      "0:0d9b85d42c4824fb8b92ffc122168d92b431b6814686fa04af25277a987683a5",
+    ),
   );
-  const transactionCall = multisigContract.methods.sendTransaction({
-    bounce: true,
-    dest: new Address(everWallet.address),
-    flags: 3,
-    payload: body,
-    value: 1600000000,
+  const walletOfCall = rootContract.methods.walletOf({
+    answerId: 0,
+    walletOwner: new Address(everWallet.address),
   });
-  const resTransaction: CallReturnType<typeof transactionCall.call> =
-    yield call(transactionCall.call.bind(transactionCall), {});
-  debug("transaction_response", resTransaction);
+  const walletOfRes: CallReturnType<typeof walletOfCall.call> = yield call(
+    walletOfCall.call.bind(walletOfCall),
+    {},
+  );
+  debug("wallet_of", walletOfRes);
+
+  const walletContract = new Contract(
+    everRpcClient,
+    TokenWallet,
+    walletOfRes.value0,
+  );
+  const walletCall = walletContract.methods.burn({
+    amount: action.payload.amount,
+    callbackTo: new Address(TOKEN_PROXY_ADDRESS),
+    payload: resEncode.data,
+    remainingGasTo: new Address(everWallet.address),
+  });
+
+  const walletRes: CallReturnType<typeof walletCall.send> =
+    yield walletCall.send({
+      amount: "1600000000",
+      bounce: true,
+      from: new Address(everWallet.address),
+    });
+  debug("wallet_res", walletRes);
 }
 
 export default function* depositEverTezosSaga() {
