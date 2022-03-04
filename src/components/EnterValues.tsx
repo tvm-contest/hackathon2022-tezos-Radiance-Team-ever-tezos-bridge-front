@@ -18,12 +18,14 @@ import {
   connect as connectEver,
   selectEverWallet,
   selectEverWalletError,
+  selectEverWalletLoading,
 } from "../store/reducers/everWallet";
 import {selectTezosTokens} from "../store/reducers/tezosTokens";
 import {
   connect as connectTezos,
   selectTezosWallet,
   selectTezosWalletError,
+  selectTezosWalletLoading,
 } from "../store/reducers/tezosWallet";
 import {
   Direction,
@@ -44,8 +46,10 @@ export default function EnterValues() {
   const currentStep = useAppSelector(selectCurrentStep);
   const tezosWallet = useAppSelector(selectTezosWallet);
   const tezosWalletError = useAppSelector(selectTezosWalletError);
+  const tezosWalletLoading = useAppSelector(selectTezosWalletLoading);
   const everWallet = useAppSelector(selectEverWallet);
   const everWalletError = useAppSelector(selectEverWalletError);
+  const everWalletLoading = useAppSelector(selectEverWalletLoading);
   const tezosTokens = useAppSelector(selectTezosTokens);
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
@@ -160,12 +164,17 @@ export default function EnterValues() {
       direction === Direction.TezosEver
         ? ["Install Temple wallet", "Install Ever wallet"]
         : ["Install Ever wallet", "Install Temple wallet"];
+    const loading =
+      direction === Direction.TezosEver
+        ? [tezosWalletLoading, everWalletLoading]
+        : [everWalletLoading, tezosWalletLoading];
 
     return {
       extensionInstalled,
       extensionLabel,
       extensionLink,
       label,
+      loading,
       name,
       onConnectWallet,
       onSelectToken,
@@ -180,8 +189,10 @@ export default function EnterValues() {
     everPopup,
     everWallet,
     everWalletInstalled,
+    everWalletLoading,
     tezosPopup,
     tezosWallet,
+    tezosWalletLoading,
     templeWalletInstalled,
     values,
   ]);

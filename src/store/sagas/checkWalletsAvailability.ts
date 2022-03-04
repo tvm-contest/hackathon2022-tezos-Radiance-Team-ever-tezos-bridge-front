@@ -6,11 +6,13 @@ import {NO_EXTENSION} from "../../misc/error-messages";
 import {CallReturnType} from "../../types";
 import {
   check as checkEver,
+  reset as resetEver,
   setConnecting as setConnectingEver,
   setError as setErrorEver,
 } from "../reducers/everWallet";
 import {
   check as checkTezos,
+  reset as resetTezos,
   setConnecting as setConnectingTezos,
   setError as setErrorTezos,
 } from "../reducers/tezosWallet";
@@ -22,6 +24,8 @@ function* checkWalletTezos() {
     TempleWallet.isAvailable.bind(TempleWallet),
   );
   if (!available) yield put(setErrorTezos(NO_EXTENSION));
+
+  yield put(resetTezos());
 }
 
 function* checkWalletEver() {
@@ -34,6 +38,8 @@ function* checkWalletEver() {
     yield put(setErrorEver(NO_EXTENSION));
     return;
   }
+
+  yield put(resetEver());
 }
 
 export default function* checkWalletsAvailabilitySaga() {

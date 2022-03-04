@@ -22,6 +22,9 @@ export const tezosWalletSlice = createSlice({
     disconnect() {
       // handled by saga
     },
+    reset() {
+      return initialState;
+    },
     setConnected(state, action: PayloadAction<Wallet>) {
       state.data = action.payload;
       state.error = null;
@@ -45,6 +48,7 @@ export const {
   check,
   connect,
   disconnect,
+  reset,
   setConnecting,
   setError,
   setConnected,
@@ -53,5 +57,7 @@ export const {
 export const selectTezosWallet = (state: RootState) => state.tezosWallet.data;
 export const selectTezosWalletError = (state: RootState) =>
   state.tezosWallet.error;
+export const selectTezosWalletLoading = (state: RootState) =>
+  state.tezosWallet.loading;
 
 export default tezosWalletSlice.reducer;

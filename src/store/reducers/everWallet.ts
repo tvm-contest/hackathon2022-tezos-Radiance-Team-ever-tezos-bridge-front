@@ -22,6 +22,9 @@ export const everWalletSlice = createSlice({
     disconnect() {
       // handled by saga
     },
+    reset() {
+      return initialState;
+    },
     setConnected(state, action: PayloadAction<Wallet>) {
       state.data = action.payload;
       state.error = null;
@@ -45,6 +48,7 @@ export const {
   check,
   connect,
   disconnect,
+  reset,
   setConnecting,
   setError,
   setConnected,
@@ -53,5 +57,7 @@ export const {
 export const selectEverWallet = (state: RootState) => state.everWallet.data;
 export const selectEverWalletError = (state: RootState) =>
   state.everWallet.error;
+export const selectEverWalletLoading = (state: RootState) =>
+  state.everWallet.loading;
 
 export default everWalletSlice.reducer;

@@ -2,6 +2,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LinkIcon from "@mui/icons-material/Link";
 import {
   Button,
+  CircularProgress,
   FormControl,
   InputBase,
   InputLabel,
@@ -65,9 +66,10 @@ export default function TokenInput({
   extensionLabel,
   extensionLink,
   label,
-  token,
+  loading,
   onConnectWallet,
   onSelectToken,
+  token,
   wallet,
   walletLabel,
   ...rest
@@ -92,7 +94,12 @@ export default function TokenInput({
     else if (extensionInstalled)
       return (props: StackProps) => (
         <Stack justifyContent="flex-end" {...props}>
-          <Button onClick={onConnectWallet}>{walletLabel}</Button>
+          <Button
+            endIcon={loading && <CircularProgress color="inherit" size={25} />}
+            onClick={onConnectWallet}
+          >
+            {walletLabel}
+          </Button>
         </Stack>
       );
     else
@@ -113,6 +120,7 @@ export default function TokenInput({
     extensionLink,
     extensionInstalled,
     extensionLabel,
+    loading,
     onSelectToken,
     onConnectWallet,
     rest.readOnly,
