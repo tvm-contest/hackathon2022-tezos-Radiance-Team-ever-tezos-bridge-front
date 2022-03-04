@@ -7,14 +7,27 @@ import {
   selectCurrentStep,
 } from "../store/reducers/currentStep";
 import {selectEnteredValues} from "../store/reducers/enteredValues";
+import {deposit} from "../store/reducers/everTezosTransactions";
+import {selectTezosWallet} from "../store/reducers/tezosWallet";
 import {Step} from "../types";
 
 export default function ConfirmEverTezos() {
   const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
   const enteredValues = useAppSelector(selectEnteredValues);
+  const tezosWallet = useAppSelector(selectTezosWallet);
 
-  function handleDeposit() {}
+  function handleDeposit() {
+    if (enteredValues.data && tezosWallet)
+      dispatch(
+        deposit({
+          amount:
+            enteredValues.data.amount *
+            10 ** enteredValues.data.selectedToken.decimals,
+          receiver: tezosWallet.address,
+        }),
+      );
+  }
 
   function handleBack() {
     dispatch(prevStep());
