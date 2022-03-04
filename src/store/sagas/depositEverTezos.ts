@@ -75,6 +75,6 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   debug("transaction_response", resTransaction);
 }
 
-export default function* depositSaga() {
+export default function* depositEverTezosSaga() {
   yield takeLatest(deposit, depositFn);
 }

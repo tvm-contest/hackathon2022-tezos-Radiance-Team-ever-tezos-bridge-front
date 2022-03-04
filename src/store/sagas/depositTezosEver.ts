@@ -45,6 +45,6 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   yield put(setOpHash(op.opHash));
 }
 
-export default function* depositSaga() {
+export default function* depositTezosEverSaga() {
   yield takeLatest(deposit, depositFn);
 }

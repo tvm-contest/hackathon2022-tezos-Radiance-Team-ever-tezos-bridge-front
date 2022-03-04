@@ -15,6 +15,7 @@ import checkTezosPermissionsSaga from "./sagas/checkTezosPermissions";
 import checkWalletsAvailabilitySaga from "./sagas/checkWalletsAvailability";
 import connectEverWallet from "./sagas/connectEverWallet";
 import connectTezosWallet from "./sagas/connectTezosWallet";
+import depositEverTezosSaga from "./sagas/depositEverTezos";
 import depositTezosEverSaga from "./sagas/depositTezosEver";
 import fetchEverTokensSaga from "./sagas/fetchEverTokens";
 import fetchTezosTokensSaga from "./sagas/fetchTezosTokens";
@@ -49,6 +50,7 @@ sagaMiddleware.run(function* () {
     checkWalletsAvailabilitySaga(),
     connectEverWallet(),
     connectTezosWallet(),
+    depositEverTezosSaga(),
     depositTezosEverSaga(),
     fetchEverTokensSaga(),
     fetchTezosTokensSaga(),
