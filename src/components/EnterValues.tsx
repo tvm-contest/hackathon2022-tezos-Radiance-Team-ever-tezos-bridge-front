@@ -115,7 +115,6 @@ export default function EnterValues() {
   const everWalletInstalled = useMemo(() => {
     return everWalletError !== NO_EXTENSION;
   }, [everWalletError]);
-  console.log(tezosWalletError, everWalletError);
 
   const inputProps = useMemo(() => {
     const {direction} = values;
@@ -204,7 +203,7 @@ export default function EnterValues() {
     if (direction === Direction.TezosEver && everValue !== tezosValue)
       setFieldValue("everValue", tezosValue);
     else if (direction === Direction.EverTezos && tezosValue !== everValue)
-      setFieldValue("tezosValues", tezosValue);
+      setFieldValue("tezosValue", everValue);
   }, [values, setFieldValue]);
 
   const fromProps = useMemo(() => {

@@ -1,7 +1,7 @@
 const tokensRelation = [
   [
     "KT1Ua1r4kEBUQ4vP546QyCc5WK6sadvesoPu",
-    "0:0cdacfbb4372309a5264e1c23e56e0938f8e47d00d39af776fbb75fd13375aa1",
+    "0:0d9b85d42c4824fb8b92ffc122168d92b431b6814686fa04af25277a987683a5",
   ],
 ];
 

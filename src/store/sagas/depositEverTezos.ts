@@ -10,7 +10,7 @@ import {
 
 import everRpcClient from "../../lib/everRpcClient";
 import client from "../../lib/everWSClient";
-import {PROXY_ADDRESS, TOKEN_ROOT_PROXY} from "../../misc/constants";
+import {TOKEN_PROXY_ADDRESS} from "../../misc/constants";
 import {NO_WALLET} from "../../misc/error-messages";
 import {MultisigWallet, TokenProxy, TokenWallet} from "../../misc/ever-abi";
 import {CallReturnType, DepositAction, RootState} from "../../types";
@@ -30,7 +30,7 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   const proxyContract = new Contract(
     everRpcClient,
     TokenProxy,
-    new Address(TOKEN_ROOT_PROXY),
+    new Address(TOKEN_PROXY_ADDRESS),
   );
   const encodeCall = proxyContract.methods.encodeTezosAddrPayload({
     recipient: action.payload.receiver,
@@ -48,7 +48,7 @@ function* depositFn(action: PayloadAction<DepositAction>) {
         function_name: "burn",
         input: {
           amount: action.payload.amount,
-          callbackTo: PROXY_ADDRESS,
+          callbackTo: TOKEN_PROXY_ADDRESS,
           payload: resEncode.data,
           remainingGasTo: everWallet.address,
         },

@@ -3,7 +3,7 @@ import {channel} from "redux-saga";
 import {call, put, select, takeEvery, takeLatest} from "redux-saga/effects";
 
 import client from "../../lib/everWSClient";
-import {TOKEN_ROOT_PROXY} from "../../misc/constants";
+import {TOKEN_PROXY_ADDRESS} from "../../misc/constants";
 import {TokenProxy} from "../../misc/ever-abi";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
@@ -21,7 +21,7 @@ function* subscribeToReceive() {
     {
       collection: "messages",
       filter: {
-        dst: {eq: TOKEN_ROOT_PROXY},
+        dst: {eq: TOKEN_PROXY_ADDRESS},
       },
       result: "id boc",
     },
