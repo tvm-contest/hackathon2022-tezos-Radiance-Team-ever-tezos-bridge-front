@@ -19,8 +19,6 @@ const StyledPaper = styled(Paper)(({theme}) => ({
   "&": {
     borderRadius: 24,
     borderWidth: 2,
-    display: "flex",
-    justifyContent: "space-between",
     padding: 20,
   },
 }));
@@ -132,7 +130,7 @@ export default function TokenInput({
   return (
     <StyledPaper>
       <Stack direction="row" justifyContent="space-between" spacing={1}>
-        <FormControl sx={{width: "100%"}}>
+        <FormControl sx={{flexGrow: 1}}>
           <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
           <StyledInput
             id="standard-input"
