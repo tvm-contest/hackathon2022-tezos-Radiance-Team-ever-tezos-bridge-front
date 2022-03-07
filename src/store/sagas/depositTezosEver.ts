@@ -11,12 +11,14 @@ import tezos from "../../lib/tezosRpcClient";
 import {VAULT_ADDRESS} from "../../misc/constants";
 import {CallReturnType, DepositAction, RootState} from "../../types";
 import {debug} from "../../utils/console";
+import {fetch as fetchEver} from "../reducers/everTokens";
 import {
   deposit,
   setError,
   setLoading,
   setOpHash,
 } from "../reducers/tezosEverTransactions";
+import {fetch as fetchTezos} from "../reducers/tezosTokens";
 
 function* depositFn(action: PayloadAction<DepositAction>) {
   yield put(setLoading());
@@ -41,6 +43,11 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   const op: CallReturnType<typeof methodProvider.send> = yield call(
     methodProvider.send.bind(methodProvider),
   );
+
+  // Refresh balances
+  yield put(fetchEver());
+  yield put(fetchTezos());
+
   debug("deposit_operation", op);
   yield put(setOpHash(op.opHash));
 }
