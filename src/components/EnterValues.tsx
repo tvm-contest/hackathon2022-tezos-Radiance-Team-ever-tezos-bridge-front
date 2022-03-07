@@ -149,8 +149,8 @@ export default function EnterValues() {
         : ["Connect Ever wallet", "Connect Temple wallet"];
     const label =
       direction === Direction.TezosEver
-        ? ["From (Tezos)", "From (Everscale)"]
-        : ["To (Everscale)", "To (Tezos)"];
+        ? ["From (Tezos)", "To (Everscale)"]
+        : ["From (Everscale)", "To (Tezos)"];
     const extensionInstalled =
       direction === Direction.TezosEver
         ? [templeWalletInstalled, everWalletInstalled]
