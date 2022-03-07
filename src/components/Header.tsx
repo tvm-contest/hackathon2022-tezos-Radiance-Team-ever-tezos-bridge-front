@@ -9,33 +9,13 @@ export default function Header(props: StackProps) {
   const tezosWallet = useAppSelector(selectTezosWallet);
 
   return (
-    <Stack component="header" direction="row-reverse" spacing={1} {...props}>
-      {tezosWallet ? (
-        <Paper sx={{borderRadius: "18px", px: 0.75, py: 0.5}}>
-          <Stack alignItems="center" direction="row" spacing={2}>
-            <Typography
-              component="span"
-              sx={{
-                color: "text.secondary",
-                fontSize: "1.25rem",
-                fontWeight: 700,
-              }}
-            >
-              Balance: {tezosWallet.balance} XTZ
-            </Typography>
-            <Button
-              href={`https://hangzhou2net.tzkt.io/${encodeURIComponent(
-                tezosWallet.address,
-              )}`}
-              size="small"
-              target="_blank"
-              variant="outlined"
-            >
-              {tezosWallet.address.replace(/(?<=^.{5}).*(?=.{5}$)/, "...")}
-            </Button>
-          </Stack>
-        </Paper>
-      ) : null}
+    <Stack
+      alignItems="center"
+      component="header"
+      gap={1}
+      justifyContent="center"
+      {...props}
+    >
       {everWallet ? (
         <Paper sx={{borderRadius: "18px", px: 0.75, py: 0.5}}>
           <Stack alignItems="center" direction="row" spacing={2}>
@@ -58,6 +38,32 @@ export default function Header(props: StackProps) {
               variant="outlined"
             >
               {everWallet.address.replace(/(?<=^.{5}).*(?=.{5}$)/, "...")}
+            </Button>
+          </Stack>
+        </Paper>
+      ) : null}
+      {tezosWallet ? (
+        <Paper sx={{borderRadius: "18px", px: 0.75, py: 0.5}}>
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <Typography
+              component="span"
+              sx={{
+                color: "text.secondary",
+                fontSize: "1.25rem",
+                fontWeight: 700,
+              }}
+            >
+              Balance: {tezosWallet.balance} XTZ
+            </Typography>
+            <Button
+              href={`https://hangzhou2net.tzkt.io/${encodeURIComponent(
+                tezosWallet.address,
+              )}`}
+              size="small"
+              target="_blank"
+              variant="outlined"
+            >
+              {tezosWallet.address.replace(/(?<=^.{5}).*(?=.{5}$)/, "...")}
             </Button>
           </Stack>
         </Paper>

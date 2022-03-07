@@ -56,10 +56,17 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Header
-        sx={{justifyContent: "center", mt: everWallet || tezosWallet ? 2 : 0}}
-      />
-      <Container maxWidth="sm">
+      <Container>
+        <Header
+          sx={{
+            flexDirection: {
+              tablet: "row",
+            },
+            mt: everWallet || tezosWallet ? 2 : 0,
+          }}
+        />
+      </Container>
+      <Container maxWidth="tablet">
         <Subheader sx={{mb: 2, mt: 4}} />
         <StepIndicator sx={{mb: 4}} />
         <EnterValues />

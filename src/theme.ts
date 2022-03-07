@@ -1,7 +1,15 @@
+/* eslint-disable sort-keys */
 import {createTheme} from "@mui/material";
-import {orange} from "@mui/material/colors";
 
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      laptop: 1024,
+      desktop: 1280,
+    },
+  },
   components: {
     MuiButton: {
       defaultProps: {
@@ -69,9 +77,6 @@ const theme = createTheme({
       primary: "#626262",
       secondary: "#333333",
     },
-  },
-  status: {
-    danger: orange[500],
   },
   typography: {
     fontFamily: ["Gilroy", "sans-serif"].join(","),
