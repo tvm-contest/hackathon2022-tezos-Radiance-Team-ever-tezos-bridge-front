@@ -18,3 +18,10 @@ export const TokenInput = Template.bind({});
 TokenInput.args = {
   label: "Input",
 };
+
+export const TokenInputError = Template.bind({});
+TokenInputError.args = {
+  error: true,
+  errorLabel: "Error message",
+  label: "Input (with error)",
+};

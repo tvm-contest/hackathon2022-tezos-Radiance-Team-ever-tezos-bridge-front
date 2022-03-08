@@ -54,7 +54,7 @@ export default function EnterValues() {
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
 
-  const {values, handleChange, handleBlur, setFieldValue, handleSubmit} =
+  const {handleBlur, handleChange, handleSubmit, setFieldValue, values} =
     useFormik<EnterValuesFormik>({
       enableReinitialize: true,
       initialValues: {

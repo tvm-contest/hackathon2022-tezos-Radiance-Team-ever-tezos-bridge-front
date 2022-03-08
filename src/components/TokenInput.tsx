@@ -4,6 +4,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  FormHelperText,
   InputBase,
   InputLabel,
   Paper,
@@ -16,17 +17,13 @@ import {useMemo} from "react";
 import {TokenInputProps} from "../types";
 
 const StyledPaper = styled(Paper)(({theme}) => ({
-  "&": {
-    borderRadius: 24,
-    borderWidth: 2,
-    padding: 20,
-  },
+  borderRadius: 24,
+  borderWidth: 2,
+  padding: 20,
 }));
 
 const StyledLabel = styled(InputLabel)(({theme}) => ({
-  "&": {
-    fontSize: "1.25rem",
-  },
+  fontSize: "1.25rem",
 }));
 
 const StyledInput = styled(InputBase)(({theme}) => ({
@@ -60,6 +57,8 @@ const Balance = styled("span")(({theme}) => ({
 }));
 
 export default function TokenInput({
+  error,
+  errorLabel,
   extensionInstalled,
   extensionLabel,
   extensionLink,
@@ -128,18 +127,33 @@ export default function TokenInput({
   ]);
 
   return (
-    <StyledPaper>
-      <Stack direction="row" justifyContent="space-between" spacing={1}>
-        <FormControl sx={{flexGrow: 1}}>
-          <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
-          <StyledInput
-            id="standard-input"
-            {...rest}
-            sx={{color: "text.secondary"}}
-          />
-        </FormControl>
-        <CurrentButton sx={{flexBasis: 350}} />
-      </Stack>
-    </StyledPaper>
+    <>
+      <StyledPaper
+        sx={
+          error
+            ? {
+                borderColor: "error.main",
+              }
+            : null
+        }
+      >
+        <Stack direction="row" justifyContent="space-between" spacing={1}>
+          <FormControl sx={{flexGrow: 1}}>
+            <StyledLabel htmlFor="standard-input">{label}</StyledLabel>
+            <StyledInput
+              id="standard-input"
+              {...rest}
+              sx={{color: "text.secondary"}}
+            />
+          </FormControl>
+          <CurrentButton sx={{flexBasis: 350}} />
+        </Stack>
+      </StyledPaper>
+      {error && errorLabel && (
+        <FormHelperText sx={{color: "error.main", marginLeft: "22px"}}>
+          {errorLabel}
+        </FormHelperText>
+      )}
+    </>
   );
 }

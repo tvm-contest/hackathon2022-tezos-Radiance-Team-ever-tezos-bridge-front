@@ -157,6 +157,8 @@ export interface AddressInputProps {
 }
 
 export type TokenInputProps = InputBaseProps & {
+  error?: boolean;
+  errorLabel?: string;
   extensionInstalled: boolean;
   extensionLabel: string;
   extensionLink: string;
