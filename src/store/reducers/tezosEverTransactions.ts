@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 import {
@@ -8,9 +9,9 @@ import {
 
 const initialState: TezosEverTransactionsState = {
   currentTransaction: {
-    everId: null, // 3 step (simulated)
-    id: null, // 2 step
     opHash: null, // 1 step
+    tezosId: null, // 2 step
+    everId: null, // 3 step
   },
   error: null,
   fetched: false,
@@ -38,8 +39,8 @@ export const tezosEverTransactionsSlice = createSlice({
       state.fetched = true;
       state.error = null;
     },
-    setId(state, action: PayloadAction<number>) {
-      state.currentTransaction.id = action.payload;
+    setTezosId(state, action: PayloadAction<number>) {
+      state.currentTransaction.tezosId = action.payload;
       state.loading = false;
       state.fetched = true;
       state.error = null;
@@ -69,7 +70,7 @@ export const {
   resetTransaction,
   setError,
   setEverId,
-  setId,
+  setTezosId,
   setLoading,
   setOpHash,
   subscribeDeposit,

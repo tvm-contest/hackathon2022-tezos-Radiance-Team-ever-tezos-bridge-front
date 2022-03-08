@@ -108,9 +108,9 @@ export interface PermissionsState {
 
 export interface TezosEverTransactionsState {
   currentTransaction: {
-    everId: string | null;
-    id: number | null;
     opHash: string | null;
+    tezosId: number | null;
+    everId: string | null;
   };
   error: string | null;
   fetched: boolean;

@@ -66,14 +66,17 @@ export default function Step2() {
 
   if (currentStep !== Step.ConfirmTezosEver || !enteredValues.data) return null;
 
-  const hasAccess = permittedTezosTokens.length !== 0;
+  const step1Finished = permittedTezosTokens.length !== 0;
+  const step21Finished = currentTransaction.opHash;
+  const step22Finished = currentTransaction.tezosId;
+  const step3Finished = currentTransaction.everId;
 
   return (
     <Stack spacing={2}>
       <Paper sx={{borderRadius: "40px", p: 4}}>
         <Stack component="ol" spacing={2} sx={{m: 0, p: 0}}>
           <Stack alignItems="flex-start" component="li" spacing={1}>
-            {hasAccess ? (
+            {step1Finished ? (
               <Typography>Access to the token has been given</Typography>
             ) : (
               <Typography>
@@ -81,7 +84,7 @@ export default function Step2() {
               </Typography>
             )}
             <Button
-              disabled={hasAccess}
+              disabled={step1Finished}
               endIcon={
                 permissionLoading ? (
                   <CircularProgress color="inherit" size={25} />
@@ -93,28 +96,33 @@ export default function Step2() {
             </Button>
           </Stack>
           <Stack alignItems="flex-start" component="li" spacing={1}>
-            {currentTransaction.opHash && currentTransaction.id ? (
+            {step21Finished && step22Finished ? (
               <Typography>Tokens deposited to the vault</Typography>
             ) : (
               <Typography>Deposit tokens to the vault</Typography>
             )}
             <Button
-              disabled={Boolean(
-                currentTransaction.opHash || currentTransaction.id,
-              )}
+              disabled={Boolean(step21Finished)}
+              endIcon={
+                step21Finished && !step22Finished ? (
+                  <CircularProgress color="inherit" size={25} />
+                ) : null
+              }
               onClick={handleDeposit}
             >
               Deposit
             </Button>
           </Stack>
-          <Stack alignItems="flex-start" component="li" spacing={1}>
-            {currentTransaction.everId ? (
-              <Typography>Your tokens have arrived!</Typography>
-            ) : (
-              <Typography>Waiting for tokens to be received</Typography>
-            )}
-            {!currentTransaction.everId && <CircularProgress />}
-          </Stack>
+          {step22Finished && (
+            <Stack alignItems="flex-start" component="li" spacing={1}>
+              {step3Finished ? (
+                <Typography>Your tokens have arrived!</Typography>
+              ) : (
+                <Typography>Waiting for tokens to be received</Typography>
+              )}
+              {!step3Finished && <CircularProgress />}
+            </Stack>
+          )}
         </Stack>
       </Paper>
       {currentTransaction.everId ? (

@@ -5,7 +5,7 @@ import {getConnection} from "../../lib/tezosWSClient";
 import {VAULT_ADDRESS} from "../../misc/constants";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
-import {setId, subscribeDeposit} from "../reducers/tezosEverTransactions";
+import {setTezosId, subscribeDeposit} from "../reducers/tezosEverTransactions";
 
 const operationsChannel = channel();
 
@@ -33,7 +33,7 @@ function* subscribeToDeposit() {
           state.tezosEverTransactions.currentTransaction.opHash,
       );
 
-    if (opHash === msg.data[0].hash) yield put(setId(msg.data[0].id));
+    if (opHash === msg.data[0].hash) yield put(setTezosId(msg.data[0].id));
   });
 }
 
