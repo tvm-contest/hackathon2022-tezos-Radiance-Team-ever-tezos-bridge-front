@@ -33,7 +33,7 @@ export const tezosEverTransactionsSlice = createSlice({
       state.fetched = true;
       state.error = action.payload;
     },
-    setEverId(state, action: PayloadAction<string>) {
+    setEverId(state, action: PayloadAction<number>) {
       state.currentTransaction.everId = action.payload;
       state.loading = false;
       state.fetched = true;

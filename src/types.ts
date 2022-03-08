@@ -110,7 +110,7 @@ export interface TezosEverTransactionsState {
   currentTransaction: {
     opHash: string | null;
     tezosId: number | null;
-    everId: string | null;
+    everId: number | null;
   };
   error: string | null;
   fetched: boolean;
