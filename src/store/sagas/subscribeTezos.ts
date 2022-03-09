@@ -9,7 +9,7 @@ import {setTezosId, subscribeDeposit} from "../reducers/tezosEverTransactions";
 
 const operationsChannel = channel();
 
-function* subscribeToDeposit() {
+function* subscribeTezos() {
   const connection: CallReturnType<typeof getConnection> = yield call(
     getConnection,
   );
@@ -27,16 +27,15 @@ function* subscribeToDeposit() {
   yield takeEvery(operationsChannel, function* (msg: any) {
     if (msg.type !== 1) return;
 
-    const opHash: RootState["tezosEverTransactions"]["currentTransaction"]["opHash"] =
-      yield select(
-        (state: RootState) =>
-          state.tezosEverTransactions.currentTransaction.opHash,
-      );
+    const opHash: string = yield select(
+      (state: RootState) =>
+        state.tezosEverTransactions.currentTransaction.opHash,
+    );
 
     if (opHash === msg.data[0].hash) yield put(setTezosId(msg.data[0].id));
   });
 }
 
-export default function* subscribeToDepositSaga() {
-  yield takeLatest(subscribeDeposit, subscribeToDeposit);
+export default function* subscribeTezosSaga() {
+  yield takeLatest(subscribeDeposit, subscribeTezos);
 }
