@@ -106,20 +106,11 @@ export interface PermissionsState {
   permittedTezosTokens: string[];
 }
 
-export interface TezosEverTransactionsState {
+export interface TransactionsState {
   currentTransaction: {
     opHash: string | null;
     tezosId: number | null;
     everId: number | null;
-  };
-  error: string | null;
-  fetched: boolean;
-  loading: boolean;
-}
-
-export interface EverTezosTransactionsState {
-  currentTransaction: {
-    id: number | null;
   };
   error: string | null;
   fetched: boolean;

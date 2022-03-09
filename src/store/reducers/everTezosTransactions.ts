@@ -1,10 +1,13 @@
+/* eslint-disable sort-keys */
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {DepositAction, EverTezosTransactionsState} from "../../types";
+import {DepositAction, TransactionsState} from "../../types";
 
-const initialState: EverTezosTransactionsState = {
+const initialState: TransactionsState = {
   currentTransaction: {
-    id: null, // 1 step
+    opHash: null,
+    everId: null,
+    tezosId: null,
   },
   error: null,
   fetched: false,
@@ -23,15 +26,33 @@ export const everTezosTransactionsSlice = createSlice({
       state.fetched = true;
       state.error = action.payload;
     },
+    setEverId(state, action: PayloadAction<number>) {
+      state.currentTransaction.everId = action.payload;
+      state.loading = false;
+      state.fetched = true;
+      state.error = null;
+    },
     setLoading(state) {
       state.loading = true;
       state.fetched = false;
       state.error = null;
     },
+    setOpHash(state, action: PayloadAction<string>) {
+      state.currentTransaction.opHash = action.payload;
+      state.loading = false;
+      state.fetched = true;
+      state.error = null;
+    },
+    setTezosId(state, action: PayloadAction<number>) {
+      state.currentTransaction.tezosId = action.payload;
+      state.loading = false;
+      state.fetched = true;
+      state.error = null;
+    },
   },
 });
 
-export const {deposit, setError, setLoading} =
+export const {deposit, setError, setEverId, setLoading, setOpHash, setTezosId} =
   everTezosTransactionsSlice.actions;
 
 export default everTezosTransactionsSlice.reducer;

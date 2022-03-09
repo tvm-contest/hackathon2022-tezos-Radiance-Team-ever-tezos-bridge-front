@@ -1,13 +1,9 @@
 /* eslint-disable sort-keys */
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {
-  DepositAction,
-  RootState,
-  TezosEverTransactionsState,
-} from "../../types";
+import {DepositAction, RootState, TransactionsState} from "../../types";
 
-const initialState: TezosEverTransactionsState = {
+const initialState: TransactionsState = {
   currentTransaction: {
     opHash: null, // 1 step
     tezosId: null, // 2 step

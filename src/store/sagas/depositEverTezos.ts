@@ -14,7 +14,12 @@ import {NO_WALLET} from "../../misc/error-messages";
 import {TokenProxy, TokenRoot, TokenWallet} from "../../misc/ever-abi";
 import {CallReturnType, DepositAction, RootState} from "../../types";
 import {debug} from "../../utils/console";
-import {deposit, setError, setLoading} from "../reducers/everTezosTransactions";
+import {
+  deposit,
+  setError,
+  setLoading,
+  setOpHash,
+} from "../reducers/everTezosTransactions";
 
 function* depositFn(action: PayloadAction<DepositAction>) {
   debug("params", action.payload);
@@ -77,7 +82,9 @@ function* depositFn(action: PayloadAction<DepositAction>) {
       bounce: true,
       from: new Address(everWallet.address),
     });
-  debug("wallet_res", walletRes);
+  debug("ever_operation_hash", walletRes.id.hash);
+
+  yield put(setOpHash(walletRes.id.hash));
 }
 
 export default function* depositEverTezosSaga() {
