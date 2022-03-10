@@ -21,6 +21,9 @@ export const everTezosTransactionsSlice = createSlice({
     deposit(_, __: PayloadAction<DepositAction>) {
       // Handled by saga
     },
+    resetTransaction() {
+      return initialState;
+    },
     setError(state, action: PayloadAction<string>) {
       state.loading = false;
       state.fetched = true;
@@ -57,6 +60,7 @@ export const everTezosTransactionsSlice = createSlice({
 
 export const {
   deposit,
+  resetTransaction,
   setError,
   setEverId,
   setLoading,

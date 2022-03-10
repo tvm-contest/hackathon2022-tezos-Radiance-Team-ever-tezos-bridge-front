@@ -37,8 +37,11 @@ export default function App() {
   // Fetch tokens after detecting wallets
   useEffect(() => {
     if (everWallet) dispatch(fetchEverTokens());
+  }, [everWallet, dispatch]);
+
+  useEffect(() => {
     if (tezosWallet) dispatch(fetchTezosTokens());
-  }, [tezosWallet, everWallet, dispatch]);
+  }, [tezosWallet, dispatch]);
 
   // Fetch tezos permissions for its token manipulation
   useEffect(() => {
@@ -47,9 +50,12 @@ export default function App() {
 
   // Subscriptions
   useEffect(() => {
-    if (everWallet) dispatch(subscribeEver());
     if (tezosWallet) dispatch(subscribeTezos());
-  }, [tezosWallet, everWallet, dispatch]);
+  }, [tezosWallet, dispatch]);
+
+  useEffect(() => {
+    if (everWallet) dispatch(subscribeEver());
+  }, [everWallet, dispatch]);
 
   return (
     <>

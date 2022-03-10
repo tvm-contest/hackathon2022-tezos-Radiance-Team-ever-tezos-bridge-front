@@ -13,9 +13,13 @@ import {
   prev as prevStep,
   selectCurrentStep,
 } from "../store/reducers/currentStep";
-import {selectEnteredValues} from "../store/reducers/enteredValues";
+import {
+  resetValues,
+  selectEnteredValues,
+} from "../store/reducers/enteredValues";
 import {
   deposit,
+  resetTransaction,
   selectCurrentEverTezosTransaction,
 } from "../store/reducers/everTezosTransactions";
 import {selectTezosWallet} from "../store/reducers/tezosWallet";
@@ -28,6 +32,16 @@ export default function ConfirmEverTezos() {
   const tezosWallet = useAppSelector(selectTezosWallet);
   const currentTransaction = useAppSelector(selectCurrentEverTezosTransaction);
 
+  function handleBack() {
+    dispatch(prevStep());
+  }
+
+  function handleReset() {
+    dispatch(prevStep());
+    dispatch(resetValues());
+    dispatch(resetTransaction());
+  }
+
   function handleDeposit() {
     if (enteredValues.data && tezosWallet)
       dispatch(
@@ -38,14 +52,11 @@ export default function ConfirmEverTezos() {
       );
   }
 
-  function handleBack() {
-    dispatch(prevStep());
-  }
-
   if (currentStep !== Step.ConfirmEverTezos || !enteredValues.data) return null;
 
   const step21Finished = currentTransaction.opHash;
   const step22Finished = currentTransaction.everId;
+  const step3Finished = currentTransaction.tezosId;
 
   return (
     <Stack spacing={2}>
@@ -69,9 +80,23 @@ export default function ConfirmEverTezos() {
               Deposit
             </Button>
           </Stack>
+          {step22Finished && (
+            <Stack alignItems="flex-start" component="li" spacing={1}>
+              {step3Finished ? (
+                <Typography>Your tokens have arrived!</Typography>
+              ) : (
+                <Typography>Waiting for tokens to be received</Typography>
+              )}
+              {!step3Finished && <CircularProgress />}
+            </Stack>
+          )}
         </Stack>
       </Paper>
-      <Button onClick={handleBack}>Back</Button>
+      {currentTransaction.tezosId ? (
+        <Button onClick={handleReset}>Make another transfer</Button>
+      ) : (
+        <Button onClick={handleBack}>Back</Button>
+      )}
     </Stack>
   );
 }

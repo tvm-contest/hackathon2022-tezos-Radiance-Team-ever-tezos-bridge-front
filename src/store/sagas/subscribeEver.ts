@@ -56,10 +56,6 @@ function* subscribeEver() {
   });
 }
 
-export default function* subscribeEverSaga() {
-  yield takeLatest(subscribe, subscribeEver);
-}
-
 function* handleTezosEverConfirmation(r: DecodedMessageBody) {
   // Decode callback
   const proxyContract = new Contract(
@@ -111,4 +107,8 @@ function* handleEverTezosConfirmation(r: DecodedMessageBody) {
 
   if (sender === everAddr && amount === enteredAmount)
     yield put(setEverIdEver(Math.random()));
+}
+
+export default function* subscribeEverSaga() {
+  yield takeLatest(subscribe, subscribeEver);
 }
