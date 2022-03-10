@@ -49,7 +49,7 @@ export default function App() {
 
   // Subscriptions
   useEffect(() => {
-    if (everWallet) setTimeout(() => dispatch(subscribeReceive()), 5000);
+    if (everWallet) dispatch(subscribeReceive());
     if (tezosWallet) dispatch(subscribeDeposit());
   }, [tezosWallet, everWallet, dispatch]);
 

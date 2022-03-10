@@ -1,8 +1,6 @@
 import {TonClient} from "@eversdk/core";
 import {libWeb} from "@eversdk/lib-web";
 
-// Application initialization
-
 // eslint-disable-next-line react-hooks/rules-of-hooks
 TonClient.useBinaryLibrary(libWeb as any);
 
