@@ -52,10 +52,7 @@ export const tezosEverTransactionsSlice = createSlice({
       state.fetched = true;
       state.error = null;
     },
-    subscribeDeposit() {
-      // Handled by saga
-    },
-    subscribeReceive() {
+    subscribe() {
       // Handled by saga
     },
   },
@@ -69,8 +66,7 @@ export const {
   setTezosId,
   setLoading,
   setOpHash,
-  subscribeDeposit,
-  subscribeReceive,
+  subscribe,
 } = tezosEverTransactionsSlice.actions;
 
 export const selectCurrentTezosEverTransaction = (state: RootState) =>

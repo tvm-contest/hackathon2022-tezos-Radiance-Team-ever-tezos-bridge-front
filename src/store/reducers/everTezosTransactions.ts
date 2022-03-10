@@ -49,10 +49,20 @@ export const everTezosTransactionsSlice = createSlice({
       state.fetched = true;
       state.error = null;
     },
+    subscribe() {
+      // Handled by saga
+    },
   },
 });
 
-export const {deposit, setError, setEverId, setLoading, setOpHash, setTezosId} =
-  everTezosTransactionsSlice.actions;
+export const {
+  deposit,
+  setError,
+  setEverId,
+  setLoading,
+  setOpHash,
+  setTezosId,
+  subscribe,
+} = everTezosTransactionsSlice.actions;
 
 export default everTezosTransactionsSlice.reducer;

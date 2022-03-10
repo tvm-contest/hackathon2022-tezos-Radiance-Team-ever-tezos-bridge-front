@@ -5,7 +5,7 @@ import {getConnection} from "../../lib/tezosWSClient";
 import {VAULT_ADDRESS} from "../../misc/constants";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
-import {setTezosId, subscribeDeposit} from "../reducers/tezosEverTransactions";
+import {setTezosId, subscribe} from "../reducers/tezosEverTransactions";
 
 const operationsChannel = channel();
 
@@ -20,22 +20,27 @@ function* subscribeTezos() {
   });
 
   connection.on("operations", (msg) => {
-    debug("operation_msg_1", msg);
+    debug("operation_msg", msg);
     operationsChannel.put(msg);
   });
 
   yield takeEvery(operationsChannel, function* (msg: any) {
-    if (msg.type !== 1) return;
-
-    const opHash: string = yield select(
-      (state: RootState) =>
-        state.tezosEverTransactions.currentTransaction.opHash,
-    );
-
-    if (opHash === msg.data[0].hash) yield put(setTezosId(msg.data[0].id));
+    yield handleTezosEverConfirmation(msg);
   });
 }
 
 export default function* subscribeTezosSaga() {
-  yield takeLatest(subscribeDeposit, subscribeTezos);
+  yield takeLatest(subscribe, subscribeTezos);
 }
+
+function* handleTezosEverConfirmation(msg: any) {
+  if (msg.type !== 1) return;
+
+  const opHash: string = yield select(
+    (state: RootState) => state.tezosEverTransactions.currentTransaction.opHash,
+  );
+
+  if (opHash === msg.data[0].hash) yield put(setTezosId(msg.data[0].id));
+}
+
+function* handleEverTezosConfirmation() {}

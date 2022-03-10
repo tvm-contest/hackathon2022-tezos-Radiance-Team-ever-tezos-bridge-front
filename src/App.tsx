@@ -9,16 +9,14 @@ import StepIndicator from "./components/StepIndicator";
 import Subheader from "./components/Subheader";
 import useAppDispatch from "./hooks/useAppDispatch";
 import useAppSelector from "./hooks/useAppSelector";
+import {subscribe as subscribeEver} from "./store/reducers/everTezosTransactions";
 import {fetch as fetchEverTokens} from "./store/reducers/everTokens";
 import {
   check as checkEver,
   selectEverWallet,
 } from "./store/reducers/everWallet";
 import {getTezosPermissions} from "./store/reducers/permissions";
-import {
-  subscribeDeposit,
-  subscribeReceive,
-} from "./store/reducers/tezosEverTransactions";
+import {subscribe as subscribeTezos} from "./store/reducers/tezosEverTransactions";
 import {fetch as fetchTezosTokens} from "./store/reducers/tezosTokens";
 import {
   check as checkTezos,
@@ -49,8 +47,8 @@ export default function App() {
 
   // Subscriptions
   useEffect(() => {
-    if (everWallet) dispatch(subscribeReceive());
-    if (tezosWallet) dispatch(subscribeDeposit());
+    if (everWallet) dispatch(subscribeEver());
+    if (tezosWallet) dispatch(subscribeTezos());
   }, [tezosWallet, everWallet, dispatch]);
 
   return (

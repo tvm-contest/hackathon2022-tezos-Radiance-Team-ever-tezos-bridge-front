@@ -10,7 +10,7 @@ import {TokenProxy} from "../../misc/ever-abi";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {fetch as fetchEverTokens} from "../reducers/everTokens";
-import {setEverId, subscribeReceive} from "../reducers/tezosEverTransactions";
+import {setEverId, subscribe} from "../reducers/tezosEverTransactions";
 import {fetch as fetchTezosTokens} from "../reducers/tezosTokens";
 
 const callbackChannel = channel();
@@ -52,7 +52,7 @@ function* subscribeEver() {
 }
 
 export default function* subscribeEverSaga() {
-  yield takeLatest(subscribeReceive, subscribeEver);
+  yield takeLatest(subscribe, subscribeEver);
 }
 
 function* handleTezosEverConfirmation(r: DecodedMessageBody) {
