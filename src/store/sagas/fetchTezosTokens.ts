@@ -8,7 +8,7 @@ import {
 } from "redux-saga/effects";
 
 import {getTezosWallets} from "../../lib/tezosApiClient";
-import {DECIMAL_PLACES} from "../../misc/constants";
+import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
 import tezosTokens from "../../misc/tezos-tokens";
 import {CallReturnType, RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/tezosTokens";
@@ -35,7 +35,7 @@ function* fetchTezosTokens() {
         address: tezosTokens[0].contract,
         balance: new BigNumber(t.balance)
           .div(10 ** tezosTokens[0].decimals)
-          .dp(DECIMAL_PLACES)
+          .dp(VIEW_DECIMAL_PLACES)
           .toNumber(),
       })),
     ),

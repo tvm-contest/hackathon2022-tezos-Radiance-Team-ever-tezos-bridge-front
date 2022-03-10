@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys */
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {DepositAction, TransactionsState} from "../../types";
+import {DepositAction, RootState, TransactionsState} from "../../types";
 
 const initialState: TransactionsState = {
   currentTransaction: {
@@ -64,5 +64,8 @@ export const {
   setTezosId,
   subscribe,
 } = everTezosTransactionsSlice.actions;
+
+export const selectCurrentEverTezosTransaction = (state: RootState) =>
+  state.everTezosTransactions.currentTransaction;
 
 export default everTezosTransactionsSlice.reducer;

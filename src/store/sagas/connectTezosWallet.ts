@@ -4,7 +4,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 
 import {getAccount} from "../../lib/tezosApiClient";
 import {getWallet} from "../../lib/tezosRpcClient";
-import {DECIMAL_PLACES, TEZOS_DECIMALS} from "../../misc/constants";
+import {TEZOS_DECIMALS, VIEW_DECIMAL_PLACES} from "../../misc/constants";
 import {NO_EXTENSION} from "../../misc/error-messages";
 import {CallReturnType} from "../../types";
 import {setError} from "../reducers/everWallet";
@@ -46,7 +46,7 @@ function* connectTezosWallet() {
       address: pkh,
       balance: new BigNumber(balance)
         .div(10 ** TEZOS_DECIMALS)
-        .dp(DECIMAL_PLACES)
+        .dp(VIEW_DECIMAL_PLACES)
         .toNumber(),
     }),
   );

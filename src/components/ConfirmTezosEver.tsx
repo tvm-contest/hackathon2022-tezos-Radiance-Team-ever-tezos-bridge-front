@@ -8,6 +8,7 @@ import {
 import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
+import {TOKEN_DECIMALS} from "../misc/constants";
 import {
   prev as prevStep,
   selectCurrentStep,
@@ -56,9 +57,7 @@ export default function Step2() {
     if (enteredValues.data && everWallet)
       dispatch(
         deposit({
-          amount:
-            enteredValues.data.amount *
-            10 ** enteredValues.data.selectedToken.decimals,
+          amount: enteredValues.data.amount * 10 ** TOKEN_DECIMALS,
           receiver: everWallet.address,
         }),
       );

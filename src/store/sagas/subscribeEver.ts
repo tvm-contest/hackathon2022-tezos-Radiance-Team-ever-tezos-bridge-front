@@ -5,12 +5,20 @@ import {call, put, select, takeEvery, takeLatest} from "redux-saga/effects";
 
 import everRpcClient from "../../lib/everRpcClient";
 import client from "../../lib/everWSClient";
-import {EVER_DECIMALS, TOKEN_PROXY_ADDRESS} from "../../misc/constants";
+import {
+  EVER_DECIMALS,
+  TOKEN_DECIMALS,
+  TOKEN_PROXY_ADDRESS,
+} from "../../misc/constants";
 import {TokenProxy} from "../../misc/ever-abi";
 import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
+import {
+  setEverId as setEverIdEver,
+  subscribe,
+} from "../reducers/everTezosTransactions";
 import {fetch as fetchEverTokens} from "../reducers/everTokens";
-import {setEverId, subscribe} from "../reducers/tezosEverTransactions";
+import {setEverId as setEverIdTezos} from "../reducers/tezosEverTransactions";
 import {fetch as fetchTezosTokens} from "../reducers/tezosTokens";
 
 const callbackChannel = channel();
@@ -41,9 +49,6 @@ function* subscribeEver() {
   debug("ever_subscribe_id", id);
 
   yield takeEvery(callbackChannel, function* (r: DecodedMessageBody) {
-    debug("ever_encoded_callback", r);
-
-    // Check if it is callback
     if (r.name === "transferTokenCallback")
       yield handleTezosEverConfirmation(r);
     else if (r.name === "onAcceptTokensBurn")
@@ -69,6 +74,7 @@ function* handleTezosEverConfirmation(r: DecodedMessageBody) {
     proxyCall.call.bind(proxyCall),
     {},
   );
+
   const resRecipient = "0:" + BigInt(proxyRes.recipient).toString(16);
   const resAmount = +proxyRes.amount / 10 ** EVER_DECIMALS;
   debug("ever_decoded_callback", {resAmount, resRecipient});
@@ -82,7 +88,7 @@ function* handleTezosEverConfirmation(r: DecodedMessageBody) {
   debug("local_data_for_receiver", {enteredAmount, everAddr});
 
   if (resRecipient === everAddr && resAmount === enteredAmount) {
-    yield put(setEverId(Math.random()));
+    yield put(setEverIdTezos(Math.random()));
 
     // Refetch tokens
     yield put(fetchTezosTokens());
@@ -91,5 +97,18 @@ function* handleTezosEverConfirmation(r: DecodedMessageBody) {
 }
 
 function* handleEverTezosConfirmation(r: DecodedMessageBody) {
-  debug("ever_encdode_handler", r);
+  debug("ever_encode_handler", r);
+
+  const amount = r.value.amount / 10 ** TOKEN_DECIMALS;
+  const sender = r.value.walletOwner;
+
+  const everAddr: string = yield select(
+    (state: RootState) => state.everWallet.data?.address,
+  );
+  const enteredAmount: number = yield select(
+    (state: RootState) => state.enteredValues.data?.amount,
+  );
+
+  if (sender === everAddr && amount === enteredAmount)
+    yield put(setEverIdEver(Math.random()));
 }

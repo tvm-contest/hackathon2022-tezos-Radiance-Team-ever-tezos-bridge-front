@@ -64,6 +64,8 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   );
   debug("wallet_of", walletOfRes);
 
+  yield put(setOpHash("" + Math.random()));
+
   const walletContract = new Contract(
     everRpcClient,
     TokenWallet,
@@ -75,7 +77,6 @@ function* depositFn(action: PayloadAction<DepositAction>) {
     payload: resEncode.data,
     remainingGasTo: new Address(everWallet.address),
   });
-
   const walletRes: CallReturnType<typeof walletCall.send> =
     yield walletCall.send({
       amount: "1600000000",
@@ -83,8 +84,6 @@ function* depositFn(action: PayloadAction<DepositAction>) {
       from: new Address(everWallet.address),
     });
   debug("ever_operation_hash", walletRes.id.hash);
-
-  yield put(setOpHash(walletRes.id.hash));
 }
 
 export default function* depositEverTezosSaga() {

@@ -10,7 +10,7 @@ import {
 } from "redux-saga/effects";
 
 import {balanceByTokenRoot} from "../../lib/everRpcClient";
-import {DECIMAL_PLACES} from "../../misc/constants";
+import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
 import {NO_WALLET} from "../../misc/error-messages";
 import everTokens from "../../misc/ever-tokens";
 import {RootState} from "../../types";
@@ -42,7 +42,7 @@ function* fetchEverTokens() {
         ...t,
         balance: new BigNumber(balances[i])
           .div(10 ** t.decimals)
-          .dp(DECIMAL_PLACES)
+          .dp(VIEW_DECIMAL_PLACES)
           .toNumber(),
       })),
     ),
