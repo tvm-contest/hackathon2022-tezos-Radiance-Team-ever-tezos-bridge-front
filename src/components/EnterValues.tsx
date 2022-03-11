@@ -54,19 +54,27 @@ export default function EnterValues() {
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
 
-  const {handleBlur, handleChange, handleSubmit, setFieldValue, values} =
-    useFormik<EnterValuesFormik>({
-      enableReinitialize: true,
-      initialValues: {
-        direction: Direction.TezosEver,
-        everToken: null,
-        everValue: enteredValues.data?.amount || "",
-        tezosToken: null,
-        tezosValue: enteredValues.data?.amount || "",
-      },
-      onSubmit: handleNext,
-      validate,
-    });
+  const {
+    errors,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    setFieldTouched,
+    touched,
+    values,
+  } = useFormik<EnterValuesFormik>({
+    enableReinitialize: true,
+    initialValues: {
+      direction: Direction.TezosEver,
+      everToken: null,
+      everValue: enteredValues.data?.amount || "",
+      tezosToken: null,
+      tezosValue: enteredValues.data?.amount || "",
+    },
+    onSubmit: handleNext,
+    validate,
+  });
 
   const tezosPopup = useTokensPopup({
     setToken(t) {
@@ -168,7 +176,29 @@ export default function EnterValues() {
         ? [tezosWalletLoading, everWalletLoading]
         : [everWalletLoading, tezosWalletLoading];
 
+    const tezosTouched = touched.tezosToken || touched.tezosValue;
+    const everTouched = touched.everToken || touched.everValue;
+    const tezosError = errors.tezosToken || errors.tezosValue;
+    const everError = errors.everToken || errors.everValue;
+
+    const error =
+      direction === Direction.TezosEver
+        ? [
+            tezosTouched && Boolean(tezosError),
+            everTouched && Boolean(everError),
+          ]
+        : [
+            everTouched && Boolean(everError),
+            tezosTouched && Boolean(tezosError),
+          ];
+    const errorLabel =
+      direction === Direction.TezosEver
+        ? [tezosError, everError]
+        : [everError, tezosError];
+
     return {
+      error,
+      errorLabel,
       extensionInstalled,
       extensionLabel,
       extensionLink,
@@ -185,6 +215,7 @@ export default function EnterValues() {
   }, [
     handleConnectEverWallet,
     handleConnectTezosWallet,
+    errors,
     everPopup,
     everWallet,
     everWalletInstalled,
@@ -193,6 +224,7 @@ export default function EnterValues() {
     tezosWallet,
     tezosWalletLoading,
     templeWalletInstalled,
+    touched,
     values,
   ]);
 
@@ -260,6 +292,16 @@ export default function EnterValues() {
     else dispatch(nextStep(Step.ConfirmEverTezos));
   }
 
+  function handleTezosTokenClose() {
+    tezosPopup.handleClose();
+    setFieldTouched("tezosToken");
+  }
+
+  function handleEverTokenClose() {
+    everPopup.handleClose();
+    setFieldTouched("everToken");
+  }
+
   if (currentStep !== Step.EnterValues) return null;
 
   return (
@@ -273,16 +315,16 @@ export default function EnterValues() {
         <Button type="submit">Next</Button>
       </Stack>
       <TokenListPopup
-        onClose={everPopup.handleClose}
-        onTokenSelect={everPopup.handleTokenSelect}
-        open={everPopup.open}
-        tokens={everTokens}
-      />
-      <TokenListPopup
-        onClose={tezosPopup.handleClose}
+        onClose={handleTezosTokenClose}
         onTokenSelect={tezosPopup.handleTokenSelect}
         open={tezosPopup.open}
         tokens={tezosTokens}
+      />
+      <TokenListPopup
+        onClose={handleEverTokenClose}
+        onTokenSelect={everPopup.handleTokenSelect}
+        open={everPopup.open}
+        tokens={everTokens}
       />
     </>
   );

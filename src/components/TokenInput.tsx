@@ -150,7 +150,7 @@ export default function TokenInput({
         </Stack>
       </StyledPaper>
       {error && errorLabel && (
-        <FormHelperText sx={{color: "error.main", marginLeft: "22px"}}>
+        <FormHelperText sx={{color: "error.main", paddingLeft: "22px"}}>
           {errorLabel}
         </FormHelperText>
       )}
