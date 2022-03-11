@@ -54,6 +54,35 @@ export default function EnterValues() {
   const everTokens = useAppSelector(selectEverTokens);
   const enteredValues = useAppSelector(selectEnteredValues);
 
+  const initEverToken =
+    useMemo(() => {
+      if (!enteredValues.data) return null;
+
+      const {direction, selectedToken} = enteredValues.data;
+
+      if (selectedToken && direction === Direction.EverTezos)
+        return enteredValues.data.selectedToken;
+
+      const rel =
+        tokensRelation.find((r) => r.includes(selectedToken.address)) || [];
+      const opAddr = rel[0] === selectedToken.address ? rel[1] : rel[0];
+      return everTokens.find((t) => t.address === opAddr);
+    }, [enteredValues, everTokens]) || null;
+
+  const initTezosToken = useMemo(() => {
+    if (!enteredValues.data) return null;
+
+    const {direction, selectedToken} = enteredValues.data;
+
+    if (selectedToken && direction === Direction.TezosEver)
+      return enteredValues.data.selectedToken;
+
+    const rel =
+      tokensRelation.find((r) => r.includes(selectedToken.address)) || [];
+    const opAddr = rel[0] === selectedToken.address ? rel[1] : rel[0];
+    return tezosTokens.find((t) => t.address === opAddr) || null;
+  }, [enteredValues, tezosTokens]);
+
   const {
     errors,
     handleBlur,
@@ -66,10 +95,10 @@ export default function EnterValues() {
   } = useFormik<EnterValuesFormik>({
     enableReinitialize: true,
     initialValues: {
-      direction: Direction.TezosEver,
-      everToken: null,
+      direction: enteredValues.data?.direction || Direction.TezosEver,
+      everToken: initEverToken,
       everValue: enteredValues.data?.amount || "",
-      tezosToken: null,
+      tezosToken: initTezosToken,
       tezosValue: enteredValues.data?.amount || "",
     },
     onSubmit: handleNext,
@@ -280,6 +309,7 @@ export default function EnterValues() {
     dispatch(
       setValues({
         amount: +values.tezosValue,
+        direction: values.direction,
         selectedToken:
           values.direction === Direction.TezosEver
             ? (values.tezosToken as Token)

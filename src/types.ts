@@ -126,12 +126,14 @@ export interface EnteredValuesState {
   data: {
     amount: number;
     selectedToken: Token;
+    direction: Direction;
   } | null;
 }
 
 export interface EnteredValuesAction {
   amount: number;
   selectedToken: Token;
+  direction: Direction;
 }
 
 /**

@@ -75,7 +75,7 @@ function* handleTezosEverConfirmation(msg: any) {
 }
 
 function* handleEverTezosConfirmation(msg: any) {
-  if (!msg.data && !msg.data[0].parameter.value[0]) return;
+  if (!msg.data) return;
 
   const {amount, to_} = msg.data[0].parameter.value[0].txs[0];
 
