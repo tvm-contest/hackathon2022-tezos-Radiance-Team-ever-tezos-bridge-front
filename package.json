@@ -58,7 +58,7 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "heroku-postbuild": "cp node_modules/@eversdk/lib-web/eversdk.wasm build/eversdk.wasm"
+    "heroku-predeploy": "cp node_modules/@eversdk/lib-web/eversdk.wasm build/eversdk.wasm"
   },
   "browserslist": {
     "production": [
