@@ -53,12 +53,11 @@
   "scripts": {
     "start": "serve -s build",
     "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cp node_modules/@eversdk/lib-web/eversdk.wasm build/eversdk.wasm",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
-    "heroku-predeploy": "cp node_modules/@eversdk/lib-web/eversdk.wasm build/eversdk.wasm"
+    "build-storybook": "build-storybook -s public"
   },
   "browserslist": {
     "production": [
