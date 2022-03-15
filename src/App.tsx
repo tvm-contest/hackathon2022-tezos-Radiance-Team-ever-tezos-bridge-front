@@ -1,12 +1,12 @@
-import {Container, CssBaseline} from "@mui/material";
+import {Container, CssBaseline, Typography} from "@mui/material";
 import {useEffect} from "react";
 
 import ConfirmEverTezos from "./components/ConfirmEverTezos";
 import ConfirmTezosEver from "./components/ConfirmTezosEver";
 import EnterValues from "./components/EnterValues";
 import Header from "./components/Header";
+import RecentTransactions from "./components/RecentTransactions";
 import StepIndicator from "./components/StepIndicator";
-import Subheader from "./components/Subheader";
 import useAppDispatch from "./hooks/useAppDispatch";
 import useAppSelector from "./hooks/useAppSelector";
 import {subscribe as subscribeEver} from "./store/reducers/everTezosTransactions";
@@ -71,12 +71,15 @@ export default function App() {
         />
       </Container>
       <Container maxWidth="tablet">
-        <Subheader sx={{mb: 2, mt: 4}} />
+        <Typography color="textSecondary" sx={{mb: 2, mt: 4}} variant="h1">
+          Cross-chain transfer
+        </Typography>
         <StepIndicator sx={{mb: 4}} />
         <EnterValues />
         <ConfirmTezosEver />
         <ConfirmEverTezos />
       </Container>
+      <RecentTransactions />
     </>
   );
 }
