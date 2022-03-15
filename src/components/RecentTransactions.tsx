@@ -118,7 +118,11 @@ export default function ModalUnstyledDemo() {
             width: "100%",
           }}
         >
-          <Typography color="textSecondary" sx={{mb: 2}} variant="h1">
+          <Typography
+            color="textSecondary"
+            sx={{mb: 2, textAlign: "center"}}
+            variant="h1"
+          >
             Recent transactions
           </Typography>
           <TableContainer>

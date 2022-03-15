@@ -24,7 +24,7 @@ const StyledContainer = styled(Box)(({theme}) => ({
   border: "1px solid #eee",
   borderRadius: 30,
   maxWidth: 600,
-  padding: 30,
+  padding: "50px",
   width: "90%",
 }));
 
