@@ -11,6 +11,8 @@ import {
 import {Box, styled} from "@mui/system";
 import React from "react";
 
+import TransactionsButton from "./TransactionsButton";
+
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
   z-index: 1300;
@@ -39,39 +41,64 @@ const Backdrop = styled("div")`
 `;
 
 function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
+  direction: string,
+  amount: number,
+  token: string,
+  sender: string,
+  receiver: string,
+  timestamp: string,
+  status: string,
 ) {
   return {
-    calories,
-    carbs,
-    fat,
-    name,
-    protein,
+    amount,
+    direction,
+    id: Math.random(),
+    receiver,
+    sender,
+    status,
+    timestamp,
+    token,
   };
 }
 
 const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData(
+    "TEZ→EVER",
+    21,
+    "USDC",
+    "tz1ih...hYdw7",
+    "0:526...836c3",
+    "12:23 15.01.2022",
+    "SUCCESS",
+  ),
+  createData(
+    "TEZ→EVER",
+    0.21,
+    "USDC",
+    "tz1ih...hYdw7",
+    "0:526...836c3",
+    "12:34 15.01.2022",
+    "WAITING",
+  ),
+  createData(
+    "EVER→TEZ",
+    5.000031,
+    "USDT",
+    "0:526...836c3",
+    "tz1ih...hYdw7",
+    "10:00 13.01.2022",
+    "SUCCESS",
+  ),
 ];
 
 export default function ModalUnstyledDemo() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <button onClick={handleOpen} type="button">
-        Open modal
-      </button>
+      <TransactionsButton onClick={handleOpen} type="button" />
       <StyledModal
         BackdropComponent={Backdrop}
         aria-describedby="unstyled-modal-description"
@@ -85,7 +112,7 @@ export default function ModalUnstyledDemo() {
             backgroundColor: "hsla(0,0%,100%,.95)",
             border: "1px solid #eee",
             borderRadius: "50px",
-            maxWidth: 650,
+            maxWidth: 850,
             overflowY: "auto",
             padding: "50px",
             width: "100%",
@@ -95,29 +122,38 @@ export default function ModalUnstyledDemo() {
             Recent transactions
           </Typography>
           <TableContainer>
-            <Table aria-label="simple table" sx={{minWidth: 530}}>
+            <Table aria-label="simple table" sx={{minWidth: 730}}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Dessert (100g serving)</TableCell>
-                  <TableCell align="right">Calories</TableCell>
-                  <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                  <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                  <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                  <TableCell>Direction</TableCell>
+                  <TableCell align="right">Amount</TableCell>
+                  <TableCell align="right">Token</TableCell>
+                  <TableCell align="right">Sender</TableCell>
+                  <TableCell align="right">Recipient</TableCell>
+                  <TableCell align="right">Timestamp</TableCell>
+                  <TableCell align="right">Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row.id}
                     sx={{"&:last-child td, &:last-child th": {border: 0}}}
                   >
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.direction}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{maxWidth: 100, overflowWrap: "break-word"}}
+                    >
+                      {row.amount}
+                    </TableCell>
+                    <TableCell align="right">{row.token}</TableCell>
+                    <TableCell align="right">{row.sender}</TableCell>
+                    <TableCell align="right">{row.receiver}</TableCell>
+                    <TableCell align="right">{row.timestamp}</TableCell>
+                    <TableCell align="right">{row.status}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

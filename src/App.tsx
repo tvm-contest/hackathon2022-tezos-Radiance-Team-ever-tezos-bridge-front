@@ -69,6 +69,7 @@ export default function App() {
             mt: everWallet || tezosWallet ? 2 : 0,
           }}
         />
+        <RecentTransactions />
       </Container>
       <Container maxWidth="tablet">
         <Typography color="textSecondary" sx={{mb: 2, mt: 4}} variant="h1">
@@ -79,7 +80,6 @@ export default function App() {
         <ConfirmTezosEver />
         <ConfirmEverTezos />
       </Container>
-      <RecentTransactions />
     </>
   );
 }
