@@ -11,6 +11,7 @@ import permissions from "./reducers/permissions";
 import tezosEverTransactions from "./reducers/tezosEverTransactions";
 import tezosTokens from "./reducers/tezosTokens";
 import tezosWallet from "./reducers/tezosWallet";
+import transfers from "./reducers/transfers";
 import checkTezosPermissionsSaga from "./sagas/checkTezosPermissions";
 import checkWalletsAvailabilitySaga from "./sagas/checkWalletsAvailability";
 import connectEverWallet from "./sagas/connectEverWallet";
@@ -40,6 +41,7 @@ const store = configureStore({
     tezosEverTransactions,
     tezosTokens,
     tezosWallet,
+    transfers,
   },
 });
 

@@ -11,7 +11,9 @@ import {
 import {Box, styled} from "@mui/system";
 import React from "react";
 
-import TransactionsButton from "./TransactionsButton";
+import useAppDispatch from "../hooks/useAppDispatch";
+import useAppSelector from "../hooks/useAppSelector";
+import {hideModal, selectTransfersVisible} from "../store/reducers/transfers";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -22,7 +24,7 @@ const StyledModal = styled(ModalUnstyled)`
   left: 0;
   display: flex;
   justify-content: center;
-  padding: 50px 10px;
+  padding: 64px 10px;
 `;
 
 const Backdrop = styled("div")`
@@ -92,20 +94,22 @@ const rows = [
 ];
 
 export default function ModalUnstyledDemo() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const modalVisible = useAppSelector(selectTransfersVisible);
+  const dispatch = useAppDispatch();
+
+  function handleClose() {
+    dispatch(hideModal());
+  }
 
   return (
     <div>
-      <TransactionsButton onClick={handleOpen} type="button" />
       <StyledModal
         BackdropComponent={Backdrop}
         aria-describedby="unstyled-modal-description"
         aria-labelledby="unstyled-modal-title"
         closeAfterTransition
         onClose={handleClose}
-        open={open}
+        open={modalVisible}
       >
         <Box
           sx={{

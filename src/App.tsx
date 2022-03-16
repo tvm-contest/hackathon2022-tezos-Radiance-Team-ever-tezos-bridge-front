@@ -1,4 +1,4 @@
-import {Container, CssBaseline, Typography} from "@mui/material";
+import {Container, CssBaseline, Stack, Typography} from "@mui/material";
 import {useEffect} from "react";
 
 import ConfirmEverTezos from "./components/ConfirmEverTezos";
@@ -7,6 +7,7 @@ import EnterValues from "./components/EnterValues";
 import Header from "./components/Header";
 import RecentTransactions from "./components/RecentTransactions";
 import StepIndicator from "./components/StepIndicator";
+import TransactionsButton from "./components/TransactionsButton";
 import useAppDispatch from "./hooks/useAppDispatch";
 import useAppSelector from "./hooks/useAppSelector";
 import {subscribe as subscribeEver} from "./store/reducers/everTezosTransactions";
@@ -22,6 +23,7 @@ import {
   check as checkTezos,
   selectTezosWallet,
 } from "./store/reducers/tezosWallet";
+import {fetch as fetchTransfers, showModal} from "./store/reducers/transfers";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -34,11 +36,12 @@ export default function App() {
     dispatch(checkEver());
   }, [dispatch]);
 
-  // Fetch tokens after detecting wallets
+  // Fetch Ever tokens after detecting wallets
   useEffect(() => {
     if (everWallet) dispatch(fetchEverTokens());
   }, [everWallet, dispatch]);
 
+  // Fetch Tezos tokens after detecting wallets
   useEffect(() => {
     if (tezosWallet) dispatch(fetchTezosTokens());
   }, [tezosWallet, dispatch]);
@@ -48,14 +51,24 @@ export default function App() {
     if (tezosWallet) dispatch(getTezosPermissions());
   }, [tezosWallet, dispatch]);
 
-  // Subscriptions
+  // Subscription to Tezos
   useEffect(() => {
     if (tezosWallet) dispatch(subscribeTezos());
   }, [tezosWallet, dispatch]);
 
+  // Subscription to Ever
   useEffect(() => {
     if (everWallet) dispatch(subscribeEver());
   }, [everWallet, dispatch]);
+
+  // Fetch transfers
+  useEffect(() => {
+    dispatch(fetchTransfers());
+  }, [dispatch]);
+
+  function handleOpen() {
+    dispatch(showModal());
+  }
 
   return (
     <>
@@ -72,9 +85,17 @@ export default function App() {
         <RecentTransactions />
       </Container>
       <Container maxWidth="tablet">
-        <Typography color="textSecondary" sx={{mb: 2, mt: 4}} variant="h1">
-          Cross-chain transfer
-        </Typography>
+        <Stack
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
+          sx={{mb: 2, mt: 4}}
+        >
+          <Typography color="textSecondary" variant="h1">
+            Cross-chain transfer
+          </Typography>
+          <TransactionsButton onClick={handleOpen} type="button" />
+        </Stack>
         <StepIndicator sx={{mb: 4}} />
         <EnterValues />
         <ConfirmTezosEver />

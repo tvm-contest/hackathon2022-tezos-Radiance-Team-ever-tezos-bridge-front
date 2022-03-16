@@ -117,6 +117,15 @@ export interface TransactionsState {
   loading: boolean;
 }
 
+export interface TransfersState {
+  items: {
+    data: string[];
+  };
+  modal: {
+    visible: boolean;
+  };
+}
+
 export interface DepositAction {
   amount: number;
   receiver: string;
