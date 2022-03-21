@@ -1,4 +1,4 @@
-import {abiContract, AbiModule, DecodedMessageBody} from "@eversdk/core";
+import {abiContract, DecodedMessageBody} from "@eversdk/core";
 import {Address, Contract} from "everscale-inpage-provider";
 import {channel} from "redux-saga";
 import {call, put, select, takeEvery, takeLatest} from "redux-saga/effects";
@@ -24,8 +24,6 @@ import {fetch as fetchTezosTokens} from "../reducers/tezosTokens";
 const callbackChannel = channel();
 
 function* subscribeEver() {
-  const abiModule = new AbiModule(client);
-
   const id: CallReturnType<typeof client.net.subscribe_collection> = yield call(
     client.net.subscribe_collection.bind(client.net),
     {
@@ -37,7 +35,7 @@ function* subscribeEver() {
     },
     (d, responseType) => {
       debug("ever_callback", {d, responseType});
-      abiModule
+      client.abi
         .decode_message({
           abi: abiContract(TokenProxy as any),
           message: d.result.boc,

@@ -20,6 +20,7 @@ import depositEverTezosSaga from "./sagas/depositEverTezos";
 import depositTezosEverSaga from "./sagas/depositTezosEver";
 import fetchEverTokensSaga from "./sagas/fetchEverTokens";
 import fetchTezosTokensSaga from "./sagas/fetchTezosTokens";
+import fetchTransfersSaga from "./sagas/fetchTransfers";
 import requestTezosPermissionSaga from "./sagas/requestTezosPermission";
 import subscribeEverSaga from "./sagas/subscribeEver";
 import subscribeTezosSaga from "./sagas/subscribeTezos";
@@ -56,6 +57,7 @@ sagaMiddleware.run(function* () {
     depositTezosEverSaga(),
     fetchEverTokensSaga(),
     fetchTezosTokensSaga(),
+    fetchTransfersSaga(),
     requestTezosPermissionSaga(),
     subscribeEverSaga(),
     subscribeTezosSaga(),

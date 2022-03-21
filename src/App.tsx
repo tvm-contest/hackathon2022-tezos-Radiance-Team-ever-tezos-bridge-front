@@ -1,4 +1,5 @@
 import {Container, CssBaseline, Stack, Typography} from "@mui/material";
+import useInterval from "@use-it/interval";
 import {useEffect} from "react";
 
 import ConfirmEverTezos from "./components/ConfirmEverTezos";
@@ -63,8 +64,13 @@ export default function App() {
 
   // Fetch transfers
   useEffect(() => {
-    dispatch(fetchTransfers());
-  }, [dispatch]);
+    if (everWallet && tezosWallet) dispatch(fetchTransfers());
+  }, [dispatch, everWallet, tezosWallet]);
+
+  // Refetch transfers every 10 seconds
+  useInterval(() => {
+    if (everWallet && tezosWallet) dispatch(fetchTransfers());
+  }, 5e3);
 
   function handleOpen() {
     dispatch(showModal());

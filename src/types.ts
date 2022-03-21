@@ -37,6 +37,15 @@ export interface Wallet {
   balance: number;
 }
 
+export interface Transfer {
+  amount: number;
+  createdAt: string;
+  direction: Direction;
+  id: string;
+  receiver: string;
+  sender: string;
+}
+
 export type WalletAddressRequest = {
   root: Address;
   owner: Address;
@@ -119,7 +128,10 @@ export interface TransactionsState {
 
 export interface TransfersState {
   items: {
-    data: string[];
+    data: Transfer[];
+    error: string | null;
+    fetched: boolean;
+    loading: boolean;
   };
   modal: {
     visible: boolean;
