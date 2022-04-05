@@ -43,6 +43,12 @@ export interface Transfer {
   id: string;
   receiver: string;
   sender: string;
+  status: TransferStatus;
+  token: Token;
+}
+
+export enum TransferStatus {
+  Success = "Success",
 }
 
 export type WalletAddressRequest = {

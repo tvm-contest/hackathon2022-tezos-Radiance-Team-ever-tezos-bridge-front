@@ -79,7 +79,7 @@ export default function RecentTransactions() {
                   >
                     {row.amount}
                   </TableCell>
-                  <TableCell align="right">UNKNOWN</TableCell>
+                  <TableCell align="right">{row.token.symbol}</TableCell>
                   <TableCell
                     align="right"
                     sx={{maxWidth: 100, overflowWrap: "break-word"}}
@@ -95,7 +95,7 @@ export default function RecentTransactions() {
                   <TableCell align="right">
                     {dayjs(row.createdAt).format("HH:MM DD-MM-YY")}
                   </TableCell>
-                  <TableCell align="right">UNKNOWN</TableCell>
+                  <TableCell align="right">{row.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

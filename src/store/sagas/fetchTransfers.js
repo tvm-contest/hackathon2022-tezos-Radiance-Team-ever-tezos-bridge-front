@@ -9,7 +9,6 @@ import client from "../../lib/everWSClient";
 import {TOKEN_DECIMALS, TOKEN_PROXY_ADDRESS} from "../../misc/constants";
 import {NO_WALLET} from "../../misc/error-messages";
 import {TokenProxy} from "../../misc/ever-abi";
-import {Direction} from "../../types";
 import getGqlString from "../../utils/getGqlString";
 import {fetch, setError, setFetched, setLoading} from "../reducers/transfers";
 
@@ -94,10 +93,14 @@ function* fetchTransfers() {
           return {
             amount: decoded.amount / 10 ** TOKEN_DECIMALS,
             createdAt: c.created_at * 1e3,
-            direction: Direction.TezosEver,
+            direction: "Tezos ➡ Ever",
             id: c.id,
             receiver: "0:" + BigInt(decoded.recipient).toString(16),
-            sender: "",
+            sender: tezosWallet.address,
+            status: "Success",
+            token: {
+              symbol: "tDEX",
+            },
           };
 
         return null;
@@ -117,10 +120,14 @@ function* fetchTransfers() {
         return {
           amount: c.value.amount / 10 ** TOKEN_DECIMALS,
           createdAt: c.created_at * 1e3,
-          direction: Direction.EverTezos,
+          direction: "Ever ➡ Tezos",
           id: c.id,
           receiver: decoded.recipient,
           sender: c.value.walletOwner,
+          status: "Success",
+          token: {
+            symbol: "eDEX",
+          },
         };
 
       return null;
