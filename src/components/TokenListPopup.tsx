@@ -1,31 +1,11 @@
-import {ModalUnstyled} from "@mui/base";
-import {Box, styled, Typography} from "@mui/material";
+import {Typography} from "@mui/material";
 
 import {TokenListPopupProps} from "../types";
 import Backdrop from "./Backdrop";
+import Modal from "./Modal";
+import ModalContainer from "./ModalContainer";
 import SearchInput from "./SearchInput";
 import TokenListItem from "./TokenListItem";
-
-const StyledModal = styled(ModalUnstyled)(({theme}) => ({
-  bottom: 0,
-  display: "flex",
-  justifyContent: "center",
-  left: 0,
-  padding: "64px 10px",
-  position: "fixed",
-  right: 0,
-  top: 0,
-  zIndex: 1300,
-}));
-
-const StyledContainer = styled(Box)(({theme}) => ({
-  background: "rgba(255, 255, 255, 0.6)",
-  border: "1px solid #eee",
-  borderRadius: 30,
-  maxWidth: 600,
-  padding: "50px",
-  width: "90%",
-}));
 
 export default function TokenListPopup({
   onClose,
@@ -34,17 +14,22 @@ export default function TokenListPopup({
   onTokenSelect,
 }: TokenListPopupProps) {
   return (
-    <StyledModal
+    <Modal
       BackdropComponent={Backdrop}
-      aria-describedby="modal-description"
-      aria-labelledby="modal-title"
+      aria-describedby="token-list-modal-description"
+      aria-labelledby="token-list-modal-title"
       onClose={onClose}
       open={open}
     >
-      <StyledContainer>
+      <ModalContainer
+        sx={{
+          background: "rgba(255, 255, 255, 0.6)",
+          maxWidth: 600,
+        }}
+      >
         <Typography
           color="textSecondary"
-          id="modal-title"
+          id="token-list-modal-title"
           sx={{
             mb: 2,
             textAlign: "center",
@@ -53,7 +38,7 @@ export default function TokenListPopup({
         >
           Select a token
         </Typography>
-        <Typography id="modal-description" sx={{display: "none"}}>
+        <Typography id="token-list-modal-description" sx={{display: "none"}}>
           List of a tokens to select from
         </Typography>
         <SearchInput containerProps={{sx: {mb: 2}}} />
@@ -64,7 +49,7 @@ export default function TokenListPopup({
             token={t}
           />
         ))}
-      </StyledContainer>
-    </StyledModal>
+      </ModalContainer>
+    </Modal>
   );
 }
