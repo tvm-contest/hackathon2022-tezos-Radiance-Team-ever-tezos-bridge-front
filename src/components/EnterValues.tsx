@@ -92,6 +92,7 @@ export default function EnterValues() {
     setFieldTouched,
     touched,
     values,
+    validateForm,
   } = useFormik<EnterValuesFormik>({
     enableReinitialize: true,
     initialValues: {
@@ -267,6 +268,12 @@ export default function EnterValues() {
       setFieldValue("tezosValue", everValue);
   }, [values, setFieldValue]);
 
+  // Revalidate each time when change direction
+  useEffect(() => {
+    validateForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.direction]);
+
   const fromProps = useMemo(() => {
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "0")),
@@ -292,6 +299,19 @@ export default function EnterValues() {
     if (!values.everToken) errors.everToken = "Select token";
     if (!values.tezosValue) errors.tezosValue = "Enter value";
     if (!values.everValue) errors.everValue = "Enter value";
+
+    if (
+      values.direction === Direction.TezosEver &&
+      values.tezosToken &&
+      values.tezosValue > values.tezosToken.balance
+    )
+      errors.tezosValue = "Entered amount exceeds balance";
+    else if (
+      values.direction === Direction.EverTezos &&
+      values.everToken &&
+      values.everValue > values.everToken.balance
+    )
+      errors.everValue = "Entered amount exceeds balance";
 
     return errors;
   }
