@@ -1,4 +1,4 @@
-import {abiContract, DecodedMessageBody} from "@eversdk/core";
+import {abiContract} from "@eversdk/core";
 import {Address, Contract} from "everscale-inpage-provider";
 import {channel} from "redux-saga";
 import {call, put, select, takeEvery, takeLatest} from "redux-saga/effects";
@@ -11,7 +11,6 @@ import {
   TOKEN_PROXY_ADDRESS,
 } from "../../misc/constants";
 import {TokenProxy} from "../../misc/ever-abi";
-import {CallReturnType, RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {
   setEverId as setEverIdEver,
@@ -24,7 +23,7 @@ import {fetch as fetchTezosTokens} from "../reducers/tezosTokens";
 const callbackChannel = channel();
 
 function* subscribeEver() {
-  const id: CallReturnType<typeof client.net.subscribe_collection> = yield call(
+  const id = yield call(
     client.net.subscribe_collection.bind(client.net),
     {
       collection: "messages",
@@ -37,7 +36,7 @@ function* subscribeEver() {
       debug("ever_callback", {d, responseType});
       client.abi
         .decode_message({
-          abi: abiContract(TokenProxy as any),
+          abi: abiContract(TokenProxy),
           message: d.result.boc,
         })
         .then((r) => callbackChannel.put(r));
@@ -46,7 +45,7 @@ function* subscribeEver() {
 
   debug("ever_subscribe_id", id);
 
-  yield takeEvery(callbackChannel, function* (r: DecodedMessageBody) {
+  yield takeEvery(callbackChannel, function* (r) {
     if (r.name === "transferTokenCallback")
       yield handleTezosEverConfirmation(r);
     else if (r.name === "onAcceptTokensBurn")
@@ -54,7 +53,7 @@ function* subscribeEver() {
   });
 }
 
-function* handleTezosEverConfirmation(r: DecodedMessageBody) {
+function* handleTezosEverConfirmation(r) {
   // Decode callback
   const proxyContract = new Contract(
     everRpcClient,
@@ -64,20 +63,15 @@ function* handleTezosEverConfirmation(r: DecodedMessageBody) {
   const proxyCall = proxyContract.methods.decodeTezosEventData({
     data: r.value.data,
   });
-  const proxyRes: CallReturnType<typeof proxyCall.call> = yield call(
-    proxyCall.call.bind(proxyCall),
-    {},
-  );
+  const proxyRes = yield call(proxyCall.call.bind(proxyCall), {});
 
   const resRecipient = "0:" + BigInt(proxyRes.recipient).toString(16);
   const resAmount = +proxyRes.amount / 10 ** EVER_DECIMALS;
   debug("ever_decoded_callback", {resAmount, resRecipient});
 
-  const everAddr: string = yield select(
-    (state: RootState) => state.everWallet.data?.address,
-  );
-  const enteredAmount: number = yield select(
-    (state: RootState) => state.enteredValues.data?.amount,
+  const everAddr = yield select((state) => state.everWallet.data?.address);
+  const enteredAmount = yield select(
+    (state) => state.enteredValues.data?.amount,
   );
   debug("local_data_for_receiver", {enteredAmount, everAddr});
 
@@ -90,17 +84,15 @@ function* handleTezosEverConfirmation(r: DecodedMessageBody) {
   }
 }
 
-function* handleEverTezosConfirmation(r: DecodedMessageBody) {
+function* handleEverTezosConfirmation(r) {
   debug("ever_encode_handler", r);
 
   const amount = r.value.amount / 10 ** TOKEN_DECIMALS;
   const sender = r.value.walletOwner;
 
-  const everAddr: string = yield select(
-    (state: RootState) => state.everWallet.data?.address,
-  );
-  const enteredAmount: number = yield select(
-    (state: RootState) => state.enteredValues.data?.amount,
+  const everAddr = yield select((state) => state.everWallet.data?.address);
+  const enteredAmount = yield select(
+    (state) => state.enteredValues.data?.amount,
   );
 
   if (sender === everAddr && amount === enteredAmount)

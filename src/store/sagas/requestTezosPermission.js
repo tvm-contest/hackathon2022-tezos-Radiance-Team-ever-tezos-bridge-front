@@ -1,14 +1,7 @@
-import {
-  call,
-  put,
-  SagaReturnType,
-  select,
-  takeLatest,
-} from "redux-saga/effects";
+import {call, put, select, takeLatest} from "redux-saga/effects";
 
 import tezos from "../../lib/tezosRpcClient";
 import {FA2_ADDRESS, VAULT_ADDRESS} from "../../misc/constants";
-import {CallReturnType, RootState} from "../../types";
 import {
   getTezosPermissions,
   permitTezosToken,
@@ -19,14 +12,13 @@ import {
 function* requestTezosPermission() {
   yield put(setLoading());
 
-  const tezosWallet: SagaReturnType<() => RootState["tezosWallet"]["data"]> =
-    yield select((state: RootState) => state.tezosWallet.data);
+  const tezosWallet = yield select((state) => state.tezosWallet.data);
   if (!tezosWallet) {
     yield put(setError("Tezos wallet not connected"));
     return;
   }
 
-  const tokenWallet: CallReturnType<typeof tezos.wallet.at> = yield call(
+  const tokenWallet = yield call(
     tezos.wallet.at.bind(tezos.wallet),
     FA2_ADDRESS,
   );
@@ -40,9 +32,7 @@ function* requestTezosPermission() {
       },
     },
   ]);
-  const op: CallReturnType<typeof methodProvider.send> = yield call(
-    methodProvider.send.bind(methodProvider),
-  );
+  const op = yield call(methodProvider.send.bind(methodProvider));
   yield call(op.confirmation.bind(op));
 
   // Lunch checkTezosPermissions saga

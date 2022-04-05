@@ -1,32 +1,21 @@
 import BigNumber from "bignumber.js";
-import {
-  call,
-  put,
-  SagaReturnType,
-  select,
-  takeLatest,
-} from "redux-saga/effects";
+import {call, put, select, takeLatest} from "redux-saga/effects";
 
 import {getTezosWallets} from "../../lib/tezosApiClient";
 import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
 import tezosTokens from "../../misc/tezos-tokens";
-import {CallReturnType, RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/tezosTokens";
 
 function* fetchTezosTokens() {
   yield put(setLoading());
 
-  const tezosWallet: SagaReturnType<() => RootState["tezosWallet"]["data"]> =
-    yield select((state: RootState) => state.tezosWallet.data);
+  const tezosWallet = yield select((state) => state.tezosWallet.data);
   if (!tezosWallet) {
     yield put(setError("Tezos wallet not connected"));
     return;
   }
 
-  const {data}: CallReturnType<typeof getTezosWallets> = yield call(
-    getTezosWallets,
-    tezosWallet.address,
-  );
+  const {data} = yield call(getTezosWallets, tezosWallet.address);
 
   yield put(
     setFetched(

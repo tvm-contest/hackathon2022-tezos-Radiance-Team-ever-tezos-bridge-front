@@ -10,7 +10,6 @@ import {
 
 import connection from "../../lib/tezosWSClient";
 import {FA2_ADDRESS, TOKEN_DECIMALS, VAULT_ADDRESS} from "../../misc/constants";
-import {RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {setTezosId as setTezosIdTezos} from "../reducers/everTezosTransactions";
 import {fetch as fetchEverTokens} from "../reducers/everTokens";
@@ -64,17 +63,17 @@ function* init() {
   });
 }
 
-function* handleTezosEverConfirmation(msg: any) {
+function* handleTezosEverConfirmation(msg) {
   if (msg.type !== 1) return;
 
-  const opHash: string = yield select(
-    (state: RootState) => state.tezosEverTransactions.currentTransaction.opHash,
+  const opHash = yield select(
+    (state) => state.tezosEverTransactions.currentTransaction.opHash,
   );
 
   if (opHash === msg.data[0].hash) yield put(setTezosIdEver(msg.data[0].id));
 }
 
-function* handleEverTezosConfirmation(msg: any) {
+function* handleEverTezosConfirmation(msg) {
   if (
     !(
       msg.data &&
@@ -90,11 +89,9 @@ function* handleEverTezosConfirmation(msg: any) {
 
   const {amount, to_} = msg.data[0].parameter.value[0].txs[0];
 
-  const tezosAddr: string = yield select(
-    (state: RootState) => state.tezosWallet.data?.address,
-  );
-  const enteredAmount: number = yield select(
-    (state: RootState) => state.enteredValues.data?.amount,
+  const tezosAddr = yield select((state) => state.tezosWallet.data?.address);
+  const enteredAmount = yield select(
+    (state) => state.enteredValues.data?.amount,
   );
 
   if (enteredAmount === amount / 10 ** TOKEN_DECIMALS && tezosAddr === to_) {

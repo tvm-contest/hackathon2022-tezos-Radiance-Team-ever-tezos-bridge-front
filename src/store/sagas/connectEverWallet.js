@@ -5,7 +5,6 @@ import {getBalance} from "../../lib/everApiClient";
 import everRpcClient from "../../lib/everRpcClient";
 import {EVER_DECIMALS, VIEW_DECIMAL_PLACES} from "../../misc/constants";
 import {NO_EXTENSION} from "../../misc/error-messages";
-import {CallReturnType} from "../../types";
 import {
   connect,
   setConnected,
@@ -16,9 +15,7 @@ import {
 function* connectWalletEver() {
   yield put(setConnecting());
 
-  const has: CallReturnType<typeof everRpcClient.hasProvider> = yield call(
-    everRpcClient.hasProvider.bind(everRpcClient),
-  );
+  const has = yield call(everRpcClient.hasProvider.bind(everRpcClient));
   if (!has) {
     yield put(setError(NO_EXTENSION));
     return;
@@ -26,9 +23,7 @@ function* connectWalletEver() {
 
   yield call(everRpcClient.ensureInitialized.bind(everRpcClient));
 
-  const {
-    accountInteraction,
-  }: CallReturnType<typeof everRpcClient.requestPermissions> = yield call(
+  const {accountInteraction} = yield call(
     everRpcClient.requestPermissions.bind(everRpcClient),
     {
       permissions: ["basic", "accountInteraction"],
@@ -44,10 +39,7 @@ function* connectWalletEver() {
         accounts: [{balance}],
       },
     },
-  }: CallReturnType<typeof getBalance> = yield call(
-    getBalance,
-    accountInteraction.address.toString(),
-  );
+  } = yield call(getBalance, accountInteraction.address.toString());
 
   yield put(
     setConnected({

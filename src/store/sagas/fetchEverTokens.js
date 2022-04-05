@@ -1,32 +1,23 @@
 import BigNumber from "bignumber.js";
 import {Address} from "everscale-inpage-provider";
-import {
-  all,
-  call,
-  put,
-  SagaReturnType,
-  select,
-  takeLatest,
-} from "redux-saga/effects";
+import {all, call, put, select, takeLatest} from "redux-saga/effects";
 
 import {balanceByTokenRoot} from "../../lib/everRpcClient";
 import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
 import {NO_WALLET} from "../../misc/error-messages";
 import everTokens from "../../misc/ever-tokens";
-import {RootState} from "../../types";
 import {fetch, setError, setFetched, setLoading} from "../reducers/everTokens";
 
 function* fetchEverTokens() {
   yield put(setLoading());
 
-  const everWallet: SagaReturnType<() => RootState["everWallet"]["data"]> =
-    yield select((state: RootState) => state.everWallet.data);
+  const everWallet = yield select((state) => state.everWallet.data);
   if (!everWallet) {
     yield put(setError(NO_WALLET));
     return;
   }
 
-  const balances: SagaReturnType<() => string[]> = yield all(
+  const balances = yield all(
     everTokens.map((t) =>
       call(
         balanceByTokenRoot,

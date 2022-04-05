@@ -3,7 +3,6 @@ import {all, call, put, takeLatest} from "redux-saga/effects";
 
 import everRpcClient from "../../lib/everRpcClient";
 import {NO_EXTENSION} from "../../misc/error-messages";
-import {CallReturnType} from "../../types";
 import {
   check as checkEver,
   reset as resetEver,
@@ -20,9 +19,7 @@ import {
 function* checkWalletTezos() {
   yield put(setConnectingTezos());
 
-  const available: CallReturnType<typeof TempleWallet.isAvailable> = yield call(
-    TempleWallet.isAvailable.bind(TempleWallet),
-  );
+  const available = yield call(TempleWallet.isAvailable.bind(TempleWallet));
   if (!available) yield put(setErrorTezos(NO_EXTENSION));
 
   yield put(resetTezos());
@@ -31,9 +28,7 @@ function* checkWalletTezos() {
 function* checkWalletEver() {
   yield put(setConnectingEver());
 
-  const has: CallReturnType<typeof everRpcClient.hasProvider> = yield call(
-    everRpcClient.hasProvider.bind(everRpcClient),
-  );
+  const has = yield call(everRpcClient.hasProvider.bind(everRpcClient));
   if (!has) {
     yield put(setErrorEver(NO_EXTENSION));
     return;

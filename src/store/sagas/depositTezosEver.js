@@ -1,15 +1,7 @@
-import {PayloadAction} from "@reduxjs/toolkit";
-import {
-  call,
-  put,
-  SagaReturnType,
-  select,
-  takeLatest,
-} from "redux-saga/effects";
+import {call, put, select, takeLatest} from "redux-saga/effects";
 
 import tezos from "../../lib/tezosRpcClient";
 import {VAULT_ADDRESS} from "../../misc/constants";
-import {CallReturnType, DepositAction, RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {
   deposit,
@@ -18,17 +10,16 @@ import {
   setOpHash,
 } from "../reducers/tezosEverTransactions";
 
-function* depositFn(action: PayloadAction<DepositAction>) {
+function* depositFn(action) {
   yield put(setLoading());
 
-  const tezosWallet: SagaReturnType<() => RootState["tezosWallet"]["data"]> =
-    yield select((state: RootState) => state.tezosWallet.data);
+  const tezosWallet = yield select((state) => state.tezosWallet.data);
   if (!tezosWallet) {
     yield put(setError("Tezos wallet not connected"));
     return;
   }
 
-  const tokenContract: CallReturnType<typeof tezos.wallet.at> = yield call(
+  const tokenContract = yield call(
     tezos.wallet.at.bind(tezos.wallet),
     VAULT_ADDRESS,
   );
@@ -38,9 +29,7 @@ function* depositFn(action: PayloadAction<DepositAction>) {
     requests: [{owner: tezosWallet.address, token_id: 0}],
   });
 
-  const op: CallReturnType<typeof methodProvider.send> = yield call(
-    methodProvider.send.bind(methodProvider),
-  );
+  const op = yield call(methodProvider.send.bind(methodProvider));
 
   debug("deposit_operation", op);
   yield put(setOpHash(op.opHash));

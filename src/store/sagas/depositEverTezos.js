@@ -1,18 +1,10 @@
-import {PayloadAction} from "@reduxjs/toolkit";
 import {Address, Contract} from "everscale-inpage-provider";
-import {
-  call,
-  put,
-  SagaReturnType,
-  select,
-  takeLatest,
-} from "redux-saga/effects";
+import {call, put, select, takeLatest} from "redux-saga/effects";
 
 import everRpcClient from "../../lib/everRpcClient";
 import {TOKEN_PROXY_ADDRESS} from "../../misc/constants";
 import {NO_WALLET} from "../../misc/error-messages";
 import {TokenProxy, TokenRoot, TokenWallet} from "../../misc/ever-abi";
-import {CallReturnType, DepositAction, RootState} from "../../types";
 import {debug} from "../../utils/console";
 import {
   deposit,
@@ -21,13 +13,12 @@ import {
   setOpHash,
 } from "../reducers/everTezosTransactions";
 
-function* depositFn(action: PayloadAction<DepositAction>) {
+function* depositFn(action) {
   debug("params", action.payload);
 
   yield put(setLoading());
 
-  const everWallet: SagaReturnType<() => RootState["everWallet"]["data"]> =
-    yield select((state: RootState) => state.everWallet.data);
+  const everWallet = yield select((state) => state.everWallet.data);
   if (!everWallet) {
     yield put(setError(NO_WALLET));
     return;
@@ -41,10 +32,7 @@ function* depositFn(action: PayloadAction<DepositAction>) {
   const encodeCall = proxyContract.methods.encodeTezosAddrPayload({
     recipient: action.payload.receiver,
   });
-  const resEncode: CallReturnType<typeof encodeCall.call> = yield call(
-    encodeCall.call.bind(encodeCall),
-    {},
-  );
+  const resEncode = yield call(encodeCall.call.bind(encodeCall), {});
   debug("encode_tezos_addr", resEncode);
 
   const rootContract = new Contract(
@@ -58,10 +46,7 @@ function* depositFn(action: PayloadAction<DepositAction>) {
     answerId: 0,
     walletOwner: new Address(everWallet.address),
   });
-  const walletOfRes: CallReturnType<typeof walletOfCall.call> = yield call(
-    walletOfCall.call.bind(walletOfCall),
-    {},
-  );
+  const walletOfRes = yield call(walletOfCall.call.bind(walletOfCall), {});
   debug("wallet_of", walletOfRes);
 
   yield put(setOpHash("" + Math.random()));
@@ -77,12 +62,11 @@ function* depositFn(action: PayloadAction<DepositAction>) {
     payload: resEncode.data,
     remainingGasTo: new Address(everWallet.address),
   });
-  const walletRes: CallReturnType<typeof walletCall.send> =
-    yield walletCall.send({
-      amount: "1600000000",
-      bounce: true,
-      from: new Address(everWallet.address),
-    });
+  const walletRes = yield walletCall.send({
+    amount: "1600000000",
+    bounce: true,
+    from: new Address(everWallet.address),
+  });
   debug("ever_operation_hash", walletRes.id.hash);
 }
 
