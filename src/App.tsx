@@ -70,8 +70,11 @@ export default function App() {
   }, [dispatch, everWallet, tezosWallet]);
 
   // Refetch transfers every 10 seconds
+  // Refetch ever and tezos tokens also
   useInterval(() => {
     if (everWallet && tezosWallet) dispatch(fetchTransfers());
+    if (tezosWallet) dispatch(fetchTezosTokens());
+    if (everWallet) dispatch(fetchEverTokens());
   }, 5e3);
 
   function handleOpen() {

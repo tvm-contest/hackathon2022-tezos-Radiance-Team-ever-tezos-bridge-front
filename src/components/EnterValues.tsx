@@ -274,6 +274,20 @@ export default function EnterValues() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.direction]);
 
+  // Update balances each time that tokens refetches
+  useEffect(() => {
+    if (values.everToken)
+      setFieldValue(
+        "everToken",
+        _.find(everTokens, {address: values.everToken.address}),
+      );
+    if (values.tezosToken)
+      setFieldValue(
+        "tezosToken",
+        _.find(tezosTokens, {address: values.tezosToken.address}),
+      );
+  }, [tezosTokens, everTokens, values, setFieldValue]);
+
   const fromProps = useMemo(() => {
     return {
       ..._.zipObject(_.keys(inputProps), _.map(inputProps, "0")),

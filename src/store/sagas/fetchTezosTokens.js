@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import {call, put, select, takeLatest} from "redux-saga/effects";
+import {call, put, select, takeLeading} from "redux-saga/effects";
 
 import {getTezosWallets} from "../../lib/tezosApiClient";
 import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
@@ -32,5 +32,5 @@ function* fetchTezosTokens() {
 }
 
 export default function* fetchTezosTokensSaga() {
-  yield takeLatest(fetch, fetchTezosTokens);
+  yield takeLeading(fetch, fetchTezosTokens);
 }

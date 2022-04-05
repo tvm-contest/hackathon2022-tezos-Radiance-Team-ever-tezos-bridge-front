@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import {Address} from "everscale-inpage-provider";
-import {all, call, put, select, takeLatest} from "redux-saga/effects";
+import {all, call, put, select, takeLeading} from "redux-saga/effects";
 
 import {balanceByTokenRoot} from "../../lib/everRpcClient";
 import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
@@ -57,5 +57,5 @@ function* fetchEverTokens() {
 }
 
 export default function* fetchEverTokensSaga() {
-  yield takeLatest(fetch, fetchEverTokens);
+  yield takeLeading(fetch, fetchEverTokens);
 }
