@@ -32,8 +32,7 @@ export default function RecentTransactions() {
   return (
     <Modal
       BackdropComponent={Backdrop}
-      aria-describedby="unstyled-modal-description"
-      aria-labelledby="unstyled-modal-title"
+      aria-labelledby="recent-modal-title"
       closeAfterTransition
       onClose={handleClose}
       open={modalVisible}
@@ -41,18 +40,44 @@ export default function RecentTransactions() {
       <ModalContainer
         sx={{
           background: "rgba(255, 255, 255, 0.95)",
+          height: "100%",
           maxWidth: 850,
+          overflowY: "hidden",
+          paddingRight: "42px",
         }}
       >
         <Typography
           color="textSecondary"
+          id="recent-modal-title"
           sx={{mb: 2, textAlign: "center"}}
           variant="h1"
         >
           Recent transactions
         </Typography>
-        <TableContainer>
-          <Table aria-label="simple table" sx={{minWidth: 730}}>
+        <TableContainer
+          sx={{
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "rgba(0, 0, 0, 0.3)",
+              borderRadius: "30px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              borderRadius: "30px",
+            },
+            maxHeight: "90%",
+          }}
+        >
+          <Table
+            aria-label="simple table"
+            stickyHeader
+            sx={{
+              minWidth: 730,
+              paddingRight: "8px",
+            }}
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Direction</TableCell>
