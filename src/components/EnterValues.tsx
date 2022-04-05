@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 
 import useAppSelector from "../hooks/useAppSelector";
 import {EVER_WALLET_URL, TEMPLE_WALLET_URL} from "../misc/constants";
-import {NO_EXTENSION} from "../misc/error-messages";
+import {NO_EVER_EXTENSION, NO_TEZOS_EXTENSION} from "../misc/error-messages";
 import tokensRelation from "../misc/tokens-relation";
 import {
   next as nextStep,
@@ -146,11 +146,11 @@ export default function EnterValues() {
   }, [dispatch]);
 
   const templeWalletInstalled = useMemo(() => {
-    return tezosWalletError !== NO_EXTENSION;
+    return tezosWalletError !== NO_TEZOS_EXTENSION;
   }, [tezosWalletError]);
 
   const everWalletInstalled = useMemo(() => {
-    return everWalletError !== NO_EXTENSION;
+    return everWalletError !== NO_EVER_EXTENSION;
   }, [everWalletError]);
 
   const inputProps = useMemo(() => {

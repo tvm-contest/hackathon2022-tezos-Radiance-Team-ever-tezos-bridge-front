@@ -4,7 +4,7 @@ import {call, put, takeLatest} from "redux-saga/effects";
 import {getBalance} from "../../lib/everApiClient";
 import everRpcClient from "../../lib/everRpcClient";
 import {EVER_DECIMALS, VIEW_DECIMAL_PLACES} from "../../misc/constants";
-import {NO_EXTENSION} from "../../misc/error-messages";
+import {NO_EVER_EXTENSION} from "../../misc/error-messages";
 import {
   connect,
   setConnected,
@@ -18,7 +18,7 @@ function* connectWalletEver() {
   const has = yield call(everRpcClient.hasProvider.bind(everRpcClient));
 
   if (!has) {
-    yield put(setError(NO_EXTENSION));
+    yield put(setError(NO_EVER_EXTENSION));
     return;
   }
 

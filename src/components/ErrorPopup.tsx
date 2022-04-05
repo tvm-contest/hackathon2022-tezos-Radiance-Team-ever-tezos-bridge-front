@@ -4,6 +4,8 @@ import {useMemo} from "react";
 import useAppDispatch from "../hooks/useAppDispatch";
 import useAppSelector from "../hooks/useAppSelector";
 import {reset, selectEverTokensError} from "../store/reducers/everTokens";
+import {selectEverWalletError} from "../store/reducers/everWallet";
+import {selectTezosWalletError} from "../store/reducers/tezosWallet";
 import Backdrop from "./Backdrop";
 import Modal from "./Modal";
 import ModalContainer from "./ModalContainer";
@@ -11,13 +13,15 @@ import ModalContainer from "./ModalContainer";
 export default function ErrorPopup() {
   const dispatch = useAppDispatch();
   const everTokensError = useAppSelector(selectEverTokensError);
+  const tezosWalletError = useAppSelector(selectTezosWalletError);
+  const everWalletError = useAppSelector(selectEverWalletError);
 
   const error = useMemo(() => {
-    return Boolean(everTokensError);
-  }, [everTokensError]);
+    return Boolean(everTokensError || tezosWalletError || everWalletError);
+  }, [everTokensError, tezosWalletError, everWalletError]);
   const errorMsg = useMemo(() => {
-    return everTokensError;
-  }, [everTokensError]);
+    return everTokensError || tezosWalletError || everWalletError;
+  }, [everTokensError, tezosWalletError, everWalletError]);
 
   function onClose() {
     dispatch(reset());
