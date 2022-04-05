@@ -1,4 +1,4 @@
-import {Container, CssBaseline, Stack, Typography} from "@mui/material";
+import {Container, CssBaseline, Stack} from "@mui/material";
 import useInterval from "@use-it/interval";
 import {useEffect} from "react";
 
@@ -8,6 +8,7 @@ import EnterValues from "./components/EnterValues";
 import Header from "./components/Header";
 import RecentTransactions from "./components/RecentTransactions";
 import StepIndicator from "./components/StepIndicator";
+import Subheader from "./components/Subheader";
 import TransactionsButton from "./components/TransactionsButton";
 import useAppDispatch from "./hooks/useAppDispatch";
 import useAppSelector from "./hooks/useAppSelector";
@@ -97,9 +98,7 @@ export default function App() {
           justifyContent="space-between"
           sx={{mb: 2, mt: 4}}
         >
-          <Typography color="textSecondary" variant="h1">
-            Cross-chain transfer
-          </Typography>
+          <Subheader />
           <TransactionsButton onClick={handleOpen} type="button" />
         </Stack>
         <StepIndicator sx={{mb: 4}} />

@@ -30,7 +30,7 @@ import {
 } from "../store/reducers/tezosEverTransactions";
 import {Step} from "../types";
 
-export default function Step2() {
+export default function ConfirmTezosEver() {
   const dispatch = useDispatch();
   const currentStep = useAppSelector(selectCurrentStep);
   const enteredValues = useAppSelector(selectEnteredValues);
