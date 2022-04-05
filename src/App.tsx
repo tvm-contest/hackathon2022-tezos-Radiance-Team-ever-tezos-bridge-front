@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import ConfirmEverTezos from "./components/ConfirmEverTezos";
 import ConfirmTezosEver from "./components/ConfirmTezosEver";
 import EnterValues from "./components/EnterValues";
+import ErrorPopup from "./components/ErrorPopup";
 import Header from "./components/Header";
 import RecentTransactions from "./components/RecentTransactions";
 import StepIndicator from "./components/StepIndicator";
@@ -89,7 +90,6 @@ export default function App() {
             mt: everWallet || tezosWallet ? 2 : 0,
           }}
         />
-        <RecentTransactions />
       </Container>
       <Container maxWidth="tablet">
         <Stack
@@ -106,6 +106,8 @@ export default function App() {
         <ConfirmTezosEver />
         <ConfirmEverTezos />
       </Container>
+      <RecentTransactions />
+      <ErrorPopup />
     </>
   );
 }

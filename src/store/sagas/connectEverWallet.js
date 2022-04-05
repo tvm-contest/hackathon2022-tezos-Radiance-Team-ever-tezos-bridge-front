@@ -16,6 +16,7 @@ function* connectWalletEver() {
   yield put(setConnecting());
 
   const has = yield call(everRpcClient.hasProvider.bind(everRpcClient));
+
   if (!has) {
     yield put(setError(NO_EXTENSION));
     return;

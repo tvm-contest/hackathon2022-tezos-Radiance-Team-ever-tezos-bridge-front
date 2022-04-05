@@ -83,7 +83,7 @@ export async function balanceByTokenRoot(
     });
   } catch (e) {
     error(e);
-    return "0";
+    throw e;
   }
 }
 

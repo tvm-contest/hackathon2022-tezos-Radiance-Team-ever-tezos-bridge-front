@@ -42,5 +42,7 @@ export const {fetch, reset, setError, setFetched, setLoading} =
   everTokensSlice.actions;
 
 export const selectEverTokens = (state: RootState) => state.everTokens.data;
+export const selectEverTokensError = (state: RootState) =>
+  state.everTokens.error;
 
 export default everTokensSlice.reducer;

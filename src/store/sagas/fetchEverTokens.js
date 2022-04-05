@@ -4,8 +4,9 @@ import {all, call, put, select, takeLatest} from "redux-saga/effects";
 
 import {balanceByTokenRoot} from "../../lib/everRpcClient";
 import {VIEW_DECIMAL_PLACES} from "../../misc/constants";
-import {NO_WALLET} from "../../misc/error-messages";
+import {NEED_RECONNECT, NO_WALLET} from "../../misc/error-messages";
 import everTokens from "../../misc/ever-tokens";
+import {error} from "../../utils/console";
 import {fetch, setError, setFetched, setLoading} from "../reducers/everTokens";
 
 function* fetchEverTokens() {
@@ -17,15 +18,30 @@ function* fetchEverTokens() {
     return;
   }
 
-  const balances = yield all(
-    everTokens.map((t) =>
-      call(
-        balanceByTokenRoot,
-        new Address(everWallet.address),
-        new Address(t.address),
+  let balances = [];
+
+  try {
+    balances = yield all(
+      everTokens.map((t) =>
+        call(
+          balanceByTokenRoot,
+          new Address(everWallet.address),
+          new Address(t.address),
+        ),
       ),
-    ),
-  );
+    );
+  } catch (e) {
+    if (
+      typeof e.message === "string" &&
+      /API request failed\. Request failed/.test(e.message)
+    ) {
+      yield put(setError(NEED_RECONNECT));
+      return;
+    }
+
+    error(e);
+    throw e;
+  }
 
   yield put(
     setFetched(
